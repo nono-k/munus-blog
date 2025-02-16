@@ -1,0 +1,19 @@
+@use '/src/styles/mixin';
+
+@include mixin.large {
+  .for-mobile {
+    display: none !important;
+  }
+}
+
+@include mixin.large-2 {
+  .for-large-2 {
+    display: none !important;
+  }
+}
+
+@include mixin.mobile {
+  .for-large {
+    display: none !important;
+  }
+}

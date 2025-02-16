@@ -1,0 +1,39 @@
+/**
+* mixin
+* 記述方法
+*
+* @use 'mixin';
+*
+* @include mixin.mobile {
+*
+* }
+*/
+
+$mobile: 959px;
+$large: 960px;
+$large-2: 550px;
+$phone: 549px;
+
+@mixin mobile {
+  @media (max-width: ($mobile)) {
+    @content;
+  }
+}
+
+@mixin phone {
+  @media (max-width: ($phone)) {
+    @content;
+  }
+}
+
+@mixin large {
+  @media (min-width: ($large)) {
+    @content;
+  }
+}
+
+@mixin large-2 {
+  @media (max-width: ($large-2)) {
+    @content;
+  }
+}
