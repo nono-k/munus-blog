@@ -1,0 +1,39 @@
+---
+import { siteMeta } from "@/lib/constants";
+const { siteTitle, siteDesc, siteLocale, siteType, siteIcon, siteImg } = siteMeta;
+
+const {
+  pageTitle,
+  description = siteDesc,
+  articleOgp,
+} = Astro.props;
+
+const title = pageTitle ? `${pageTitle} | ${siteTitle}` : siteTitle;
+
+// const ogpImg = articleOgp ?
+//   articleOgp
+//   : siteImg;
+
+// const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+// const socialImageURL = new URL(ogpImg, Astro.site);
+
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<meta name="generator" content={Astro.generator} />
+<title data-pagefind-meta="title">{title}</title>
+<meta property="og:title" content={title} />
+<meta name="description" content={description} />
+<meta property="og:description" content={description} />
+<!-- <link rel="canonical" href={canonicalURL} />
+<meta property="og:url" content={canonicalURL} /> -->
+<meta property="og:site_name" content={siteTitle} />
+<meta property="og:type" content={siteType} />
+<meta property="og:locale" content={siteLocale} />
+<link rel="icon" href={siteIcon} />
+<link rel="apple-touch-icon" href={siteIcon} />
+<!-- <meta property="og:image" content={socialImageURL} data-pagefind-meta="image[content]" /> -->
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
