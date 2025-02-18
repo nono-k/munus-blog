@@ -1,0 +1,58 @@
+---
+import { headerLinks } from "@/config";
+---
+
+<header class="header">
+  <div class="header__inner">
+    <div class="header__logo">UnStable</div>
+    <nav class="header__nav">
+      <ul>
+        {headerLinks.map((link) => (
+          <li>
+            <a href={link.url}>{link.name}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <div class="header__right">seach</div>
+  </div>
+</header>
+
+<style lang="scss">
+  .header {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    translate: -50% 0;
+    width: 100%;
+    max-width: var(--page-width);
+    margin-inline: auto;
+    padding-inline: 2rem;
+    &__inner {
+      height: var(--header-height);
+      background: var(--card-bg);
+      border-bottom-right-radius: 1rem;
+      border-bottom-left-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-inline: 1rem;
+    }
+    &__nav {
+      ul {
+        display: flex;
+        a {
+          font-weight: 700;
+          padding: 1rem;
+          border-radius: 1rem;
+          transition-property: background, color;
+          transition-duration: 0.3s;
+          @include mixin.hover {
+            background: var(--btn-plain-bg-hover);
+            color: var(--primary);
+          }
+        }
+      }
+    }
+  }
+</style>

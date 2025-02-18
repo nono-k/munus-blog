@@ -1,6 +1,8 @@
 ---
 import '@/styles/styles.scss';
 
+import BackgroundImage from '@/components/base/BackgroundImage.astro';
+import Header from '@/components/base/Header.astro';
 import Meta from '@/components/base/Meta.astro';
 
 const props = Astro.props;
@@ -12,6 +14,8 @@ const props = Astro.props;
 		<Meta {...props} />
 	</head>
 	<body>
+    <Header />
+    <BackgroundImage />
 		<slot />
 	</body>
 </html>
