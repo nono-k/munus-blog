@@ -37,3 +37,11 @@ $phone: 549px;
     @content;
   }
 }
+
+@mixin hover {
+  @media (any-hover: hover) {
+    &:hover {
+      @content;
+    }
+  }
+}
