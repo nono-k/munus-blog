@@ -14,6 +14,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "@iconify-json/devicon": "^1.2.16",
+    "@iconify-json/fa6-brands": "^1.2.5",
     "astro-icon": "^1.1.5"
   }
 }
