@@ -1,3 +1,4 @@
+import icon from 'astro-icon';
 // @ts-check
 import { defineConfig } from 'astro/config';
 
@@ -12,4 +13,5 @@ export default defineConfig({
       },
     },
   },
+  integrations: [icon()],
 });
