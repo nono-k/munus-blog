@@ -1,4 +1,4 @@
-import type { HeaderLink, SiteConfig } from '@/types/config';
+import type { HeaderLink, ProfileConfig, SiteConfig } from '@/types/config';
 
 export const siteConfig: SiteConfig = {
   siteTitle: 'unstable',
@@ -15,5 +15,7 @@ export const siteConfig: SiteConfig = {
 
 export const headerLinks: HeaderLink[] = [
   { name: 'Home', url: '/' },
+  { name: 'Blog', url: '/blog' },
   { name: 'About', url: '/about' },
+  { name: 'Contact', url: '/contact' },
 ];
