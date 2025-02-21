@@ -1,0 +1,8 @@
+.btn-regular {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--btn-regular-bg);
+  color: var(--btn-content);
+  border-radius: 0.5rem;
+}
