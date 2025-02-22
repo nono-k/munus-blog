@@ -23,7 +23,17 @@ export type ProfileConfig = {
   bio: string;
   links: {
     name: string;
-    url: string;
     icon: string;
-  };
+    url: string;
+  }[];
+};
+
+export type Category = {
+  name: string;
+  slug: string;
+};
+
+export type Tags = {
+  name: string;
+  slug: string;
 };
