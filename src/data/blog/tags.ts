@@ -1,3 +1,6 @@
 import type { Tags } from '@/types/config';
 
-export const tags: Tags[] = [{ name: 'blog', slug: 'blog' }];
+export const tags: Tags[] = [
+  { name: 'ブログ', slug: 'blog' },
+  { name: 'Markdown', slug: 'markdown' },
+];
