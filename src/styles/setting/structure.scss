@@ -6,10 +6,14 @@
 
 body {
   font-size: 1rem;
-  color: var(--black);
+  color: var(--text-color);
+  background: var(--page-bg);
+  line-height: 1.5;
+  letter-spacing: 0.05em;
 }
 
 a {
+  color: inherit;
   text-decoration: none;
 }
 
