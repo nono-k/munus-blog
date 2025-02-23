@@ -1,9 +1,9 @@
 import type { HeaderLink, ProfileConfig, SiteConfig } from '@/types/config';
 
 export const siteConfig: SiteConfig = {
-  siteTitle: 'unstable',
+  siteTitle: 'munus',
   siteDesc: '',
-  siteUrl: 'https://unstable.dev',
+  siteUrl: 'https://munus.dev',
   siteType: 'website',
   siteLocale: 'ja_JP',
   siteIcon: '/favicon.svg',
@@ -19,3 +19,16 @@ export const headerLinks: HeaderLink[] = [
   { name: 'About', url: '/about' },
   { name: 'Contact', url: '/contact' },
 ];
+
+export const profileConfig: ProfileConfig = {
+  avatar: '../../assets/images/profile.jpg',
+  name: 'かめのの',
+  bio: 'フロントエンド',
+  links: [
+    {
+      name: 'Twitter',
+      icon: '',
+      url: '',
+    },
+  ],
+};
