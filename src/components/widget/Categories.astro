@@ -1,0 +1,62 @@
+---
+import { category } from "@/data/blog/category";
+import { countCategory } from "@/utils/content-utils";
+---
+
+<div class="card-base">
+  <div class="title">Category</div>
+  <ul class="list">
+    {category.map(item => {
+      return (
+        <li class="item">
+          <a class="link" href={`/blog/category/${item.slug}`}>
+            <span class="name">{item.name}</span>
+            <span class="num">{countCategory(item.name)}</span>
+          </a>
+        </li>
+      )
+    })}
+  </ul>
+</div>
+
+<style lang="scss">
+  .title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    &::before {
+      content: '';
+      width: 0.25rem;
+      height: 1rem;
+      background: var(--primary);
+      border-radius: 0.125rem;
+    }
+  }
+  .list {
+    margin-top: 0.5rem;
+  }
+  .link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition-property: background, color, padding;
+    transition-duration: 0.3s;
+    @include mixin.hover {
+      background: var(--btn-regular-bg);
+      color: var(--primary);
+      padding-left: 0.75rem;
+    }
+    .num {
+      padding: 0.2rem 0.65rem;
+      color: var(--btn-content);
+      background: var(--btn-regular-bg);
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 700;
+    }
+  }
+</style>

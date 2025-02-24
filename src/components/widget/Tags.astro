@@ -1,0 +1,45 @@
+---
+import { tags } from "@/data/blog/tags";
+---
+
+<div class="card-base">
+  <div class="title">Tag</div>
+  <ul class="list">
+    {tags.map(item => {
+      return (
+        <li class="item">
+          <a class="btn-regular link" href={`/blog/category/${item.slug}`}>
+            <span class="name">{item.name}</span>
+          </a>
+        </li>
+      )
+    })}
+  </ul>
+</div>
+
+<style lang="scss">
+  .title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    &::before {
+      content: '';
+      width: 0.25rem;
+      height: 1rem;
+      background: var(--primary);
+      border-radius: 0.125rem;
+    }
+  }
+  .list {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .link {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+</style>
