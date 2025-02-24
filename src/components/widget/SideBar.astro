@@ -1,0 +1,19 @@
+---
+import Categories from "./Categories.astro";
+import Profile from "./Profile.astro";
+import Tags from "./Tags.astro";
+---
+
+<div class="sidebar">
+  <Profile />
+  <Categories />
+  <Tags />
+</div>
+
+<style lang="scss">
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+  }
+</style>
