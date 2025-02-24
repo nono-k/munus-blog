@@ -1,0 +1,87 @@
+---
+import { Image } from "astro:assets";
+import avatar from "@/assets/images/profile.jpg";
+import { Icon } from 'astro-icon/components'
+
+const profile = {
+  avatar: avatar,
+  name: 'かめのの',
+  bio: '日常についてのつぶやき場',
+  links: [
+    {
+      name: 'X/Twitter',
+      icon: 'fa6-brands:x-twitter',
+      url: 'https://x.com/kameno_no3',
+    },
+    {
+      name: 'GitHub',
+      icon: 'fa6-brands:github',
+      url: 'https://github.com/iwasaki-source',
+    },
+  ],
+};
+---
+
+<div class="card-base profile">
+  <a href="/about">
+    <div class="avatar">
+      <Image src={profile.avatar} alt={profile.name} />
+    </div>
+  </a>
+  <div class="body">
+    <div class="name">{profile.name}</div>
+    <div class="bio">{profile.bio}</div>
+    <ul class="links">
+      {profile.links.map((link) => (
+        <li>
+          <a class="btn-regular link" aria-label={link.name} href={link.url} target="_blank">
+            <Icon name={link.icon} />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
+
+<style lang="scss">
+  .avatar {
+    border-radius: 0.75rem;
+    overflow: hidden;
+  }
+  .body {
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+  .name {
+    position: relative;
+    font-size: 1.125rem;
+    font-weight: 700;
+    padding-bottom: 0.3rem;
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      translate: -50% 0;
+      width: 1.2rem;
+      height: 0.25rem;
+      background: var(--primary);
+      border-radius: 0.125rem;
+    }
+  }
+  .bio {
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    color: #a3a3a3;
+  }
+  .links {
+    margin-top: 0.75rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    .link {
+      padding: 0.5rem;
+      font-size: 1.25rem;
+    }
+  }
+</style>
