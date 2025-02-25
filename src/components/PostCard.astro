@@ -1,0 +1,68 @@
+---
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import PostMeta from "./PostMeta.astro";
+
+const { url, title, date, image, category, tags, description } = Astro.props;
+---
+
+<div class="card-base card">
+  <div class="card__body">
+    <a href={url} class="card__title">{title}</a>
+    <PostMeta date={date} category={category} tags={tags} />
+    <p class="card__desc">{description}</p>
+  </div>
+  {image ?
+    <a href={url} class="card__img">
+      <Image src={image} alt={title} />
+    </a>
+    :
+    <a href={url} class="btn-regular card__arrow">
+      <Icon name="material-symbols:chevron-right-rounded" />
+    </a>}
+</div>
+
+<style lang="scss">
+  .card {
+    display: flex;
+    justify-content: space-between;
+    &__title {
+      font-size: 1.75rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition-property: color;
+      transition-duration: 0.3s;
+      &::before {
+        content: '';
+        width: 0.25rem;
+        height: 1rem;
+        background: var(--primary);
+        border-radius: 0.1rem;
+      }
+      @include mixin.hover {
+        color: var(--primary);
+      }
+    }
+    &__desc {
+      margin-top: 0.75rem;
+      margin-left: 1rem;
+    }
+    &__arrow {
+      width: 2.8rem;
+      border-radius: 0.75rem;
+      font-size: 2rem;
+    }
+    &__img {
+      width: 240px;
+      border-radius: 1rem;
+      overflow: hidden;
+      aspect-ratio: 5 / 3;
+      img {
+        height: 100%;
+      }
+    }
+  }
+</style>

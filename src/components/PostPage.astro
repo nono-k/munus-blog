@@ -1,0 +1,29 @@
+---
+import PostCard from "@/components/PostCard.astro";
+const { posts } = Astro.props;
+// console.log(posts);
+---
+
+<ul class="post-list">
+  {posts.map(entry => (
+    <li>
+      <PostCard
+        url={`/blog/${entry.slug}`}
+        title={entry.data.title}
+        date={entry.data.pubDate}
+        image={entry.data.image}
+        category={entry.data.category}
+        tags={entry.data.tags}
+        description={entry.data.description}
+      />
+    </li>
+  ))}
+</ul>
+
+<style lang="scss">
+  .post-list {
+    > * + * {
+      margin-top: 1rem;
+    }
+  }
+</style>

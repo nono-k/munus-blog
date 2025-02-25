@@ -1,7 +1,14 @@
 ---
-import Layout from '../layouts/Layout.astro';
+// import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+
+import PostPage from "@/components/PostPage.astro";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+
+const posts = await getCollection('blog');
+// console.log(posts);
 ---
 
-<Layout>
-
-</Layout>
+<MainGridLayout>
+  <PostPage posts={posts} />
+</MainGridLayout>
