@@ -1,0 +1,27 @@
+---
+import Fotter from '@/components/base/Fotter.astro';
+import SideBar from '@/components/widget/SideBar.astro';
+import Layout from '@/layouts/Layout.astro';
+---
+
+<Layout>
+  <main class="main">
+    <SideBar />
+    <slot />
+    <Fotter />
+  </main>
+</Layout>
+
+<style lang="scss">
+  .main {
+    max-width: var(--page-width);
+    margin-inline: auto;
+    margin-top: -5rem;
+    padding-inline: 1rem;
+    display: grid;
+    grid-template-columns: 16rem auto;
+    grid-template-rows: 1fr 5rem;
+    column-gap: 1rem;
+    row-gap: 1rem;
+  }
+</style>
