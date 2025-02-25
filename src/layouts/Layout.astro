@@ -1,4 +1,10 @@
 ---
+// Supports weights 100-900
+import '@fontsource-variable/genos';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import '@fontsource/kiwi-maru';
+
 import '@/styles/styles.scss';
 
 import BackgroundImage from '@/components/base/BackgroundImage.astro';
@@ -21,10 +27,7 @@ const props = Astro.props;
 </html>
 
 <style>
-	html,
 	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
+		font-family: 'IBM Plex Mono', 'Kiwi Maru', sans-serif;
 	}
 </style>
