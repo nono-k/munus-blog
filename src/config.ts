@@ -1,4 +1,4 @@
-import type { HeaderLink, ProfileConfig, SiteConfig } from '@/types/config';
+import type { HeaderLink, SiteConfig } from '@/types/config';
 
 export const siteConfig: SiteConfig = {
   siteTitle: 'munus',
@@ -19,16 +19,3 @@ export const headerLinks: HeaderLink[] = [
   { name: 'About', url: '/about' },
   { name: 'Contact', url: '/contact' },
 ];
-
-export const profileConfig: ProfileConfig = {
-  avatar: '../../assets/images/profile.jpg',
-  name: 'かめのの',
-  bio: 'フロントエンド',
-  links: [
-    {
-      name: 'Twitter',
-      icon: '',
-      url: '',
-    },
-  ],
-};
