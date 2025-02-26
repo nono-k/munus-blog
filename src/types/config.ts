@@ -1,3 +1,5 @@
+import type { ImageMetadata } from 'astro';
+
 export type SiteConfig = {
   siteTitle: string;
   siteDesc: string;
@@ -18,7 +20,7 @@ export type HeaderLink = {
 };
 
 export type ProfileConfig = {
-  avatar: string;
+  avatar: ImageMetadata;
   name: string;
   bio: string;
   links: {
@@ -36,4 +38,20 @@ export type Category = {
 export type Tags = {
   name: string;
   slug: string;
+};
+
+export type BlogPostData = {
+  body: string;
+  title: string;
+  pubDate: string;
+  image?: string;
+  ogp?: string;
+  category: string;
+  tags: string[];
+  description: string;
+  draft: boolean;
+  prevTitle?: string;
+  prevSlug?: string;
+  nextTitle?: string;
+  nextSlug?: string;
 };

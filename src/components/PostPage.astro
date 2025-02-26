@@ -1,11 +1,17 @@
 ---
+import type { CollectionEntry } from "astro:content";
 import PostCard from "@/components/PostCard.astro";
-const { posts } = Astro.props;
-// console.log(posts);
+import type { Page } from "astro";
+
+interface Props {
+  page: Page<CollectionEntry<"blog">>;
+}
+
+const { page } = Astro.props;
 ---
 
 <ul class="post-list">
-  {posts.map(entry => (
+  {page.data.map(entry => (
     <li>
       <PostCard
         url={`/blog/${entry.slug}`}
