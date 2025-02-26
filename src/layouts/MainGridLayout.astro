@@ -2,9 +2,11 @@
 import Fotter from '@/components/base/Fotter.astro';
 import SideBar from '@/components/widget/SideBar.astro';
 import Layout from '@/layouts/Layout.astro';
+
+const props = Astro.props;
 ---
 
-<Layout>
+<Layout {...props}>
   <main class="main">
     <SideBar />
     <slot />
