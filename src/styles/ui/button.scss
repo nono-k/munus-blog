@@ -14,3 +14,18 @@
     background-color: var(--btn-regular-bg-hover);
   }
 }
+
+.btn-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--card-bg);
+  color: var(--primary);
+  border-radius: 0.5rem;
+  transition-property: background-color;
+  transition-duration: 0.3s;
+
+  @include mixin.hover {
+    background-color: var(--btn-card-bg-hover);
+  }
+}
