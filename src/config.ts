@@ -15,7 +15,9 @@ export const siteConfig: SiteConfig = {
 
 export const headerLinks: HeaderLink[] = [
   { name: 'Home', url: '/' },
-  { name: 'Blog', url: '/blog' },
+  { name: 'Tag', url: '/tag' },
   { name: 'About', url: '/about' },
   { name: 'Contact', url: '/contact' },
 ];
+
+export const COUNT_PER_PAGE: number = 10;
