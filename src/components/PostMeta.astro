@@ -1,4 +1,6 @@
 ---
+import { categoryList } from "@/data/blog/category";
+import { tagsList } from "@/data/blog/tags";
 import { Icon } from "astro-icon/components";
 
 interface Props {
@@ -8,6 +10,13 @@ interface Props {
 }
 
 const { date, category, tags } = Astro.props;
+
+const categorySlug = categoryList.find(cat => cat.name === category)?.slug;
+
+const getTagSlug = (tag: string) => {
+  const tagData = tagsList.find(tagData => tagData.name === tag);
+  return tagData?.slug;
+};
 ---
 
 <div class="post-meta">
@@ -21,7 +30,7 @@ const { date, category, tags } = Astro.props;
     <div class="btn-regular post-meta__icon">
       <Icon name="material-symbols:book-2-outline-rounded" />
     </div>
-    <a href=`category/${category}` class="post-meta__text hover">{category}</a>
+    <a href=`category/${categorySlug}` class="post-meta__text hover">{category}</a>
   </div>
   <div class="post-meta__item">
     <div class="btn-regular post-meta__icon">
@@ -30,7 +39,7 @@ const { date, category, tags } = Astro.props;
     <div class="post-meta__tags">
       {tags.map((tag, i) => (
         <div class:list={[{"hidden": i == 0}, "separator"]}>/</div>
-        <a href=`tag/${tag}` class="post-meta__tag hover">{tag}</a>
+        <a href=`tag/${getTagSlug(tag)}` class="post-meta__tag hover">{tag}</a>
         )
       )}
     </div>

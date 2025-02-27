@@ -1,11 +1,11 @@
 ---
-import { tags } from "@/data/blog/tags";
+import { tagsList } from "@/data/blog/tags";
 ---
 
 <div class="card-base">
   <div class="title">Tag</div>
   <ul class="list">
-    {tags.map(item => {
+    {tagsList.map(item => {
       return (
         <li class="item">
           <a class="btn-regular link" href={`/blog/tag/${item.slug}`}>

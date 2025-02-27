@@ -1,12 +1,12 @@
 ---
-import { category } from "@/data/blog/category";
+import { categoryList } from "@/data/blog/category";
 import { countCategory } from "@/utils/content-utils";
 ---
 
 <div class="card-base">
   <div class="title">Category</div>
   <ul class="list">
-    {category.map(item => {
+    {categoryList.map(item => {
       return (
         <li class="item">
           <a class="link" href={`/blog/category/${item.slug}`}>
