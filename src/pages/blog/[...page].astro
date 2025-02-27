@@ -1,0 +1,25 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Pagination from "@/components/Pagination.astro";
+import PostPage from "@/components/PostPage.astro";
+import { COUNT_PER_PAGE } from "@/config";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { getSortedBlogs } from "@/utils/content-utils";
+import type { Page, PaginateFunction } from "astro";
+
+interface Props {
+  page: Page<CollectionEntry<"blog">>;
+}
+
+export async function getStaticPaths({ paginate }: { paginate: PaginateFunction }) {
+  const allBlogPosts = await getSortedBlogs();
+  return paginate(allBlogPosts, { pageSize: COUNT_PER_PAGE });
+}
+
+const { page } = Astro.props;
+---
+
+<MainGridLayout>
+  <PostPage page={page} />
+  <Pagination page={page} baseUrl="/blog" />
+</MainGridLayout>
