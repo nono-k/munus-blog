@@ -8,7 +8,7 @@ import { tags } from "@/data/blog/tags";
     {tags.map(item => {
       return (
         <li class="item">
-          <a class="btn-regular link" href={`/blog/category/${item.slug}`}>
+          <a class="btn-regular link" href={`/blog/tag/${item.slug}`}>
             <span class="name">{item.name}</span>
           </a>
         </li>
