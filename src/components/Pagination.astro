@@ -1,0 +1,89 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { Page } from  "astro";
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  page: Page<CollectionEntry<"blog">>;
+  baseUrl: string;
+}
+
+const { page, baseUrl } = Astro.props;
+
+interface PaginationLink {
+  page: number | string;
+  url?: string;
+}
+
+const generatePaginationLinks = (
+  page: Page<CollectionEntry<"blog">>
+): PaginationLink[] => {
+  const { currentPage, lastPage } = page;
+  const range = 2;
+  const links: PaginationLink[] = [];
+
+  for (let i =1; i <= lastPage; i++) {
+    if (i === 1) {
+      links.push({ page: i, url: `${baseUrl}` });
+    } else if (
+      i === lastPage ||
+      (i >= currentPage - range && i <= currentPage + range)
+    ) {
+      links.push({ page: i, url: `${baseUrl}/${i}` });
+    } else if (links[links.length - 1]?.page !== "...") {
+      links.push({ page: "..." });
+    }
+  }
+  return links;
+}
+---
+<nav class="pagination__nav">
+  {
+    page.currentPage > 1 && (
+      <a href={page.url.prev} class="btn-card pagination prev">
+        <Icon name="material-symbols:chevron-left-rounded" />
+      </a>
+    )
+  }
+
+  {
+    generatePaginationLinks(page).map((link) => (
+      link.page === "..." ? (
+        <span class="btn-card pagination dots">...</span>
+      ) : (
+        <a href={link.url} class:list={["btn-card pagination", link.page === page.currentPage ? "active" : ""]}>{link.page}</a>
+      )
+      )
+    )
+  }
+
+  {
+    page.currentPage < page.lastPage && (
+      <a href={page.url.next} class="btn-card pagination next">
+        <Icon name="material-symbols:chevron-right-rounded" />
+      </a>
+    )
+  }
+</nav>
+
+<style lang="scss">
+  .pagination {
+    width: 2.75rem;
+    height: 2.75rem;
+    font-size: 1rem;
+    &.prev, &.next {
+      font-size: 1.75rem;
+    }
+    &.active {
+      background: var(--primary);
+      color: var(--white);
+      pointer-events: none;
+    }
+    &__nav {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+  }
+</style>
