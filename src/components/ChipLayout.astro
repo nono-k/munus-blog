@@ -1,0 +1,45 @@
+---
+interface Props {
+  chips: {
+    name: string;
+    url: string;
+  }[];
+  title: string;
+  cols: number;
+}
+
+const { chips, title, cols } = Astro.props;
+---
+<div class="card-base container">
+  <h1 class="title">{title}</h1>
+  <ul class="list">
+    {chips.map((chip) => (
+      <li class="list__item">
+        <a href={chip.url} class="link">{chip.name}</a>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style lang="scss" define:vars={{ cols }}>
+  .list {
+    display: grid;
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    gap: 0.25rem;
+    margin-top: 1.5rem;
+  }
+  .link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition-property: background, color, padding;
+    transition-duration: 0.3s;
+    @include mixin.hover {
+      background: var(--btn-regular-bg);
+      color: var(--primary);
+      padding-left: 0.75rem;
+    }
+  }
+</style>

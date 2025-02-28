@@ -30,7 +30,7 @@ const getTagSlug = (tag: string) => {
     <div class="btn-regular post-meta__icon">
       <Icon name="material-symbols:book-2-outline-rounded" />
     </div>
-    <a href=`category/${categorySlug}` class="post-meta__text hover">{category}</a>
+    <a href=`/blog/category/${categorySlug}` class="post-meta__text hover">{category}</a>
   </div>
   <div class="post-meta__item">
     <div class="btn-regular post-meta__icon">
@@ -39,7 +39,7 @@ const getTagSlug = (tag: string) => {
     <div class="post-meta__tags">
       {tags.map((tag, i) => (
         <div class:list={[{"hidden": i == 0}, "separator"]}>/</div>
-        <a href=`tag/${getTagSlug(tag)}` class="post-meta__tag hover">{tag}</a>
+        <a href=`/blog/tag/${getTagSlug(tag)}` class="post-meta__tag hover">{tag}</a>
         )
       )}
     </div>

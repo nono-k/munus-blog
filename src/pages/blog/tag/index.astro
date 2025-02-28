@@ -1,0 +1,15 @@
+---
+import ChipLayout from "@/components/ChipLayout.astro";
+import { tagsList } from "@/data/blog/tags";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+
+const chips = tagsList.map(({ name, slug }) => ({
+  name,
+  url: `/blog/tag/${slug}`
+}));
+const title = "Tag一覧";
+---
+
+<MainGridLayout>
+  <ChipLayout chips={chips} title={title} cols={3} />
+</MainGridLayout>

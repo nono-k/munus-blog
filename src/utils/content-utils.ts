@@ -29,6 +29,26 @@ export async function getSortedBlogs(): Promise<
   return sorted;
 }
 
+export async function getCategoryList(
+  categoryName: string,
+): Promise<{ body: string; data: BlogPostData; slug: string }[]> {
+  const sortedBlogs = await getSortedBlogs();
+  const filteredPosts = sortedBlogs.filter(
+    blog => blog.data.category === categoryName,
+  );
+  return filteredPosts;
+}
+
+export async function getTagList(
+  tagName: string,
+): Promise<{ body: string; data: BlogPostData; slug: string }[]> {
+  const sortedBlogs = await getSortedBlogs();
+  const filteredPosts = sortedBlogs.filter(blog =>
+    blog.data.tags.some(tag => tag === tagName),
+  );
+  return filteredPosts;
+}
+
 export const countCategory = async (category: string): Promise<number> => {
   const allBlogs = await getCollection('blog');
   const nonDraftBlogs = allBlogs.filter(blog => !blog.data.draft);

@@ -1,0 +1,15 @@
+---
+import ChipLayout from "@/components/ChipLayout.astro";
+import { categoryList } from "@/data/blog/category";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+
+const chips = categoryList.map(({ name, slug }) => ({
+  name,
+  url: `/blog/category/${slug}`
+}));
+const title = "Category一覧";
+---
+
+<MainGridLayout>
+  <ChipLayout chips={chips} title={title} cols={2} />
+</MainGridLayout>
