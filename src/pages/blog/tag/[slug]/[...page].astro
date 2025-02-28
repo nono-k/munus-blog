@@ -1,0 +1,35 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Pagination from "@/components/Pagination.astro";
+import PostPage from "@/components/PostPage.astro";
+import { COUNT_PER_PAGE } from "@/config";
+import { tagsList } from "@/data/blog/tags";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { getTagList } from "@/utils/content-utils";
+import type { Page, PaginateFunction } from "astro";
+
+interface Props {
+  page: Page<CollectionEntry<"blog">>;
+  name: string;
+  slug: string;
+}
+
+export async function getStaticPaths({ paginate }: { paginate: PaginateFunction }) {
+  return Promise.all(tagsList.map(async (tag) => {
+    const { name, slug } = tag;
+    const filteredPost = await getTagList(name);
+    return paginate(filteredPost, {
+      params: { slug },
+      props: { name, slug },
+      pageSize: COUNT_PER_PAGE
+    });
+  })).then(results => results.flat());
+}
+
+const { page, name, slug } = Astro.props;
+---
+
+<MainGridLayout>
+  <PostPage page={page} />
+  <Pagination page={page} baseUrl=`/blog/tag/${slug}` />
+</MainGridLayout>
