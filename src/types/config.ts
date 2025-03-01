@@ -43,7 +43,7 @@ export type Tags = {
 export type BlogPostData = {
   body: string;
   title: string;
-  pubDate: string;
+  pubDate: Date;
   image?: string;
   ogp?: string;
   category: string;

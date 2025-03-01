@@ -1,18 +1,20 @@
 ---
 import { categoryList } from "@/data/blog/category";
 import { tagsList } from "@/data/blog/tags";
+import { formatDateToYYYYMMDD } from "@/utils/date-utils";
 import { Icon } from "astro-icon/components";
 
 interface Props {
-  date: string;
+  date: Date;
   category: string;
   tags: string[];
 }
 
 const { date, category, tags } = Astro.props;
 
-const categorySlug = categoryList.find(cat => cat.name === category)?.slug;
+const dateString = formatDateToYYYYMMDD(date);
 
+const categorySlug = categoryList.find(cat => cat.name === category)?.slug;
 const getTagSlug = (tag: string) => {
   const tagData = tagsList.find(tagData => tagData.name === tag);
   return tagData?.slug;
@@ -24,7 +26,7 @@ const getTagSlug = (tag: string) => {
     <div class="btn-regular post-meta__icon">
       <Icon name="material-symbols:calendar-today-outline-rounded" />
     </div>
-    <div class="post-meta__text">{date}</div>
+    <div class="post-meta__text">{dateString}</div>
   </div>
   <div class="post-meta__item">
     <div class="btn-regular post-meta__icon">
