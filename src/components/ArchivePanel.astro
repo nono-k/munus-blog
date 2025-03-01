@@ -1,0 +1,129 @@
+---
+const { posts } = Astro.props;
+
+interface Archive {
+  title: string;
+  slug: string;
+  date: Date;
+}
+
+const archives = new Map<number, Archive[]>();
+
+for (const post of posts) {
+  const date = new Date(post.data.pubDate);
+  const year = date.getFullYear();
+  if (!archives.has(year)) {
+    archives.set(year, []);
+  }
+  archives.get(year)?.push({
+    title: post.data.title,
+    slug: post.slug,
+    date,
+  });
+}
+
+function formatDate(date: Date) {
+  const month = (date.getMonth() + 1).toString().padStart(2, '0')
+  const day = date.getDate().toString().padStart(2, '0')
+  return `${month}-${day}`
+}
+---
+<div class="card-base archive">
+  {Array.from(archives.keys()).map(year => (
+    <div class="archive__item">
+      <div class="archive__year">
+        <h2>{year}</h2>
+        <div class="archive__circle"></div>
+        <span class="archive__count">{archives.get(year)?.length}投稿</span>
+      </div>
+      <ul class="archive__list">
+        {archives.get(year)?.map((post) => (
+          <li>
+            <a href={`/blog/${post.slug}`} class="archive__link">
+              <span class="archive__date">{formatDate(post.date)}</span>
+              <span class="archive__dot"></span>
+              <span class="archive__title">{post.title}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))}
+</div>
+
+<style lang="scss">
+  .archive {
+    padding: 1.5rem 2rem;
+    &__year {
+      display: grid;
+      grid-template-columns: 80px 80px 1fr;
+      align-items: center;
+      height: 3.75rem;
+      h2 {
+        text-align: right;
+        font-weight: 500;
+      }
+    }
+    &__circle {
+      width: 0.75rem;
+      height: 0.75rem;
+      border-radius: 50%;
+      border: 2px solid var(--primary);
+      margin-inline: auto;
+    }
+    &__dot {
+      display: block;
+      width: 0.25rem;
+      height: 0.25rem;
+      border-radius: .25rem;
+      background: var(--primary);
+      margin-inline: auto;
+      position: relative;
+      transition-property: height;
+      transition-duration: 0.15s;
+      &::before {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 0.5rem;
+        height: 2rem;
+        top: -2.2rem;
+        left: calc(50% - 1px);
+        border-left: 2px dashed rgba(#000, 0.1);
+      }
+    }
+    &__count {
+      color: var(--text-light);
+      font-size: 0.875rem;
+    }
+    &__link {
+      display: grid;
+      grid-template-columns: 80px 80px 1fr;
+      align-items: center;
+      height: 2.5rem;
+      border-radius: 0.5rem;
+      transition-property: background, color;
+      transition-duration: 0.15s;
+      @include mixin.hover {
+        background: var(--btn-plain-bg-hover);
+        color: var(--primary);
+        .archive__dot {
+          height: 1.25rem;
+        }
+        .archive__title {
+          translate: 0.25rem 0;
+        }
+      }
+    }
+    &__date {
+      color: var(--text-light);
+      font-size: 0.875rem;
+      text-align: right;
+    }
+    &__title {
+      font-weight: 500;
+      transition-property: translate;
+      transition-duration: 0.15s;
+    }
+  }
+</style>

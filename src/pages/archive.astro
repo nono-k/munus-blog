@@ -1,0 +1,10 @@
+---
+import ArchivePanel from "@/components/ArchivePanel.astro";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { getSortedBlogs } from "@/utils/content-utils";
+
+const posts = await getSortedBlogs();
+---
+<MainGridLayout>
+  <ArchivePanel posts={posts} />
+</MainGridLayout>
