@@ -10,8 +10,22 @@ import { headerLinks } from "@/config";
     <nav class="header__nav">
       <ul>
         {headerLinks.map((link) => (
-          <li>
-            <a href={link.url}>{link.name}</a>
+          <li class="header__item">
+            <a href={link.url}
+              class:list={["header__nav-link", link.popover && "popover__target"]}
+              >
+              {link.name}
+              {link.popover && <span class="arrow"></span>}
+            </a>
+            {link.popover && (
+              <ul class="popover card-base">
+                {link.popover.map(popover => (
+                  <li>
+                    <a href={popover.url} class="popover__link">{popover.name}</a>
+                  </li>
+                ))}
+              </ul>
+            )}
           </li>
         ))}
       </ul>
@@ -43,16 +57,34 @@ import { headerLinks } from "@/config";
     &__nav {
       ul {
         display: flex;
-        a {
-          font-weight: 500;
-          padding: 1rem;
-          border-radius: 1rem;
-          transition-property: background, color;
-          transition-duration: 0.3s;
-          @include mixin.hover {
-            background: var(--btn-plain-bg-hover);
-            color: var(--primary);
-          }
+      }
+    }
+    &__nav-link {
+      font-weight: 500;
+      padding: 0.75rem 1rem;
+      border-radius: 1rem;
+      transition-property: background, color;
+      transition-duration: 0.3s;
+      @include mixin.hover {
+        background: var(--btn-plain-bg-hover);
+        color: var(--primary);
+      }
+      .arrow {
+        display: inline-block;
+        margin-left: 0.15rem;
+        width: 0.5rem;
+        height: 0.5rem;
+        border-bottom: 1px solid currentColor;
+        border-right: 1px solid currentColor;
+        rotate: 45deg;
+        translate: 0 -0.12rem;
+        transition-property: rotate;
+        transition-duration: 0.3s;
+      }
+      &:has(+ .popover.active) {
+        .arrow {
+          rotate: -135deg;
+          translate: 0 0.1rem;
         }
       }
     }
@@ -61,5 +93,60 @@ import { headerLinks } from "@/config";
       font-family: 'Genos Variable', sans-serif;
       font-weight: 500;
     }
+    &__item {
+      position: relative;
+    }
+  }
+  .popover {
+    position: absolute;
+    top: calc(var(--header-height) - 0.75rem);
+    left: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+    --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1);
+    box-shadow: 0 0 #0000, 0 0 #0000, var(--tw-shadow);
+    opacity: 0;
+    visibility: hidden;
+    transition-property: opacity, visibility;
+    transition-duration: 0.3s;
+    &.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    &__link {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.5rem;
+      transition-property: background, color;
+      transition-duration: 0.3s;
+      @include mixin.hover {
+        background: var(--btn-plain-bg-hover);
+        color: var(--primary);
+      }
+    }
   }
 </style>
+
+<script>
+  const popoverTargets = document.querySelectorAll('.popover__target');
+
+  popoverTargets.forEach(target => {
+    const popover = target.nextElementSibling;
+    target.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      popover?.classList.toggle('active');
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    document.querySelectorAll('.popover').forEach(popover => {
+      if (popover.classList.contains('active')) {
+        popover.classList.remove('active');
+      }
+    })
+  });
+</script>

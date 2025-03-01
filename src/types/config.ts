@@ -17,6 +17,10 @@ export type SiteConfig = {
 export type HeaderLink = {
   name: string;
   url: string;
+  popover?: {
+    name: string;
+    url: string;
+  }[];
 };
 
 export type ProfileConfig = {
