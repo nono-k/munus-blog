@@ -9,7 +9,9 @@ const props = Astro.props;
 <Layout {...props}>
   <main class="main">
     <SideBar />
-    <slot />
+    <div class="container">
+      <slot />
+    </div>
     <Fotter />
   </main>
 </Layout>
