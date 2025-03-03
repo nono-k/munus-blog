@@ -1,5 +1,6 @@
 ---
 import { headerLinks } from "@/config";
+import Search from "../Search.astro";
 import ThemeIcon from "../ThemeIcon.astro";
 ---
 
@@ -31,7 +32,7 @@ import ThemeIcon from "../ThemeIcon.astro";
         ))}
       </ul>
     </nav>
-    <div class="header__right">seach</div>
+    <Search />
     <ThemeIcon />
   </div>
 </header>
@@ -57,6 +58,9 @@ import ThemeIcon from "../ThemeIcon.astro";
       padding-inline: 1rem;
     }
     &__nav {
+      position: absolute;
+      left: 50%;
+      translate: -50% 0;
       ul {
         display: flex;
       }

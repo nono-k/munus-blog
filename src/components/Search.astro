@@ -1,0 +1,33 @@
+---
+import { Icon } from "astro-icon/components";
+---
+<button class="search__btn">
+  <span class="search__text">⌘ + K</span>
+  <Icon name="material-symbols:search-rounded" class="search__icon" />
+</button>
+
+<style lang="scss">
+  .search {
+    &__btn {
+      margin-left: auto;
+      margin-right: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--line-color);
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.5rem;
+      color: var(--text-light);
+      cursor: pointer;
+      @include mixin.hover {
+        background: var(--btn-plain-bg-hover);
+      }
+    }
+    &__text {
+      font-size: 0.875rem;
+    }
+    &__icon {
+      font-size: 1.25rem;
+    }
+  }
+</style>
