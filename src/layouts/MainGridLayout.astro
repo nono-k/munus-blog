@@ -27,5 +27,9 @@ const props = Astro.props;
     grid-template-rows: 1fr 5rem;
     column-gap: 1rem;
     row-gap: 1rem;
+    @include mixin.mobile {
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(3, auto);
+    }
   }
 </style>

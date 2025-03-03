@@ -15,5 +15,8 @@ import Tags from "./Tags.astro";
     display: flex;
     flex-direction: column;
     row-gap: 1rem;
+    @include mixin.mobile {
+      grid-row: 2 / 3;
+    }
   }
 </style>
