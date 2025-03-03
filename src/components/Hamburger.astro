@@ -1,0 +1,104 @@
+---
+import { headerLinks } from "@/config";
+import { Icon } from "astro-icon/components";
+---
+
+<button class="hamburger__trigger btn-plain">
+  <span class="hamburger__icon">
+    <Icon name="material-symbols:menu" />
+  </span>
+  <nav class="hamburger__nav card-base">
+    <ul class="hamburger__list">
+      {headerLinks.map((link) => (
+        <li class="hamburger__item">
+          <a href={link.url} class="hamburger__link">{link.name}</a>
+          {link.popover && (
+              <ul class="">
+                {link.popover.map(popover => (
+                  <li>
+                    <a href={popover.url} class="hamburger__link">-{popover.name}</a>
+                  </li>
+                ))}
+              </ul>
+            )}
+        </li>
+      ))}
+    </ul>
+  </nav>
+</button>
+
+<style lang="scss">
+  .hamburger {
+    &__trigger {
+      width: 2.5rem;
+      height: 2.5rem;
+      position: relative;
+      border-radius: 0.5rem;
+      &.active {
+        background: var(--btn-plain-bg-hover);
+      }
+    }
+    &__icon {
+      font-size: 1.25rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    &__nav {
+      width: 12rem;
+      position: absolute;
+      top: calc(var(--header-height) - 0.5rem);
+      right: -0.5rem;
+      text-align: left;
+      --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1);
+      box-shadow: 0 0 #0000, 0 0 #0000, var(--tw-shadow);
+      opacity: 0;
+      visibility: hidden;
+      transition-property: opacity, visibility;
+      transition-duration: 0.3s;
+      &.active {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+    &__list {
+      > * + * {
+        margin-top: 0.5rem;
+      }
+      ul {
+        margin-left: 1rem;
+        .hamburger__link {
+          font-size: 0.875rem;
+          padding-block: 0.2rem;
+        }
+      }
+    }
+    &__link {
+      display: block;
+      font-weight: 500;
+      color: var(--text-color);
+      transition: color 0.3s;
+      @include mixin.hover {
+        color: var(--primary);
+      }
+    }
+  }
+</style>
+
+<script>
+  const hamburger = document.querySelector('.hamburger__trigger');
+  const nav = document.querySelector('.hamburger__nav');
+
+  hamburger?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    hamburger?.classList.toggle('active');
+    nav?.classList.toggle('active');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (nav?.classList.contains('active')) {
+      hamburger?.classList.remove('active');
+      nav?.classList.remove('active');
+    }
+  });
+</script>
