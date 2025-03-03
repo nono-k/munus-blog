@@ -15,6 +15,23 @@
   }
 }
 
+.btn-plain {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: none;
+  color: #000000bf;
+  transition-property: color, background-color;
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+  transition-duration: .15s;
+
+  @include mixin.hover {
+    color: var(--primary);
+    background-color: var(--btn-plain-bg-hover);
+  }
+}
+
 .btn-card {
   display: flex;
   justify-content: center;
