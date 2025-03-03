@@ -1,9 +1,10 @@
 ---
 import { Image } from "astro:assets";
 import avatar from "@/assets/images/profile.jpg";
+import type { ProfileConfig } from "@/types/config";
 import { Icon } from 'astro-icon/components'
 
-const profile = {
+const profile: ProfileConfig = {
   avatar: avatar,
   name: 'かめのの',
   bio: '日常についてのつぶやき場',
