@@ -8,8 +8,14 @@ const chips = tagsList.map(({ name, slug }) => ({
   url: `/blog/tag/${slug}`
 }));
 const title = "Tag一覧";
+
+const pageTitle = "Tag";
+const description = "Tag一覧";
 ---
 
-<MainGridLayout>
+<MainGridLayout
+  pageTitle={pageTitle}
+  description={description}
+  >
   <ChipLayout chips={chips} title={title} cols={3} />
 </MainGridLayout>

@@ -4,7 +4,13 @@ import MainGridLayout from "@/layouts/MainGridLayout.astro";
 import { getSortedBlogs } from "@/utils/content-utils";
 
 const posts = await getSortedBlogs();
+
+const pageTitle = "Archive";
+const description = "Archive一覧";
 ---
-<MainGridLayout>
+<MainGridLayout
+  pageTitle={pageTitle}
+  description={description}
+  >
   <ArchivePanel posts={posts} />
 </MainGridLayout>

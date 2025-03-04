@@ -8,8 +8,14 @@ const chips = categoryList.map(({ name, slug }) => ({
   url: `/blog/category/${slug}`
 }));
 const title = "Category一覧";
+
+const pageTitle = "Category";
+const description = "Category一覧";
 ---
 
-<MainGridLayout>
+<MainGridLayout
+  pageTitle={pageTitle}
+  description={description}
+  >
   <ChipLayout chips={chips} title={title} cols={2} />
 </MainGridLayout>
