@@ -1,0 +1,95 @@
+---
+
+---
+<div class="stack">
+  <slot />
+</div>
+
+<style lang="scss" is:global>
+  .stack {
+    margin-inline: 1rem;
+    > * + * {
+      margin-top: var(--stack-space, 1.5rem);
+    }
+    h2 {
+      font-size: 1.75rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      &::before {
+        content: '';
+        width: 0.28rem;
+        height: 1.25rem;
+        background: var(--primary);
+        border-radius: 0.375rem;
+      }
+    }
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      &::before {
+        content: '';
+        width: 0.5rem;
+        height: 0.5rem;
+        background: var(--primary);
+        border-radius: 50%;
+      }
+    }
+    ul, ol {
+      padding-left: 1rem;
+      > * + * {
+        margin-top: 0.5rem;
+      }
+      ul {
+        margin-top: 0.5rem;
+        padding-left: 0;
+      }
+    }
+    li {
+      list-style: unset;
+      margin-left: 1.5rem;
+    }
+    a {
+      color: var(--primary);
+      text-decoration-line: underline;
+      text-decoration-style: dashed;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 4px;
+    }
+    strong {
+      background: linear-gradient(transparent 60%, var(--btn-regular-bg) 40%);
+      color: #000;
+    }
+    span code {
+      background: var(--btn-regular-bg) !important;
+      border-radius: 0.375rem;
+      color: var(--btn-content) !important;
+      padding: 0.125rem 0.25rem;
+      font-family: JetBrains Mono Variable,ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;
+    }
+    blockquote {
+      background: var(--primary-color-transparent);
+      border-radius: 0.25rem;
+      padding: 0.5rem 0.75rem;
+      padding-left: 1rem;
+      border-left: 0.25rem solid var(--primary);
+    }
+    hr {
+      border: 0;
+      margin-block: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &::before {
+        content: '•••';
+        font-size: 1.25em;
+        letter-spacing: .2em;
+      }
+    }
+  }
+</style>

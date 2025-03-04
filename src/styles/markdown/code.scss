@@ -1,0 +1,44 @@
+@use '../mixin';
+
+[data-rehype-pretty-code-figure] {
+  position: relative;
+  margin-top: 2.5rem;
+
+  [data-rehype-pretty-code-title] {
+    position: absolute;
+    top: -1rem;
+    left: 0;
+    padding: 0.5rem 1rem;
+    background: #303446;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1;
+    color: #c6d0f5;
+  }
+
+  pre {
+    border-radius: 0.5rem;
+    overflow-x: auto;
+  }
+
+  pre>code {
+    display: grid;
+    border-radius: 0.5rem;
+    padding: 1.5rem 0 1.5rem;
+    line-height: 1.5;
+    font-family: JetBrains Mono Variable, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+    font-size: 0.85em;
+
+    [data-line] {
+      border-left: 4px solid transparent;
+      padding: 0 1.5rem;
+    }
+
+    .highlighted {
+      background-color: #2e4c35;
+      border-color: #469458;
+    }
+  }
+}
