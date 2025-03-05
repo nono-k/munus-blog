@@ -173,29 +173,15 @@ import ThemeIcon from "../ThemeIcon.astro";
     const header = document.querySelector('.header');
     const headerTarget = document.querySelector('.main');
     let lastScrollY = window.scrollY;
-    let isHiddenByTarget = false;
 
     if (!header || !headerTarget) return;
-
-    const targetObserver = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        header?.classList.add('hidden');
-        isHiddenByTarget = true;
-      } else {
-        isHiddenByTarget = false;
-      }
-    }, { threshold: 0.5 });
-
-    targetObserver.observe(headerTarget);
 
     const onScroll = () => {
       const currentScrollY = window.scrollY;
       if (currentScrollY < lastScrollY) {
         header?.classList.remove('hidden');
-        isHiddenByTarget = false;
-      } else if (!isHiddenByTarget && currentScrollY > lastScrollY) {
+      } else if (currentScrollY > 180) {
         header.classList.add('hidden');
-        isHiddenByTarget = true;
       }
       lastScrollY = currentScrollY;
     }
