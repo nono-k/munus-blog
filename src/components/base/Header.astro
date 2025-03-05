@@ -50,8 +50,12 @@ import ThemeIcon from "../ThemeIcon.astro";
     margin-inline: auto;
     padding-inline: 1rem;
     z-index: 10;
+    transition: translate 0.3s;
     @include mixin.mobile {
       padding-inline: 0;
+    }
+    &.hidden {
+      translate: -50% -100%;
     }
     &__inner {
       height: var(--header-height);
@@ -164,4 +168,40 @@ import ThemeIcon from "../ThemeIcon.astro";
       }
     })
   });
+
+  function headerScroll() {
+    const header = document.querySelector('.header');
+    const headerTarget = document.querySelector('.main');
+    let lastScrollY = window.scrollY;
+    let isHiddenByTarget = false;
+
+    if (!header || !headerTarget) return;
+
+    const targetObserver = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        header?.classList.add('hidden');
+        isHiddenByTarget = true;
+      } else {
+        isHiddenByTarget = false;
+      }
+    }, { threshold: 0.5 });
+
+    targetObserver.observe(headerTarget);
+
+    const onScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY < lastScrollY) {
+        header?.classList.remove('hidden');
+        isHiddenByTarget = false;
+      } else if (!isHiddenByTarget && currentScrollY > lastScrollY) {
+        header.classList.add('hidden');
+        isHiddenByTarget = true;
+      }
+      lastScrollY = currentScrollY;
+    }
+
+    window.addEventListener('scroll', onScroll);
+  }
+
+  headerScroll();
 </script>
