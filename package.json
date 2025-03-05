@@ -15,6 +15,8 @@
     "@fontsource/kiwi-maru": "^5.1.1",
     "astro": "^5.3.0",
     "rehype-pretty-code": "^0.14.0",
+    "remark-breaks": "^4.0.0",
+    "remark-gemoji": "^8.0.0",
     "sass": "^1.85.0"
   },
   "devDependencies": {

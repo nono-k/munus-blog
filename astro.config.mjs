@@ -4,6 +4,8 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import icon from 'astro-icon';
 import rehypePrettyCode from 'rehype-pretty-code';
+import remarkBreaks from 'remark-breaks';
+import remarkGemoji from 'remark-gemoji';
 import { siteConfig } from './src/config';
 
 const { siteUrl } = siteConfig;
@@ -49,7 +51,7 @@ export default defineConfig({
   integrations: [mdx(), icon()],
   markdown: {
     syntaxHighlight: false,
-    remarkPlugins: [],
+    remarkPlugins: [remarkBreaks, remarkGemoji],
     rehypePlugins: [[rehypePrettyCode, codeOptions]],
   },
 });
