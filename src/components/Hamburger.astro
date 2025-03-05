@@ -37,6 +37,9 @@ import { Icon } from "astro-icon/components";
       &.active {
         background: var(--btn-plain-bg-hover);
       }
+      @include mixin.large {
+        display: none;
+      }
     }
     &__icon {
       font-size: 1.25rem;
