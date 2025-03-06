@@ -8,10 +8,6 @@ export type SiteConfig = {
   siteLocale: string;
   siteIcon: string;
   siteImg: string;
-
-  background: {
-    src: string;
-  };
 };
 
 export type HeaderLink = {
