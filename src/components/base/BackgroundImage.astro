@@ -1,16 +1,16 @@
 ---
-import { siteConfig } from "@/config";
-
-const backgroundImage = siteConfig.background.src;
+import { Image } from "astro:assets";
+import backgroundImage from "@/assets/images/background.jpg";
 ---
-
 <div class="background-image">
-  <img src={backgroundImage} alt="background" />
+  <Image src={backgroundImage} alt="background" />
 </div>
 
 <style lang="scss">
 .background-image {
   height: 280px;
+  position: relative;
+  z-index: -1;
   img {
     height: 100%;
     object-fit: cover;

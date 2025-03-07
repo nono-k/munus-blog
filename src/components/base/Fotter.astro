@@ -1,0 +1,39 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <small>&copy; <span>{currentYear}</span> munus. All Rights Reserved. /
+    <a href="" target="_blank">RSS</a> /
+    <a href="" target="_blank">Sitemap</a><br>
+    <a href="">Site Policy</a> /
+    <a href="">Privacy Policy</a>
+  </small>
+</footer>
+
+<style lang="scss">
+  .footer {
+    text-align: center;
+    align-content: center;
+    position: relative;
+    @include mixin.large {
+      grid-column: 2 / 3;
+    }
+    &::before {
+      content: '';
+      width: 80%;
+      height: 2px;
+      background-image: radial-gradient(circle, var(--line-color) 1px, transparent 1px);
+      background-position: left top;
+      background-repeat: repeat-x;
+      background-size: 10px 2px;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      translate: -50% 0;
+    }
+    small a {
+      color: var(--primary);
+    }
+  }
+</style>

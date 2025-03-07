@@ -6,13 +6,13 @@ const { siteTitle, siteDesc, siteLocale, siteType, siteIcon, siteImg } = siteCon
 const {
   pageTitle,
   description = siteDesc,
-  articleOgp,
+  blogOgp,
 } = Astro.props;
 
 const title = pageTitle ? `${pageTitle} | ${siteTitle}` : siteTitle;
 
-// const ogpImg = articleOgp ?
-//   articleOgp
+// const ogpImg = blogOgp ?
+//   blogOgp
 //   : siteImg;
 
 // const canonicalURL = new URL(Astro.url.pathname, Astro.site);
