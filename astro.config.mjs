@@ -3,7 +3,9 @@ import { defineConfig } from 'astro/config';
 
 import mdx from '@astrojs/mdx';
 import icon from 'astro-icon';
+import rehypeExternalLinks from 'rehype-external-links';
 import rehypePrettyCode from 'rehype-pretty-code';
+import rehypeRaw from 'rehype-raw';
 import remarkBreaks from 'remark-breaks';
 import remarkGemoji from 'remark-gemoji';
 import remarkLinkCard from 'remark-link-card';
@@ -63,6 +65,10 @@ export default defineConfig({
         },
       ],
     ],
-    rehypePlugins: [[rehypePrettyCode, codeOptions]],
+    rehypePlugins: [
+      rehypeRaw,
+      [rehypeExternalLinks, { target: '_blank' }],
+      [rehypePrettyCode, codeOptions],
+    ],
   },
 });
