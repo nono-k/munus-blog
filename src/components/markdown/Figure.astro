@@ -12,7 +12,7 @@ const { title, src, alt } = Astro.props;
 ---
 
 <figure class="figure">
-  <Image src={src} alt={alt} />
+  <Image src={src} alt={alt} width="1200" height="675" />
   { title && (
     <figcaption class="figcaption">
       <Fragment set:html={title} />

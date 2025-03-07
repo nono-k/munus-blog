@@ -1,0 +1,92 @@
+.rlc-container {
+  width: 100%;
+  max-height: 160px;
+  margin: 2.5rem auto 2.5rem;
+
+  color: var(--black);
+  text-decoration: none !important;
+
+  border: 1px solid currentColor;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: stretch;
+
+  transition: background 200ms ease-in-out 0s, box-shadow 200ms ease-in-out 0s;
+}
+
+.rlc-container:hover {
+  background-color: #FCBB030a;
+  box-shadow: 0 4px 5px 2px rgba(180, 180, 180, 0.2);
+}
+
+.rlc-info {
+  overflow: hidden;
+  padding: 0.5rem 1rem 1rem 0.5rem;
+  flex: 3 1 100px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  // justify-content: space-between;
+}
+
+.rlc-title {
+  font-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rlc-description {
+  font-size: 0.75rem;
+  color: var(--black);
+  overflow: hidden;
+  line-height: 1.25;
+  height: 2rem;
+  margin-top: 0.5rem;
+}
+
+.rlc-url-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: auto;
+
+  >figure.figure {
+    margin-block: 0;
+    height: 100%;
+  }
+}
+
+.rlc-favicon {
+  margin-right: 4px;
+  margin-top: 2px;
+  width: 12px;
+  height: 12px;
+}
+
+.rlc-url {
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.rlc-image-container {
+  position: relative;
+  flex: 1 1 100px;
+}
+
+.rlc-image-container {
+  >figure.figure {
+    margin-block: 0;
+    height: 100%;
+  }
+
+  img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    border-bottom-right-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+  }
+}

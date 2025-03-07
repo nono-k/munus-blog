@@ -6,6 +6,7 @@ import icon from 'astro-icon';
 import rehypePrettyCode from 'rehype-pretty-code';
 import remarkBreaks from 'remark-breaks';
 import remarkGemoji from 'remark-gemoji';
+import remarkLinkCard from 'remark-link-card';
 import { siteConfig } from './src/config';
 
 const { siteUrl } = siteConfig;
@@ -51,7 +52,17 @@ export default defineConfig({
   integrations: [mdx(), icon()],
   markdown: {
     syntaxHighlight: false,
-    remarkPlugins: [remarkBreaks, remarkGemoji],
+    remarkPlugins: [
+      remarkBreaks,
+      remarkGemoji,
+      [
+        remarkLinkCard,
+        {
+          cache: true,
+          shortenUrl: true,
+        },
+      ],
+    ],
     rehypePlugins: [[rehypePrettyCode, codeOptions]],
   },
 });
