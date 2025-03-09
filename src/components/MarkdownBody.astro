@@ -83,6 +83,9 @@
     }
     strong {
       background: linear-gradient(transparent 60%, var(--btn-regular-bg) 40%);
+      font-weight: 500;
+      color: #000;
+      color: var(--black);
     }
     span code {
       background: var(--btn-regular-bg) !important;
@@ -109,6 +112,13 @@
         content: '•••';
         font-size: 1.25em;
         letter-spacing: .2em;
+      }
+    }
+  }
+  .dark {
+    .stack {
+      strong {
+        background: linear-gradient(transparent 70%, var(--primary) 30%);
       }
     }
   }
