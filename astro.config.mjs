@@ -1,8 +1,10 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 
+import { rehypeHeadingIds } from '@astrojs/markdown-remark';
 import mdx from '@astrojs/mdx';
 import icon from 'astro-icon';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeExternalLinks from 'rehype-external-links';
 import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeRaw from 'rehype-raw';
@@ -69,6 +71,28 @@ export default defineConfig({
       rehypeRaw,
       [rehypeExternalLinks, { target: '_blank' }],
       [rehypePrettyCode, codeOptions],
+      rehypeHeadingIds,
+      [
+        rehypeAutolinkHeadings,
+        {
+          behavior: 'append',
+          properties: { className: ['anchor'] },
+          content: {
+            type: 'element',
+            tagName: 'span',
+            properties: {
+              className: ['anchor-icon'],
+              'data-pagefind-ignore': true,
+            },
+            children: [
+              {
+                type: 'text',
+                value: '#',
+              },
+            ],
+          },
+        },
+      ],
     ],
   },
 });
