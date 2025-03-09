@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 
 import { rehypeHeadingIds } from '@astrojs/markdown-remark';
 import mdx from '@astrojs/mdx';
+import remarkCallout from '@r4ai/remark-callout';
 import icon from 'astro-icon';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeExternalLinks from 'rehype-external-links';
@@ -59,6 +60,7 @@ export default defineConfig({
     remarkPlugins: [
       remarkBreaks,
       remarkGemoji,
+      remarkCallout,
       [
         remarkLinkCard,
         {
