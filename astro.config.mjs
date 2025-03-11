@@ -7,11 +7,13 @@ import remarkCallout from '@r4ai/remark-callout';
 import icon from 'astro-icon';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeExternalLinks from 'rehype-external-links';
+import rehypeKatex from 'rehype-katex';
 import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeRaw from 'rehype-raw';
 import remarkBreaks from 'remark-breaks';
 import remarkGemoji from 'remark-gemoji';
 import remarkLinkCard from 'remark-link-card';
+import remarkMath from 'remark-math';
 import { siteConfig } from './src/config';
 
 const { siteUrl } = siteConfig;
@@ -60,6 +62,7 @@ export default defineConfig({
     remarkPlugins: [
       remarkBreaks,
       remarkGemoji,
+      remarkMath,
       remarkCallout,
       [
         remarkLinkCard,
@@ -71,6 +74,7 @@ export default defineConfig({
     ],
     rehypePlugins: [
       rehypeRaw,
+      rehypeKatex,
       [rehypeExternalLinks, { target: '_blank' }],
       [rehypePrettyCode, codeOptions],
       rehypeHeadingIds,
