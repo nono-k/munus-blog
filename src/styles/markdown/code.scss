@@ -6,7 +6,7 @@
 
   [data-rehype-pretty-code-title] {
     position: absolute;
-    top: -1rem;
+    top: -1.2rem;
     left: 0;
     padding: 0.5rem 1rem;
     background: #303446;
@@ -39,6 +39,24 @@
     .highlighted {
       background-color: #2e4c35;
       border-color: #469458;
+    }
+  }
+
+  .rehype-pretty-copy {
+    margin-top: 0;
+    cursor: pointer;
+    padding: 0.3rem;
+    top: 0.75rem;
+    width: 36px;
+    height: 36px;
+    background: var(--primary-color-transparent);
+    border-radius: 0.5rem;
+    transition-property: opacity, background;
+    transition-duration: 0.3s;
+
+    @include mixin.hover {
+      background: var(--primary);
+      background: oklch(0.7 .15 var(--hue) / 40%);
     }
   }
 }

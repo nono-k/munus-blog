@@ -4,6 +4,7 @@ import { defineConfig } from 'astro/config';
 import { rehypeHeadingIds } from '@astrojs/markdown-remark';
 import mdx from '@astrojs/mdx';
 import remarkCallout from '@r4ai/remark-callout';
+import { transformerCopyButton } from '@rehype-pretty/transformers';
 import icon from 'astro-icon';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeExternalLinks from 'rehype-external-links';
@@ -21,6 +22,12 @@ const { siteUrl } = siteConfig;
 const codeOptions = {
   theme: 'catppuccin-frappe',
   defaultLang: 'plaintext',
+  transformers: [
+    transformerCopyButton({
+      visibility: 'hover',
+      feedbackDuration: 2_500,
+    }),
+  ],
   // @ts-ignore
   onVisitLine(node) {
     if (node.children.length === 0) {
