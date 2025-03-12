@@ -5,6 +5,7 @@ import type { CollectionEntry } from "astro:content";
 import MarkdownBody from "@/components/MarkdownBody.astro";
 import PostMeta from "@/components/PostMeta.astro";
 import Figure from "@/components/markdown/Figure.astro";
+import Tboc from "@/components/widget/Tboc.astro";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
 import { getSortedBlogs } from "@/utils/content-utils";
 
@@ -44,7 +45,7 @@ const {
         <div class="header__dot"></div>
       )}
     </header>
-
+    <Tboc headings={headings} />
     <MarkdownBody>
       <Content components={{ img: Figure }} />
     </MarkdownBody>

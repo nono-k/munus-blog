@@ -1,0 +1,132 @@
+---
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+interface TOCHeading extends MarkdownHeading {
+  children: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+
+const generateToc = (headings: MarkdownHeading[]): TOCHeading[] => {
+  const toc: TOCHeading[] = [];
+  let lastH2: TOCHeading | null = null;
+
+  for (const heading of headings) {
+    if (heading.depth === 2) {
+      lastH2 = { ...heading, children: [] };
+      toc.push(lastH2);
+    } else if (heading.depth === 3 && lastH2) {
+      lastH2.children.push(heading);
+    }
+  }
+
+  return toc;
+};
+
+const toc = generateToc(headings);
+---
+
+<details class="tboc">
+  <summary class="btn-regular tboc__title">
+    <span class="tboc__text">目次</span>
+    <span class="tboc__icon"></span>
+  </summary>
+  <div class="tboc__body">
+    <ul class="tboc__list">
+      {toc.map((h2) => (
+        <li class="tboc__item">
+          <a href={`#${h2.slug}`} class="tboc__link">
+            {h2.text}
+          </a>
+          {h2.children.length > 0 && (
+            <ul>
+              {h2.children.map((h3) => (
+                <li class="tboc__item">
+                  <a href={`#${h3.slug}`} class="tboc__link">{h3.text}</a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</details>
+
+<style lang="scss">
+  .tboc {
+    margin-inline: 2rem;
+    margin-bottom: 2rem;
+    &__title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--btn-regular-bg-hover);
+    }
+    &__text {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+      &::before {
+        content: '';
+        display: block;
+        height: 1.25rem;
+        width: 1.25rem;
+        background-color: currentColor;
+        mask-repeat: no-repeat;
+        mask-size: cover;
+        mask-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxZW0iIGhlaWdodD0iMWVtIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiIgZD0iTTggNmgxM004IDEyaDEzTTggMThoMTNNMyA2aC4wMU0zIDEyaC4wMU0zIDE4aC4wMSIvPjwvc3ZnPg==);
+      }
+    }
+    &[open] {
+      .tboc__title {
+        border-bottom-right-radius: 0px;
+        border-bottom-left-radius: 0px;
+        border-color: var(--primary);
+      }
+      .tboc__icon {
+        margin-top: 0.5rem;
+        rotate: -45deg;
+      }
+    }
+    &__icon {
+      display: block;
+      width: 0.5rem;
+      height: 0.5rem;
+      border-top: 1px solid currentColor;
+      border-right: 1px solid currentColor;
+      rotate: 135deg;
+      transition: rotate 0.15s;
+    }
+    &__body {
+      padding: 0.5rem 2.5rem 1rem;
+      border: 1px solid var(--primary);
+      border-top: none;
+      border-bottom-right-radius: 0.5rem;
+      border-bottom-left-radius: 0.5rem;
+    }
+    &__list {
+      > * + * {
+        margin-top: 0.5rem;
+      }
+      ul {
+        margin-top: 0.5rem;
+        margin-left: 1rem;
+      }
+    }
+    &__item {
+      list-style: inherit;
+    }
+    &__link {
+      transition: color 0.2s;
+      @include mixin.hover {
+        color: var(--primary);
+      }
+    }
+  }
+</style>
