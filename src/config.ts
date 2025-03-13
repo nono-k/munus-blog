@@ -14,7 +14,7 @@ export const headerLinks: HeaderLink[] = [
   { name: 'Home', url: '/' },
   {
     name: 'Blog',
-    url: '',
+    url: '/blog',
     popover: [
       { name: 'Archive', url: '/archive' },
       { name: 'Category', url: '/blog/category' },
