@@ -1,0 +1,60 @@
+---
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+
+const workPosts = await getCollection("work");
+const pageTitle = "Work";
+const description = "個人開発したものの一覧です。";
+---
+
+<MainGridLayout
+  pageTitle={pageTitle}
+  description={description}
+>
+  <div class="stack">
+    {workPosts.map((post) => (
+      <a href={post.data.link} class="card-base card">
+        <div class="card__img">
+          <Image src={post.data.image} alt={post.data.title} />
+        </div>
+        <div class="card__body">
+          <h2 class="card__title">{post.data.title}</h2>
+          <p class="card__desc" set:html={post.data.description} />
+        </div>
+      </a>
+    ))}
+  </div>
+</MainGridLayout>
+
+<style lang="scss">
+  .stack {
+    > * + * {
+      margin-top: 1rem;
+    }
+  }
+  .card {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    transition-property: background box-shadow;
+    transition-duration: 0.4s;
+    @include mixin.hover {
+      background: var(--btn-plain-bg-hover);
+      box-shadow: 0 0 0rem 0.1rem var(--primary);
+    }
+    &__img {
+      img {
+        border-radius: 1rem;
+        overflow: hidden;
+      }
+    }
+    &__title {
+      font-size: 2rem;
+    }
+    &__desc {
+      margin-top: 0.5rem;
+      line-height: 1.35;
+    }
+  }
+</style>
