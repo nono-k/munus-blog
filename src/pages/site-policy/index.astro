@@ -1,0 +1,21 @@
+---
+import MarkdownBody from "@/components/MarkdownBody.astro";
+import SubArticle from "@/components/SubArticle.astro";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+
+const posts = await Astro.glob("./site-policy.md");
+
+const { Content, frontmatter } = posts[0];
+const { title, description } = frontmatter;
+---
+
+<MainGridLayout
+  pageTitle={title}
+  description={description}
+  >
+  <SubArticle>
+    <MarkdownBody>
+      <Content />
+    </MarkdownBody>
+  </SubArticle>
+</MainGridLayout>
