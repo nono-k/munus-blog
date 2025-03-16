@@ -14,7 +14,7 @@
 }
 
 .rlc-container:hover {
-  background-color: #FCBB030a;
+  border-color: var(--primary);
   box-shadow: 0 4px 5px 2px rgba(180, 180, 180, 0.2);
 }
 
@@ -50,6 +50,7 @@
   margin-top: auto;
 
   >figure.figure {
+    margin-inline: 0;
     margin-block: 0;
     height: 100%;
   }
