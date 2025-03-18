@@ -26,4 +26,6 @@ export const headerLinks: HeaderLink[] = [
   { name: 'Contact', url: '/contact' },
 ];
 
+export const omitBackgroundHeadings: string[] = ['munus'];
+
 export const COUNT_PER_PAGE: number = 10;

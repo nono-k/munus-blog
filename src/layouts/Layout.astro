@@ -11,7 +11,13 @@ import BackgroundImage from '@/components/base/BackgroundImage.astro';
 import Header from '@/components/base/Header.astro';
 import Meta from '@/components/base/Meta.astro';
 
+interface Props {
+  pageTitle: string;
+  omitBackgroundHeading?: boolean;
+}
+
 const props = Astro.props;
+const { pageTitle, omitBackgroundHeading } = props;
 ---
 
 <!doctype html>
@@ -21,7 +27,10 @@ const props = Astro.props;
 	</head>
 	<body>
     <Header />
-    <BackgroundImage />
+    <BackgroundImage
+      title={pageTitle}
+      omitBackgroundHeading={omitBackgroundHeading}
+    />
 		<slot />
 	</body>
 </html>

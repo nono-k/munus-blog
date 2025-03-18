@@ -1,9 +1,21 @@
 ---
 import { Image } from "astro:assets";
 import backgroundImage from "@/assets/images/background.jpg";
+import { omitBackgroundHeadings } from "@/config";
+
+interface Props {
+  title: string;
+  omitBackgroundHeading?: boolean;
+}
+
+const { title, omitBackgroundHeading } = Astro.props;
+const isOmitTitle = omitBackgroundHeadings.includes(title) || omitBackgroundHeading;
 ---
 <div class="background-image">
   <Image src={backgroundImage} alt="background" />
+  {!isOmitTitle && (
+    <h1 class="background-image__title">{title}</h1>
+  )}
 </div>
 
 <style lang="scss">
@@ -14,6 +26,14 @@ import backgroundImage from "@/assets/images/background.jpg";
   img {
     height: 100%;
     object-fit: cover;
+  }
+  &__title {
+    position: absolute;
+    top: 6rem;
+    left: 50%;
+    translate: -50% 0;
+    font-size: 3rem;
+    color: oklch(1 0.0 0);
   }
 }
 </style>

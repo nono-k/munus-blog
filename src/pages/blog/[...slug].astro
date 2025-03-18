@@ -4,6 +4,7 @@ import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import MarkdownBody from "@/components/MarkdownBody.astro";
 import PostMeta from "@/components/PostMeta.astro";
+import PostNavLinks from "@/components/PostNavLinks.astro";
 import Figure from "@/components/markdown/Figure.astro";
 import Tboc from "@/components/widget/Tboc.astro";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
@@ -26,12 +27,12 @@ const { Content, headings } = await entry.render();
 const {
   data: { title, pubDate, category, tags, description }
 } = entry;
-// console.log(entry.data);
 ---
 <MainGridLayout
   pageTitle={title}
   description={description}
   blogOgp={entry.data.ogp}
+  omitBackgroundHeading=true
   >
   <div class="article card-base">
     <header class="header">
@@ -50,6 +51,7 @@ const {
       <Content components={{ img: Figure }} />
     </MarkdownBody>
   </div>
+  <PostNavLinks entry={entry} />
 </MainGridLayout>
 
 <style lang="scss">
