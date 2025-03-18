@@ -37,11 +37,12 @@ const description = "個人開発したものの一覧です。";
     display: grid;
     grid-template-columns: 1fr 2fr;
     gap: 2rem;
-    transition-property: background box-shadow;
+    border: 2px solid transparent;
+    transition-property: background, border-color;
     transition-duration: 0.4s;
     @include mixin.hover {
       background: var(--btn-plain-bg-hover);
-      box-shadow: 0 0 0rem 0.1rem var(--primary);
+      border-color: var(--primary);
     }
     &__img {
       img {
