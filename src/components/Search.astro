@@ -1,10 +1,17 @@
 ---
+import SearchModal from "@/components/SearchModal.astro";
 import { Icon } from "astro-icon/components";
 ---
 <button class="search__btn">
   <span class="search__text">⌘ + K</span>
   <Icon name="material-symbols:search-rounded" class="search__icon" />
 </button>
+<dialog class="search__modal">
+  <div class="search__container">
+    <div class="search__overlay"></div>
+    <SearchModal />
+  </div>
+</dialog>
 
 <style lang="scss">
   .search {
@@ -14,7 +21,7 @@ import { Icon } from "astro-icon/components";
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      background: var(--line-color);
+      background: rgba(0, 0, 0, 0.04);
       padding: 0.5rem 0.75rem;
       border-radius: 0.5rem;
       color: var(--text-light);
@@ -29,5 +36,67 @@ import { Icon } from "astro-icon/components";
     &__icon {
       font-size: 1.25rem;
     }
+    &__modal {
+      &::backdrop {
+        display: none;
+      }
+    }
+    &__container {
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 10vh;
+      overflow: auto;
+    }
+    &__overlay {
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: #16181da8;
+      backdrop-filter: blur(0.25rem);
+      z-index: -1;
+    }
   }
 </style>
+
+<script>
+  const searchBtn = document.querySelector('.search__btn') as HTMLButtonElement;
+  const searchModal = document.querySelector('.search__modal') as HTMLDialogElement;
+  const overlay = document.querySelector('.search__overlay') as HTMLDivElement;
+  const body = document.body;
+
+  const openModal = () => {
+    searchModal.showModal();
+    body.style.overflow = 'hidden';
+  }
+
+  const closeModal = () => {
+    searchModal.close();
+    body.style.overflow = 'auto';
+  }
+
+  searchBtn.addEventListener('click', openModal);
+
+  overlay.addEventListener('click', (event) => {
+    if (event.target === overlay) {
+      closeModal();
+    }
+  })
+
+  searchModal.addEventListener('close', (event) => {
+    event.stopPropagation();
+  })
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && body.style.overflow === 'hidden') {
+      closeModal();
+    }
+    if (e.key === 'k' && e.metaKey) {
+      openModal();
+    }
+  })
+</script>
