@@ -12,7 +12,9 @@ const { title, src, alt } = Astro.props;
 ---
 
 <figure class="figure">
-  <Image src={src} alt={alt} width="1200" height="675" />
+  <div class="figure__img">
+    <Image src={src} alt={alt} width="1200" height="675" />
+  </div>
   { title && (
     <figcaption class="figcaption">
       <Fragment set:html={title} />
@@ -21,6 +23,14 @@ const { title, src, alt } = Astro.props;
 </figure>
 
 <style lang="scss">
+  .figure {
+    max-width: 800px;
+    margin-inline: auto;
+    &__img {
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+  }
   .figcaption {
     margin-top: 0.5rem;
     text-align: center;
