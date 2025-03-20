@@ -1,7 +1,7 @@
 ---
 
 ---
-<div class="stack">
+<div class="stack" data-pagefind-body>
   <slot />
 </div>
 
@@ -10,6 +10,9 @@
     margin-inline: 1rem;
     > * + * {
       margin-top: var(--stack-space, 1.5rem);
+    }
+    meta + h2 {
+      margin-top: 0;
     }
     h2 {
       font-size: 1.75rem;
