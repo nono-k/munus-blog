@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 
 import { rehypeHeadingIds } from '@astrojs/markdown-remark';
 import mdx from '@astrojs/mdx';
+import react from '@astrojs/react';
 import remarkCallout from '@r4ai/remark-callout';
 import { transformerCopyButton } from '@rehype-pretty/transformers';
 import icon from 'astro-icon';
@@ -63,7 +64,7 @@ export default defineConfig({
       },
     },
   },
-  integrations: [mdx(), icon()],
+  integrations: [mdx(), icon(), react()],
   markdown: {
     syntaxHighlight: false,
     remarkPlugins: [
