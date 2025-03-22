@@ -41,6 +41,7 @@
     "@iconify-json/devicon": "^1.2.16",
     "@iconify-json/fa6-brands": "^1.2.5",
     "@iconify-json/material-symbols": "^1.2.14",
-    "astro-icon": "^1.1.5"
+    "astro-icon": "^1.1.5",
+    "budoux": "^0.7.0"
   }
 }
