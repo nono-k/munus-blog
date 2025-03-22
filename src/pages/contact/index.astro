@@ -1,0 +1,97 @@
+---
+import SubArticle from "@/components/SubArticle.astro";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+
+const title = 'Contact';
+const description = 'お問い合わせ';
+---
+
+<MainGridLayout
+  pageTitle={title}
+  description={description}
+  >
+  <SubArticle>
+    <div class="container">
+      <p>お問い合わせありがとうございます。<br />弊ブログに関するご質問やご要望がございましたら、以下のフォームにご記入ください。</p>
+
+      <form class="form" id="contact-form" action="https://ssgform.com/s/IXsmlUe6DT7w" method="post">
+        <!-- 入力画面の要素 -->
+        <div class="form-wrapper">
+          <div style="display: none;">
+            <input type="text" name="wana" /><!-- name="wana"を見えない状態で設置 -->
+          </div>
+          <div class="form__group">
+            <label for="name" class="form__heading">お名前<span>必須</span></label>
+            <input id="name" type="text" name="お名前" class="form__input" required/>
+          </div>
+          <div class="form__group">
+            <label for="email" class="form__heading">メールアドレス<span>必須</span></label>
+            <input id="email" type="email" name="メールアドレス" class="form__input" required/>
+          </div>
+          <div class="form__group">
+            <label for="name" class="form__heading">お問い合わせ項目<span>必須</span></label>
+            <select name="お問い合わせ項目" class="form__select" required>
+              <option value="記事・執筆依頼">記事・執筆依頼</option>
+              <option value="当ブログへの要望">当ブログへの要望</option>
+              <option value="案件のご相談">案件のご相談</option>
+              <option value="転職スカウト">転職スカウト</option>
+              <option value="その他営業・協業依頼">その他営業・協業依頼</option>
+            </select>
+          </div>
+          <div class="form__group">
+          <label for="message" class="form__heading">お問い合わせ内容<span>必須</span></label>
+          <textarea id="message" name="お問い合わせ内容" class="form__textarea" required></textarea>
+          </div>
+          <p class="form__text">送信前に入力内容に誤りがないかをご確認ください<br>＊送信確認画面はございません</p>
+          <button class="btn-regular form__btn" id="form__submit" type="submit">送信する</button>
+        </div>
+      </form>
+    </div>
+  </SubArticle>
+</MainGridLayout>
+
+<style lang="scss">
+  .container {
+    margin: 1rem 1rem 2rem;
+  }
+  .form {
+    margin-top: 1.5rem;
+    &__group {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      & + & {
+        margin-top: 2.5rem;
+      }
+    }
+    &__heading {
+      span {
+        margin-left: 0.5rem;
+        font-size: 0.75rem;
+        background: var(--btn-plain-bg-hover);
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.5rem;
+      }
+    }
+    &__input {
+      padding: 0.5rem;
+    }
+    &__select {
+      padding: 0.5rem;
+    }
+    &__textarea {
+      padding: 0.5rem;
+      height: 10rem;
+    }
+    &__text {
+      margin-top: 2rem;
+      text-align: center;
+    }
+    &__btn {
+      margin-top: 2.5rem;
+      margin-inline: auto;
+      padding-block: 1rem;
+      width: 20rem;
+    }
+  }
+</style>
