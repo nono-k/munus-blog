@@ -17,9 +17,12 @@ export async function getStaticPaths({ paginate }: { paginate: PaginateFunction 
 }
 
 const { page } = Astro.props;
+const pageTitle = "ブログ記事一覧";
 ---
 
-<MainGridLayout>
+<MainGridLayout
+  pageTitle={pageTitle}
+>
   <PostPage page={page} />
   <Pagination page={page} baseUrl="/blog" />
 </MainGridLayout>
