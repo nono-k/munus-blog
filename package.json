@@ -27,7 +27,9 @@
     "remark-gemoji": "^8.0.0",
     "remark-link-card": "^1.3.1",
     "remark-math": "^6.0.0",
-    "sass": "^1.85.0"
+    "sass": "^1.85.0",
+    "satori": "^0.12.1",
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
