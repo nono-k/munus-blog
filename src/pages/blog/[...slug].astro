@@ -27,11 +27,12 @@ const { Content, headings } = await entry.render();
 const {
   data: { title, pubDate, category, tags, description }
 } = entry;
+const blogOgp = entry.data.ogp ||`/api/og/${entry.slug}.png`;
 ---
 <MainGridLayout
   pageTitle={title}
   description={description}
-  blogOgp={entry.data.ogp}
+  blogOgp={blogOgp}
   omitBackgroundHeading=true
   >
   <div class="article card-base">
