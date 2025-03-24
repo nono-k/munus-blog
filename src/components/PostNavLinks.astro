@@ -1,0 +1,52 @@
+---
+import { Icon } from "astro-icon/components";
+
+const { entry } = Astro.props;
+---
+
+<div class="links">
+  {entry.data.prevSlug ? (
+    <a href={entry.data.prevSlug} class="btn-card link">
+      <span class="link__icon">
+        <Icon name="material-symbols:chevron-left-rounded" />
+      </span>
+      <span class="link__title">{entry.data.prevTitle}</span>
+    </a>
+  ) : <div></div>}
+  {entry.data.nextSlug ? (
+    <a href={entry.data.nextSlug} class="btn-card link next">
+      <span class="link__title">{entry.data.nextTitle}</span>
+      <span class="link__icon">
+        <Icon name="material-symbols:chevron-right-rounded" />
+      </span>
+    </a>
+  ) : <div></div>}
+</div>
+
+<style lang="scss">
+  .links {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .link {
+    justify-content: start;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+    &.next {
+      justify-content: flex-end;
+    }
+    &__title {
+      color: var(--text-color);
+      font-weight: 500;
+    }
+    &__icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2rem;
+    }
+  }
+</style>
