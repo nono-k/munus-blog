@@ -6,7 +6,7 @@ export const siteConfig: SiteConfig = {
   siteUrl: 'https://munus.dev',
   siteType: 'website',
   siteLocale: 'ja_JP',
-  siteIcon: '/favicon.svg',
+  siteIcon: '/favicon.png',
   siteImg: '/ogp.png',
 };
 
