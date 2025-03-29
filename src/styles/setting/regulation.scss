@@ -1,3 +1,5 @@
+@use '../mixin';
+
 :root {
   --hue: 300;
 
@@ -19,6 +21,12 @@
 
   --page-width: 85rem;
   --header-height: 4rem;
+}
+
+@include mixin.mobile {
+  :root {
+    --header-height: 3.5rem;
+  }
 }
 
 :root.dark {
