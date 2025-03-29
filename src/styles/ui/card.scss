@@ -1,5 +1,11 @@
+@use '../mixin';
+
 .card-base {
   padding: 1rem;
   background: var(--card-bg);
   border-radius: 1rem;
+
+  @include mixin.mobile {
+    border-radius: 0.75rem;
+  }
 }
