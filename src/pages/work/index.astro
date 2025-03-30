@@ -14,7 +14,7 @@ const description = "個人開発したものの一覧です。";
 >
   <div class="stack">
     {workPosts.map((post) => (
-      <a href={post.data.link} class="card-base card">
+      <a href={post.data.link} class="card-base card" target="_blank">
         <div class="card__img">
           <Image src={post.data.image} alt={post.data.title} />
         </div>
@@ -40,6 +40,12 @@ const description = "個人開発したものの一覧です。";
     border: 2px solid transparent;
     transition-property: background, border-color;
     transition-duration: 0.4s;
+    @include mixin.mobile {
+      gap: 1rem;
+    }
+    @include mixin.phone {
+      grid-template-columns: 1fr;
+    }
     @include mixin.hover {
       background: var(--btn-plain-bg-hover);
       border-color: var(--primary);
@@ -52,10 +58,14 @@ const description = "個人開発したものの一覧です。";
     }
     &__title {
       font-size: 2rem;
+      @include mixin.mobile {
+        font-size: 1.5rem;
+      }
     }
     &__desc {
       margin-top: 0.5rem;
       line-height: 1.35;
+      font-size: 0.875rem;
     }
   }
 </style>
