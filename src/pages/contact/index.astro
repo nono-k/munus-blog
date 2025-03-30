@@ -53,6 +53,10 @@ const description = 'お問い合わせ';
 <style lang="scss">
   .container {
     margin: 1rem 1rem 2rem;
+    @include mixin.phone {
+      font-size: 0.875rem;
+      margin-inline: 0.25rem;
+    }
   }
   .form {
     margin-top: 1.5rem;
@@ -62,6 +66,9 @@ const description = 'お問い合わせ';
       gap: 1rem;
       & + & {
         margin-top: 2.5rem;
+        @include mixin.mobile {
+          margin-top: 1.5rem;
+        }
       }
     }
     &__heading {
