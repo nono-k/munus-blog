@@ -1,0 +1,290 @@
+---
+title: このブログでのMarkdown記法の一覧
+slug: markdown-syntax-list
+pubDate: 2025-03-25
+category: 雑記
+tags:
+  - Markdown
+description: このブログでのMarkdown記法の一覧をまとめました。
+---
+
+import Youtube from "@/components/markdown/Youtube.astro";
+import SoundCloud from "@/components/markdown/SoundCloud.astro";
+import Spotify from "@/components/markdown/Spotify.astro";
+import AmazonLink from "@/components/markdown/AmazonLink.astro";
+import Twitter from "@/components/markdown/Twitter.astro";
+
+## 見出し
+
+```text title="見出し"
+## レベル1
+### レベル2
+#### レベル3
+```
+
+## リスト
+
+ネストも可能。
+
+```text title="リスト"
+- ul-1
+- ul-2
+  - ul-2-1
+  - ul-2-2
+```
+
+- ul-1
+- ul-2
+  - ul-2-1
+  - ul-2-2
+
+### 番号付きリスト
+
+```text title="番号付きリスト"
+1. ol-1
+2. ol-2
+```
+
+1. ol-1
+2. ol-2
+
+## インラインスタイル
+
+### 強調
+
+```text title="強調"
+これは**強調表現**になります。
+```
+
+これは**強調表現**になります。
+
+### 取り消し線
+
+```text title="取り消し線"
+これは~~取り消し線~~になります。
+
+<! -- or -->
+これは~取り消し線~になります。
+
+```
+
+これは~~取り消し線~~になります。
+
+### 斜体
+
+```text title="斜体"
+これは*斜体*になります。
+```
+
+これは*斜体*になります。
+
+## 脚注
+
+```text title="脚注"
+これは脚注です[^1]。
+
+[^1]: これは脚注の内容です。
+```
+
+これは脚注です[^1]。
+
+[^1]: これは脚注の内容です。
+
+## 区切り線
+
+```text title="区切り線"
+---
+```
+
+---
+
+## リンク
+
+### URL 直書き
+
+URL 直書きでリンクカードになります。
+
+```text title="URL直書き"
+https://hypb.dev
+```
+
+https://hypb.dev
+
+### インラインリンク
+
+```text title="インラインリンク"
+私については[こちら](https://munus.dev/about)
+```
+
+私については[こちら](https://munus.dev/about)
+
+## 画像
+
+画像は assets/images/blog/[year]/[month]に入れる。
+
+```text title="画像"
+!['ダミー画像'](../../../../assets/images/blog/dummy.webp "ダミー画像")
+```
+
+!['ダミー画像'](../../../../assets/images/blog/dummy.webp "ダミー画像")
+
+## 表組み
+
+```text title="表組み"
+| 指定なし | 左揃え | 右揃え | 中央揃え |
+| -------- | :----- | -----: | :------: |
+| a        | b      |      c |    d     |
+```
+
+| 指定なし | 左揃え | 右揃え | 中央揃え |
+| -------- | :----- | -----: | :------: |
+| a        | b      |      c |    d     |
+
+## コード
+
+### インラインコード
+
+```text title="インラインコード"
+`inline code`はこう書きます。
+```
+
+`inline code`はこう書きます。
+
+### コードブロック
+
+```js title="コードブロック"
+console.log("Title example");
+```
+
+```js title="Highlightingコードブロック" {2}
+function hoge() {
+  console.log("Title example");
+}
+```
+
+## 引用
+
+> ブロック引用
+
+## コールアウト
+
+[remark-callout](https://github.com/r4ai/remark-callout)を使用してます。
+コールアウトを使うときは以下のように記述します。
+
+```text title="コールアウト"
+> [!note] Note
+> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+```
+
+現状、以下のようなコールアウトを用意しています。
+
+|  type   | description |  color  |
+| :-----: | :---------: | :-----: |
+|  Note   |    注釈     | default |
+| Success |    成功     |  green  |
+|  Info   |    情報     | violet  |
+| Example |     例      | violet  |
+|   Faq   |    質問     |  amber  |
+| Warning |    注意     |   red   |
+|   Bug   |    バグ     |   red   |
+
+> [!note] Note
+> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+> [!success] Success
+> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+> [!info] Info
+> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+> [!example] Example
+> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+> [!faq] Faq
+> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+> [!warning] Warning
+> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+> [!bug] Bug
+> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+## 埋め込み
+
+Astro のコンポーネントを利用していくつかの Web サービスを埋め込むことができます。
+
+### Youtube
+
+```text title="Youtube"
+<Youtube videoId="9GkVhgIeGJQ" />
+```
+
+<Youtube videoId="9GkVhgIeGJQ" />
+
+### Spotify
+
+```text title="Spotify"
+// トラック
+<Spotify trackId="3mcxHfLGMkv8PpGatFVkIm" />
+
+// アルバム
+<Spotify albumId="54DjkEN3wdCQgfCTZ9WjdB" />
+```
+
+<Spotify trackId="3mcxHfLGMkv8PpGatFVkIm" />
+
+<Spotify albumId="54DjkEN3wdCQgfCTZ9WjdB" />
+
+### SoundCloud
+
+```text title="SoundCloud"
+<SoundCloud query="367488743" />
+```
+
+<SoundCloud query="367488743" />
+
+### Amazon リンク
+
+```text title="Amazon リンク"
+import AmazonLink from "@/components/markdown/AmazonLink.astro";
+
+<AmazonLink
+  imageId="41OSXObwCOL._SY425_"
+  linkId="3XF1u6n"
+  title="バウハウス (コンパクトミディ・シリーズ)"
+  author="マグダレーナ・ドロステ"
+/>
+```
+
+<AmazonLink
+  imageId="41OSXObwCOL._SY425_"
+  linkId="3XF1u6n"
+  title="バウハウス (コンパクトミディ・シリーズ)"
+  author="マグダレーナ・ドロステ"
+/>
+
+### Twitter / X
+
+<Twitter url="https://x.com/kameno_no3/status/1784879479430525070" />
+
+## 数式
+
+### インライン数式
+
+```text title="インライン数式"
+$a^2 + b^2 = c^2$ はインライン数式です。
+```
+
+$a^2 + b^2 = c^2$ はインライン数式です。
+
+### ブロック数式
+
+```text title="ブロック数式"
+$$
+\forall \epsilon > 0, \exists \delta > 0 \text{ s.t. } |x - a| < \delta \Rightarrow |f(x) - b| < \epsilon
+$$
+```
+
+$$
+\forall \epsilon > 0, \exists \delta > 0 \text{ s.t. } |x - a| < \delta \Rightarrow |f(x) - b| < \epsilon
+$$
