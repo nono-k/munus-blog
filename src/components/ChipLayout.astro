@@ -22,11 +22,19 @@ const { chips, title, cols } = Astro.props;
 </div>
 
 <style lang="scss" define:vars={{ cols }}>
+  .container {
+    @include mixin.mobile {
+      padding-bottom: 1.5rem;
+    }
+  }
   .list {
     display: grid;
     grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
     gap: 0.25rem;
     margin-top: 1.5rem;
+    @include mixin.mobile {
+      margin-top: 1rem;
+    }
   }
   .link {
     display: flex;
@@ -36,6 +44,10 @@ const { chips, title, cols } = Astro.props;
     border-radius: 0.5rem;
     transition-property: background, color, padding;
     transition-duration: 0.3s;
+    @include mixin.phone {
+      background: var(--btn-regular-bg);
+      font-size: 0.875rem;
+    }
     @include mixin.hover {
       background: var(--btn-regular-bg);
       color: var(--primary);

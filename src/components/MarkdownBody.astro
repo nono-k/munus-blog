@@ -7,14 +7,18 @@
 
 <style lang="scss" is:global>
   .stack {
-    margin-inline: 1rem;
+    @include mixin.large {
+      margin-inline: 1rem;
+      font-size: 1.05rem;
+    }
     > * + * {
-      margin-top: var(--stack-space, 1.5rem);
+      margin-top: var(--stack-space, 1rem);
     }
     meta + h2 {
       margin-top: 0;
     }
     h2 {
+      --stack-space: 2.5rem;
       font-size: 1.75rem;
       &::before {
         content: '';
@@ -28,6 +32,7 @@
       }
     }
     h3 {
+      --stack-space: 2rem;
       font-size: 1.25rem;
       &::before {
         width: 0.5rem;
@@ -42,6 +47,9 @@
         display: inline-block;
         background: var(--primary);
         margin-right: 0.75rem;
+      }
+      @include mixin.mobile {
+        font-size: 1.25rem;
       }
       @include mixin.hover {
         .anchor {
@@ -64,7 +72,8 @@
       }
     }
     ul, ol {
-      padding-left: 1rem;
+      margin-top: 1.5rem;
+      padding-left: 0.5rem;
       > * + * {
         margin-top: 0.5rem;
       }
@@ -83,6 +92,14 @@
       text-decoration-style: dashed;
       text-decoration-thickness: 1px;
       text-underline-offset: 4px;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.5rem;
+      transition-property: background-color;
+      transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+      transition-duration: .15s;
+      @include mixin.hover {
+        background-color: var(--btn-plain-bg-hover);
+      }
     }
     strong {
       background: linear-gradient(transparent 60%, var(--btn-regular-bg) 40%);
@@ -100,7 +117,11 @@
         display: none;
       }
     }
+    table {
+      --stack-space: 2rem;
+    }
     blockquote {
+      --stack-space: 2rem;
       background: var(--primary-color-transparent);
       border-radius: 0.25rem;
       padding: 0.5rem 0.75rem;

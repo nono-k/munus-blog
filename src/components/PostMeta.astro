@@ -54,6 +54,10 @@ const getTagSlug = (tag: string) => {
     flex-wrap: wrap;
     gap: 1rem;
     margin-left: 1rem;
+    @include mixin.mobile {
+      margin-left: 0;
+      gap: 0.5rem;
+    }
     &__item {
       display: flex;
       gap: 0.4rem;
@@ -67,9 +71,17 @@ const getTagSlug = (tag: string) => {
       height: 2rem;
       font-size: 1.25rem;
       pointer-events: none;
+      @include mixin.mobile {
+        width: 1.75rem;
+        height: 1.75rem;
+        font-size: 1rem;
+      }
     }
     &__text {
       font-size: 0.875rem;
+      @include mixin.mobile {
+        font-size: 0.75rem;
+      }
     }
     &__tags {
       display: flex;
@@ -79,15 +91,12 @@ const getTagSlug = (tag: string) => {
       .separator {
         margin-inline: 0.25rem;
       }
-      > * + * {
-        // &::before {
-        //   content: '/';
-        //   margin-inline: 0.5rem;
-        // }
-      }
     }
     &__tag {
       font-size: 0.875rem;
+      @include mixin.mobile {
+        font-size: 0.75rem;
+      }
     }
     &__text, &__tag {
       &.hover {

@@ -71,6 +71,10 @@ const generatePaginationLinks = (
     width: 2.75rem;
     height: 2.75rem;
     font-size: 1rem;
+    @include mixin.mobile {
+      width: 2.25rem;
+      height: 2.25rem;
+    }
     &.prev, &.next {
       font-size: 1.75rem;
     }
@@ -84,6 +88,9 @@ const generatePaginationLinks = (
       justify-content: center;
       gap: 1rem;
       margin-top: 1.5rem;
+      @include mixin.mobile {
+        margin-top: 1rem;
+      }
     }
   }
 </style>

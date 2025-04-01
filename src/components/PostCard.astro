@@ -17,7 +17,7 @@ const { url, title, date, image, category, tags, description } = Astro.props;
       <Image src={image} alt={title} />
     </a>
     :
-    <a href={url} class="btn-regular card__arrow">
+    <a href={url} class="btn-regular card__arrow for-large">
       <Icon name="material-symbols:chevron-right-rounded" />
     </a>}
 </div>
@@ -27,7 +27,7 @@ const { url, title, date, image, category, tags, description } = Astro.props;
     display: flex;
     justify-content: space-between;
     &__title {
-      font-size: 1.75rem;
+      font-size: 1.5rem;
       font-weight: 500;
       margin-bottom: 0.5rem;
       display: flex;
@@ -35,12 +35,19 @@ const { url, title, date, image, category, tags, description } = Astro.props;
       gap: 1rem;
       transition-property: color;
       transition-duration: 0.3s;
+      @include mixin.mobile {
+        font-size: 1.25rem;
+        gap: 0.5rem;
+      }
       &::before {
         content: '';
         width: 0.25rem;
         height: 1rem;
         background: var(--primary);
         border-radius: 0.1rem;
+        @include mixin.mobile {
+          display: none;
+        }
       }
       @include mixin.hover {
         color: var(--primary);
@@ -49,6 +56,10 @@ const { url, title, date, image, category, tags, description } = Astro.props;
     &__desc {
       margin-top: 0.75rem;
       margin-left: 1rem;
+      @include mixin.mobile {
+        font-size: 0.875rem;
+        margin-left: 0;
+      }
     }
     &__arrow {
       width: 2.8rem;

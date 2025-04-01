@@ -46,6 +46,7 @@ import { Icon } from "astro-icon/components";
       display: flex;
       justify-content: center;
       align-items: center;
+      color: var(--text-color);
     }
     &__nav {
       width: 12rem;
@@ -59,6 +60,9 @@ import { Icon } from "astro-icon/components";
       visibility: hidden;
       transition-property: opacity, visibility;
       transition-duration: 0.3s;
+      @include mixin.phone {
+        top: calc(var(--header-height) - 0.2rem);
+      }
       &.active {
         opacity: 1;
         visibility: visible;

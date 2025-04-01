@@ -17,6 +17,11 @@ import '@pagefind/default-ui/css/ui.css';
     --pagefind-ui-border: var(--text-color);
     --pagefind-ui-border-width: 1px;
     --pagefind-ui-text: var(--text-color);
+    @include mixin.mobile {
+      padding: 0.75rem;
+      border-radius: 0.25rem;
+      --pagefind-ui-scale: 0.7;
+    }
   }
 </style>
 

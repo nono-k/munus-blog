@@ -3,7 +3,7 @@ import SearchModal from "@/components/SearchModal.astro";
 import { Icon } from "astro-icon/components";
 ---
 <button class="search__btn">
-  <span class="search__text">⌘ + K</span>
+  <span class="search__text for-large">⌘ + K</span>
   <Icon name="material-symbols:search-rounded" class="search__icon" />
 </button>
 <dialog class="search__modal">
@@ -17,15 +17,20 @@ import { Icon } from "astro-icon/components";
   .search {
     &__btn {
       margin-left: auto;
-      margin-right: 1rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      background: rgba(0, 0, 0, 0.04);
       padding: 0.5rem 0.75rem;
       border-radius: 0.5rem;
-      color: var(--text-light);
       cursor: pointer;
+      @include mixin.large {
+        margin-right: 1rem;
+        background: rgba(0, 0, 0, 0.04);
+        color: var(--text-light);
+      }
+      @include mixin.mobile {
+        color: var(--text-color);
+      }
       @include mixin.hover {
         background: var(--btn-plain-bg-hover);
       }
@@ -49,6 +54,9 @@ import { Icon } from "astro-icon/components";
       left: 0;
       padding: 10vh;
       overflow: auto;
+      @include mixin.mobile {
+        padding: 2rem 1rem;
+      }
     }
     &__overlay {
       width: 100vw;
