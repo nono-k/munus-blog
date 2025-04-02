@@ -23,6 +23,9 @@ const isOmitTitle = omitBackgroundHeadings.includes(title) || omitBackgroundHead
   height: 280px;
   position: relative;
   z-index: -1;
+  @include mixin.mobile {
+    height: 160px;
+  }
   img {
     height: 100%;
     object-fit: cover;
@@ -34,6 +37,12 @@ const isOmitTitle = omitBackgroundHeadings.includes(title) || omitBackgroundHead
     translate: -50% 0;
     font-size: 3rem;
     color: oklch(1 0.0 0);
+    @include mixin.mobile {
+      top: 3.8rem;
+      font-size: 1.8rem;
+      width: 100%;
+      text-align: center;
+    }
   }
 }
 </style>

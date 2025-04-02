@@ -111,6 +111,12 @@ import ThemeIcon from "../ThemeIcon.astro";
       font-size: 2.5rem;
       font-family: 'Genos Variable', sans-serif;
       font-weight: 500;
+      line-height: 1;
+      margin-top: -0.5rem;
+      @include mixin.mobile {
+        font-size: 2rem;
+        margin-top: -0.25rem;
+      }
     }
     &__item {
       position: relative;

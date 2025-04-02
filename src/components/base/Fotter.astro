@@ -3,11 +3,11 @@ const currentYear = new Date().getFullYear();
 ---
 
 <footer class="footer">
-  <small>&copy; <span>{currentYear}</span> munus. All Rights Reserved. /
+  <small>&copy; <span>{currentYear}</span> munus. All Rights Reserved. <span class="for-large">/</span><br class="for-mobile">
     <a href="" target="_blank">RSS</a> /
-    <a href="" target="_blank">Sitemap</a><br>
-    <a href="">Site Policy</a> /
-    <a href="">Privacy Policy</a>
+    <a href="/sitemap-index.xml" target="_blank">Sitemap</a><br>
+    <a href="/site-policy">Site Policy</a> /
+    <a href="/privacy-policy">Privacy Policy</a>
   </small>
 </footer>
 
@@ -18,6 +18,9 @@ const currentYear = new Date().getFullYear();
     position: relative;
     @include mixin.large {
       grid-column: 2 / 3;
+    }
+    @include mixin.mobile {
+      padding: 1rem;
     }
     &::before {
       content: '';
@@ -31,6 +34,11 @@ const currentYear = new Date().getFullYear();
       top: 0;
       left: 50%;
       translate: -50% 0;
+    }
+    small {
+      @include mixin.mobile {
+        font-size: 0.75rem;
+      }
     }
     small a {
       color: var(--primary);
