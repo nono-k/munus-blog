@@ -60,12 +60,18 @@ const toc = generateToc(headings);
   .tboc {
     margin-inline: 2rem;
     margin-bottom: 2rem;
+    @include mixin.mobile {
+      margin-inline: 0;
+    }
     &__title {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0.5rem 1rem;
       border: 1px solid var(--btn-regular-bg-hover);
+      @include mixin.mobile {
+        font-size: 0.875rem;
+      }
     }
     &__text {
       display: flex;
@@ -81,6 +87,10 @@ const toc = generateToc(headings);
         mask-repeat: no-repeat;
         mask-size: cover;
         mask-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxZW0iIGhlaWdodD0iMWVtIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiIgZD0iTTggNmgxM004IDEyaDEzTTggMThoMTNNMyA2aC4wMU0zIDEyaC4wMU0zIDE4aC4wMSIvPjwvc3ZnPg==);
+        @include mixin.mobile {
+          width: 1rem;
+          height: 1rem;
+        }
       }
     }
     &[open] {
@@ -102,6 +112,9 @@ const toc = generateToc(headings);
       border-right: 1px solid currentColor;
       rotate: 135deg;
       transition: rotate 0.3s;
+      @include mixin.mobile {
+        margin-top: -4px;
+      }
     }
     &__body {
       padding: 0.5rem 2.5rem 1rem;
@@ -109,10 +122,16 @@ const toc = generateToc(headings);
       border-top: none;
       border-bottom-right-radius: 0.5rem;
       border-bottom-left-radius: 0.5rem;
+      @include mixin.mobile {
+        padding-inline: 2rem 1rem;
+      }
     }
     &__list {
       > * + * {
         margin-top: 0.5rem;
+        @include mixin.mobile {
+          margin-top: 0.25rem;
+        }
       }
       ul {
         margin-top: 0.5rem;
@@ -124,6 +143,9 @@ const toc = generateToc(headings);
     }
     &__link {
       transition: color 0.2s;
+      @include mixin.mobile {
+        font-size: 0.875rem;
+      }
       @include mixin.hover {
         color: var(--primary);
       }

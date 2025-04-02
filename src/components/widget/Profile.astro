@@ -50,6 +50,9 @@ const profile: ProfileConfig = {
     overflow: hidden;
     max-width: 12rem;
     margin-inline: auto;
+    @include mixin.mobile {
+      max-width: 10.5rem;
+    }
   }
   .body {
     margin-top: 0.5rem;

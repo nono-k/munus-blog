@@ -24,6 +24,9 @@ import { tagsList } from "@/data/blog/tags";
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    @include mixin.mobile {
+      font-size: 1rem;
+    }
     &::before {
       content: '';
       width: 0.25rem;

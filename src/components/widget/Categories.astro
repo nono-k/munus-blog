@@ -26,6 +26,9 @@ import { countCategory } from "@/utils/content-utils";
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    @include mixin.mobile {
+      font-size: 1rem;
+    }
     &::before {
       content: '';
       width: 0.25rem;
@@ -36,6 +39,9 @@ import { countCategory } from "@/utils/content-utils";
   }
   .list {
     margin-top: 0.5rem;
+    @include mixin.mobile {
+      margin-top: 0.25rem;
+    }
   }
   .link {
     display: flex;
@@ -45,6 +51,9 @@ import { countCategory } from "@/utils/content-utils";
     border-radius: 0.5rem;
     transition-property: background, color, padding;
     transition-duration: 0.3s;
+    @include mixin.mobile {
+      font-size: 0.9rem;
+    }
     @include mixin.hover {
       background: var(--btn-regular-bg);
       color: var(--primary);
