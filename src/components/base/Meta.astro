@@ -39,3 +39,15 @@ const socialImageURL = new URL(ogpImg, Astro.site);
 <meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="sitemap" href="/sitemap-index.xml" />
+<!-- Google tag (gtag.js) -->
+<script
+  type="text/partytown"
+  src="https://www.googletagmanager.com/gtag/js?id=G-X5NNGH1063">
+</script>
+<script type="text/partytown">
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-X5NNGH1063');
+</script>
