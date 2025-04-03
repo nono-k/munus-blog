@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 
 import { rehypeHeadingIds } from '@astrojs/markdown-remark';
 import mdx from '@astrojs/mdx';
+import partytown from '@astrojs/partytown';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import remarkCallout from '@r4ai/remark-callout';
@@ -65,7 +66,17 @@ export default defineConfig({
       },
     },
   },
-  integrations: [mdx(), icon(), react(), sitemap()],
+  integrations: [
+    mdx(),
+    icon(),
+    react(),
+    partytown({
+      config: {
+        forward: ['dataLayer.push'],
+      },
+    }),
+    sitemap(),
+  ],
   markdown: {
     syntaxHighlight: false,
     remarkPlugins: [
