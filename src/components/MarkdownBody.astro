@@ -12,7 +12,10 @@
       font-size: 1.05rem;
     }
     > * + * {
-      margin-top: var(--stack-space, 1rem);
+      margin-top: var(--stack-space, 2rem);
+      @include mixin.mobile {
+        --stack-space: 1.5rem;
+      }
     }
     meta + h2 {
       margin-top: 0;
@@ -30,6 +33,9 @@
       .anchor {
         font-size: 1.5rem;
       }
+      + * {
+        --stack-space: 1.5rem
+      }
     }
     h3 {
       --stack-space: 2.5rem;
@@ -38,6 +44,9 @@
         width: 0.5rem;
         height: 0.5rem;
         border-radius: 50%;
+      }
+      + * {
+        --stack-space: 1.25rem;
       }
     }
     h2, h3 {
