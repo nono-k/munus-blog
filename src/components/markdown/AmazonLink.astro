@@ -41,6 +41,9 @@ const { imageId, linkId, title, author} = Astro.props;
     @media (hover: hover) {
       &:hover {
         border-color: var(--primary);
+        a {
+          background: transparent;
+        }
       }
     }
     &__link {
