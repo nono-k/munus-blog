@@ -25,7 +25,7 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content, headings } = await entry.render();
 const {
-  data: { title, pubDate, category, tags, description }
+  data: { title, pubDate, category, tags, description, isAdLink }
 } = entry;
 const blogOgp = entry.data.ogp ||`/api/og/${entry.slug}.png`;
 ---
@@ -46,8 +46,15 @@ const blogOgp = entry.data.ogp ||`/api/og/${entry.slug}.png`;
       ) : (
         <div class="header__dot"></div>
       )}
+      { isAdLink && (
+        <div class="adLink-info">
+          記事内に商品プロモーションを含む場合があります
+        </div>
+      )}
     </header>
-    <Tboc headings={headings} />
+    {headings.length > 0 && (
+      <Tboc headings={headings} />
+    )}
     <MarkdownBody>
       <Content components={{ img: Figure }} />
     </MarkdownBody>
@@ -94,6 +101,18 @@ const blogOgp = entry.data.ogp ||`/api/og/${entry.slug}.png`;
       @include mixin.mobile {
         display: none;
       }
+    }
+  }
+  .adLink-info {
+    background: linear-gradient(135deg,transparent 25%,rgba(0,0,0,.05) 25%,rgba(0,0,0,.05) 50%,transparent 50%,transparent 75%,rgba(0,0,0,.05) 75%,rgba(0,0,0,.05));
+    background-size: 4px 4px;
+    padding: 0.5rem;
+    text-align: center;
+    font-size: 0.875rem;
+    margin-top: 1rem;
+    margin-inline: 2rem;
+    @include mixin.mobile {
+      margin-inline: 0;
     }
   }
 </style>
