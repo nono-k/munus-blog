@@ -1,19 +1,33 @@
 ---
 import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
+import { CldImage } from 'astro-cloudinary';
+import { CldVideoPlayer } from 'astro-cloudinary';
 
 interface Props {
   title: string;
-  src: ImageMetadata;
+  src: ImageMetadata | string;
   alt: string;
 };
 
 const { title, src, alt } = Astro.props;
+const cloudName = import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME;
+
+const isStringSrc = typeof src === 'string';
+const isCloudinaryImage = isStringSrc && src.startsWith(`https://res.cloudinary.com/${cloudName}/image/`);
+const isCloudinaryVideo = isStringSrc && src.startsWith(`https://res.cloudinary.com/${cloudName}/video/`);
 ---
 
 <figure class="figure">
   <div class="figure__img">
-    <Image src={src} alt={alt} width="1200" height="675" />
+    { isCloudinaryVideo ? (
+      <CldVideoPlayer src={src as string} width="1200" height="675" />
+    ) : isCloudinaryImage ? (
+      <CldImage src={src as string} alt={alt} width={1200} height={675} />
+    ) : (
+      <Image src={src as ImageMetadata} alt={alt} width="1200" height="675" />
+    )
+    }
   </div>
   { title && (
     <figcaption class="figcaption">
@@ -30,6 +44,9 @@ const { title, src, alt } = Astro.props;
     &__img {
       border-radius: 0.5rem;
       overflow: hidden;
+      img {
+        aspect-ratio: auto !important;
+      }
     }
   }
   .figcaption {
