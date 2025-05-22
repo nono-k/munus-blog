@@ -1,0 +1,159 @@
+---
+title: Astro製のブログにCloudinaryを導入する
+slug: astro-blog-cloudinary-image-video
+pubDate: 2025-05-19
+category: プログラミング
+tags:
+  - Web
+  - Astro
+description: ブログにCloudinaryを導入しました☁️
+---
+
+## はじめに
+
+このブログと[技術ブログ](https://hypb.dev)は、Astro の Content Collection を使ってマークダウンでブログを書いていて、記事は GitHub で管理してます。
+
+Astro の Image コンポーネントを使うために、ブログ記事の画像も src/assets/images/配下に配置していました。しかし、ローカルで画像を管理したくないなと思ったので Cloudinary を導入してみました。
+
+Astro での Cloudinary の導入方法について、この記事では紹介します。
+Cloudinary の詳しいオプションなどは解説しないのと、Cloudinary のアカウントが既にあるのを前提に説明します。
+
+まだの方は下記 URL からアカウントを作成してください。
+
+https://cloudinary.com/
+
+## Astro Cloudinary のインストール
+
+Astro で使える Cloudinary のコンポーネントが用意されてます。下記コマンドで Astro Cloudinary をインストールしましょう。
+
+```
+npm install astro-cloudinary
+```
+
+インストールできたら、プロジェクトのルートに`.env`ファイルを作成して、Cloudinary のアカウント情報を記述します。
+
+```text title=".env"
+PUBLIC_CLOUDINARY_CLOUD_NAME="<Your Cloud Name>"
+```
+
+アカウント名は、Cloudinary のダッシュボードの Home の Product Environment の Cloud name から確認できます。
+
+![Cloudinary のアカウント名の確認方法](https://res.cloudinary.com/dy8ftemi0/image/upload/v1747730189/astro-blog-cloudinary-image-video-01_qfcwfp.jpg "Cloudinary のアカウント名の確認方法")
+
+## Cloudinary 画像と動画の使用
+
+Cloudinary の画像と動画を使うには、`astro-cloudinary`のコンポーネントを使います。ブログ内の MDX でコンポーネントを使えるように`[...slug].astro`を下記のように書きましょう。
+
+```astro {4,24} title="[...slug].astro"
+---
+import type { CollectionEntry } from "astro:content";
+import MarkdownBody from "@/components/MarkdownBody.astro";
+import Figure from "@/components/markdown/Figure.astro";
+import { getSortedBlogs } from "@/utils/content-utils";
+
+interface Props {
+  entry: CollectionEntry<"blog">;
+}
+
+export async function getStaticPaths() {
+  const blogEntries = await getSortedBlogs();
+  return blogEntries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry }
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+<Layout>
+  <MarkdownBody>
+    <Content components={{ img: Figure }} />
+  </MarkdownBody>
+</Layout>
+```
+
+これで、マークダウンで画像を使うと、`Figure`コンポーネントが使われるようになりました。
+それでは、Cloudinary の画像と動画を使うために`Figure`コンポーネントを作成します。
+
+```astro title="Figure.astro"
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import { CldImage } from 'astro-cloudinary';
+import { CldVideoPlayer } from 'astro-cloudinary';
+
+interface Props {
+  title: string;
+  src: ImageMetadata | string;
+  alt: string;
+};
+
+const { title, src, alt } = Astro.props;
+const cloudName = import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME;
+
+const isStringSrc = typeof src === 'string';
+const isCloudinaryImage = isStringSrc && src.startsWith(`https://res.cloudinary.com/${cloudName}/image/`);
+const isCloudinaryVideo = isStringSrc && src.startsWith(`https://res.cloudinary.com/${cloudName}/video/`);
+---
+
+<figure class="figure">
+  <div class="figure__img">
+    { isCloudinaryVideo ? (
+      <CldVideoPlayer src={src as string} width="1200" height="675" />
+    ) : isCloudinaryImage ? (
+      <CldImage src={src as string} alt={alt} width={1200} height={675} />
+    ) : (
+      <Image src={src as ImageMetadata} alt={alt} width="1200" height="675" />
+    )
+    }
+  </div>
+  { title && (
+    <figcaption class="figcaption">
+      <Fragment set:html={title} />
+    </figcaption>
+  )}
+</figure>
+```
+
+ここでは、`isCloudinaryImage`や`isCloudinaryVideo`で、Cloudinary の画像と動画かどうかを判定しています。Cloudinary の画像と動画の場合は`CldImage`や`CldVideoPlayer`コンポーネントを使用し src に画像 URL を渡してます。
+
+Cloudinary の画像ではない場合は、Astro の`Image`コンポーネントを使っています。
+
+## 使用例
+
+最後に使用例を見てみましょう
+
+### 画像
+
+```md title="Cloudinary画像の使用例"
+![靴の画像](https://res.cloudinary.com/dy8ftemi0/image/upload/v1747152824/cld-sample-5.jpg "靴の画像")
+```
+
+![靴の画像](https://res.cloudinary.com/dy8ftemi0/image/upload/v1747152824/cld-sample-5.jpg "靴の画像")
+
+### 動画
+
+```md title="Cloudinary画像の使用例"
+![dance-2](https://res.cloudinary.com/dy8ftemi0/video/upload/v1747152819/samples/dance-2.mp4 "dance-2")
+```
+
+![dance-2](https://res.cloudinary.com/dy8ftemi0/video/upload/v1747152819/samples/dance-2.mp4 "dance-2")
+
+## まとめ
+
+Astro 製のブログに Cloudinary を導入してみました。これで気軽に画像の投稿や動作例の動画をブログに投稿できるようになったので、より良いコンテンツが作れそうです。
+
+みなさんも、ぜひ使ってみてください！
+
+## 招待リンク
+
+以下のリンクから Cloudinary のアカウントを作ると、わたしのアカウントの Credit が増えます。ここまで読んだ方は、以下のリンクからアカウントを作ってくれると（わたしが）気軽に Cloudinary を使えるようになれるので嬉しいです。
+
+[Cloudinary Direct invitation link](https://cloudinary.com/invites/lpov9zyyucivvxsnalc5/zcesbhsqkfjztfbcle4p?t=default)
+
+## 参考
+
+- [Cloudinary & Astro](https://docs.astro.build/ja/guides/media/cloudinary/)
+
+- [Astro Cloudinary](https://astro.cloudinary.dev/)
