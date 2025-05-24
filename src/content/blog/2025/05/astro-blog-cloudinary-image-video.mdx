@@ -120,6 +120,9 @@ const isCloudinaryVideo = isStringSrc && src.startsWith(`https://res.cloudinary.
 
 Cloudinary の画像ではない場合は、Astro の`Image`コンポーネントを使っています。
 
+> [!warning] デプロイ先での注意点
+> ここでは、cloudName を環境変数から取得しています。本番環境で参照する際は、.env の PUBLIC_CLOUDINARY_CLOUD_NAME を設定してください。このブログでは Cloudflare でデプロイしているので、設定の「変数とシークレット」で環境変数を設定しています。
+
 ## 使用例
 
 最後に使用例を見てみましょう
