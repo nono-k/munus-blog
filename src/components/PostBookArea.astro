@@ -1,0 +1,79 @@
+---
+
+---
+
+<div class="post-book-area card-base">
+  <h2>PR</h2>
+
+  <ul class="post-book-area__list"></ul>
+</h2>
+
+<style lang="scss" is:global>
+  .post-book-area {
+    h2 {
+      font-size: 1.5rem;
+      @include mixin.phone {
+        font-size: 1.25rem;
+      }
+    }
+    &__list {
+      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      @include mixin.mobile {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      @include mixin.phone {
+        grid-template-columns: repeat(1, 1fr);
+      }
+    }
+    &__link {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--btn-plain-bg-hover);
+      height: 100%;
+      transition: 0.3s;
+      @include mixin.hover {
+        background: var(--btn-plain-bg-hover);
+        .post-book-area__title {
+          color: var(--primary);
+        }
+      }
+    }
+    &__img {
+      margin-inline: 0.5rem;
+      transition: 0.3s;
+    }
+    &__title {
+      font-size: 0.875rem;
+      transition: 0.3s;
+    }
+  }
+</style>
+
+<script>
+  import { getBooks } from "@/scripts/library/microcms";
+
+  const allBooks = await getBooks({ fields: ['title', 'cover', 'url'] });
+  const randomBooks = allBooks.sort(() => Math.random() - 0.5).slice(0, 4);
+  const bookList = document.querySelector(".post-book-area__list");
+
+
+  if (randomBooks && bookList) {
+    bookList.innerHTML = randomBooks.map((book) => `
+      <li class="post-book-area__item">
+        <a class="post-book-area__link" href="${book.url}" target="_blank">
+          <div class="post-book-area__img">
+            <img src="${book.cover}" alt="${book.title}" />
+          </div>
+          <div class="post-book-area__title">${book.title}</div>
+        </a>
+      </li>
+    `).join('');
+  }
+</script>
+</script>

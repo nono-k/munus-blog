@@ -1,4 +1,5 @@
 ---
+import { Icon } from "astro-icon/components";
 import Categories from "./Categories.astro";
 import Profile from "./Profile.astro";
 import Tags from "./Tags.astro";
@@ -8,6 +9,12 @@ import Tags from "./Tags.astro";
   <Profile />
   <Categories />
   <Tags />
+  <a href="/book" class="sidebar__link">
+    <span class="sidebar__link-text">読んだ本リスト</span>
+    <span class="sidebar__link-icon">
+      <Icon name="material-symbols:chevron-right-rounded" />
+    </span>
+  </a>
 </div>
 
 <style lang="scss">
@@ -18,6 +25,38 @@ import Tags from "./Tags.astro";
     @include mixin.mobile {
       grid-row: 2 / 3;
       padding-bottom: 2rem;
+    }
+    &__link {
+      padding: 0.5rem 1rem;
+      background: var(--card-bg);
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: 0.5rem;
+      transition-property: color;
+      transition-duration: 0.3s;
+      @include mixin.mobile {
+        font-size: 0.9rem;
+        border-radius: 0.75rem;
+      }
+      @include mixin.hover {
+        color: var(--primary);
+        .sidebar__link-text {
+          translate: 0.25rem;
+        }
+      }
+    }
+    &__link-text {
+      font-size: 1.05rem;
+      transition-property: translate;
+      transition-duration: 0.3s;
+    }
+    &__link-icon {
+      font-size: 1.25rem;
+      svg {
+        vertical-align: middle;
+      }
     }
   }
 </style>

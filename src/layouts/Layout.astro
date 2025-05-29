@@ -13,11 +13,12 @@ import Meta from '@/components/base/Meta.astro';
 
 interface Props {
   pageTitle: string;
+  pageLead?: string;
   omitBackgroundHeading?: boolean;
 }
 
 const props = Astro.props;
-const { pageTitle, omitBackgroundHeading } = props;
+const { pageTitle, pageLead, omitBackgroundHeading } = props;
 ---
 
 <!doctype html>
@@ -29,6 +30,7 @@ const { pageTitle, omitBackgroundHeading } = props;
     <Header />
     <BackgroundImage
       title={pageTitle}
+      lead={pageLead}
       omitBackgroundHeading={omitBackgroundHeading}
     />
 		<slot />

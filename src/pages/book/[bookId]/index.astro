@@ -1,0 +1,166 @@
+---
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { getBooks, getBooksDetail } from "@/scripts/library/microcms";
+import { Icon } from "astro-icon/components";
+
+export async function getStaticPaths() {
+  const response = await getBooks({ fields: ['id'] });
+  return response.map((content) => ({
+    params: { bookId: content.id },
+  }));
+}
+
+const { bookId } = Astro.params;
+const book = await getBooksDetail(bookId as string);
+const date = new Date(book.publishedDate as Date);
+const year = date.getFullYear();
+const month = date.getMonth() + 1;
+const day = date.getDate();
+
+const pageTitle = book.title;
+const description = `「${book.title}」の読書記録です。`;
+---
+
+<MainGridLayout
+  pageTitle={pageTitle}
+  description={description}
+  omitBackgroundHeading=true
+>
+  <div class="book__detail card-base">
+    <h1 class="book__detail-title">{book.title}</h1>
+    <div class="book__detail-body">
+      <div class="book__detail-right">
+        <a href={book.url} class="book__detail-img" target="_blank">
+          <img src={book.cover} alt={book.title} />
+        </a>
+        <div class="book__detail-links">
+          <a href={book.url} class="book__detail-link btn-regular" target="_blank">Amazon</a>
+          {book.postlink && (
+            <a href={`/blog/${book.postlink}`} class="book__detail-link btn-regular">記事を見る</a>
+          )}
+        </div>
+      </div>
+      <dl class="book__detail-info">
+        <div class="book__detail-info-category-wrap">
+          <a href=`/book/category/${book.category.slug}` class="book__detail-info-category">
+            {book.category.name}
+          </a>
+        </div>
+        <div class="book__detail-info-item">
+          <dt>著者</dt>
+          <dd>{book.author}</dd>
+        </div>
+        <div class="book__detail-info-item">
+          <dt>発売日</dt>
+          <dd>{`${year}年${month}月${day}日`}</dd>
+        </div>
+        <div class="book__detail-info-body" set:html={book.review}></div>
+      </dl>
+    </div>
+    <div class="book__detail-bottom-link-wrap">
+      <a href="/book" class="book__detail-bottom-link">
+        <span class="link__icon">
+          <Icon name="material-symbols:chevron-left-rounded" />
+        </span>
+        <span class="book__detail-bottom-link-text">読んだ本リストに戻る</span>
+      </a>
+    </div>
+  </div>
+
+</MainGridLayout>
+
+<style lang="scss">
+  .book {
+    &__detail {
+      padding: 1.5rem 2rem 2.5rem;
+      @include mixin.mobile {
+        padding-inline: 1rem;
+      }
+      @include mixin.phone {
+        padding-bottom: 1.5rem;
+      }
+    }
+    &__detail-title {
+      @include mixin.mobile {
+        font-size: 1.25rem;
+      }
+    }
+    &__detail-img {
+      display: block;
+      border: 4px solid var(--btn-plain-bg-hover);
+      transition: 0.3s;
+      @include mixin.hover {
+        border-color: var(--primary);
+      }
+    }
+    &__detail-links {
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      row-gap: 1rem;
+    }
+    &__detail-link {
+      padding-block: 0.75rem;
+      font-size: 1.25rem;
+      @include mixin.phone {
+        padding-block: 0.5rem;
+        font-size: 1rem;
+      }
+    }
+    &__detail-body {
+      display: grid;
+      grid-template-columns: 14.75rem 1fr;
+      column-gap: 1.5rem;
+      margin-inline: 1rem;
+      margin-top: 1.5rem;
+      @include mixin.phone {
+        grid-template-columns: 1fr;
+        row-gap: 1.5rem;
+        margin-inline: 0;
+        margin-top: 1rem;
+      }
+    }
+    &__detail-info-category-wrap {
+      margin-bottom: 1rem;
+    }
+    &__detail-info-category {
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.875rem;
+      border: 1px solid var(--btn-plain-bg-hover);
+    }
+    &__detail-info-item {
+      display: grid;
+      grid-template-columns: 5rem 1fr;
+      border-bottom: 1px solid var(--btn-plain-bg-hover);
+      padding: 1rem;
+    }
+    &__detail-info-body {
+      padding: 1rem;
+      line-height: 1.75;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    &__detail-bottom-link-wrap {
+      margin-top: 3rem;
+      display: flex;
+      justify-content: center;
+    }
+    &__detail-bottom-link {
+      color: var(--primary);
+      display: flex;
+      justify-content: center;
+      gap: 0.25rem;
+      @include mixin.hover {
+        .book__detail-bottom-link-text {
+          text-decoration: underline;
+        }
+      }
+      .link__icon {
+        vertical-align: middle;
+        font-size: 1.25rem;
+      }
+    }
+  }
+</style>

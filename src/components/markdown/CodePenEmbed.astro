@@ -20,6 +20,9 @@ const { penId, title = "CodePen Embed" } = Astro.props;
     height: 100%;
     aspect-ratio: 16 / 9;
     margin-bottom: 2rem;
+    iframe {
+      border: none;
+    }
   }
   @include mixin.mobile {
     .codepen-embed {

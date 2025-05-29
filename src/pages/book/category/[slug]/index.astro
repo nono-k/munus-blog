@@ -1,0 +1,118 @@
+---
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { getBooks, getBooksCategory } from "@/scripts/library/microcms";
+
+export async function getStaticPaths() {
+  const response = await getBooks({ fields: ['id', 'category'] });
+
+  return response.map((content) => ({
+    params: { slug: content.category.slug },
+    props: {
+      categoryId: content.category.id,
+      slug: content.category.slug,
+      name: content.category.name,
+    },
+  }));
+}
+
+const { categoryId, slug, name } = Astro.props;
+
+const books = await getBooks({
+  fields: ['id', 'title', 'cover', 'category'],
+  filters: `category[equals]${categoryId}`
+});
+const categories = await getBooksCategory({ fields: ['id', 'name', 'slug']});
+
+const pageTitle = "読んだ本リスト";
+const pageLead = `カテゴリー「${name}」本の一覧`;
+const description = `カテゴリー「${name}」本の一覧です。`;
+---
+
+<MainGridLayout
+  pageTitle={pageTitle}
+  pageLead={pageLead}
+  description={description}
+>
+  <ul class="category__list card-base">
+    {categories.contents.map((category) => (
+      <li class="category__item">
+        <a class="category__link btn-regular" href={`/book/category/${category.slug}`}>
+          {category.name}
+        </a>
+      </li>
+    ))}
+  </ul>
+  <ul class="book__list">
+    {books.map((book) => (
+      <li>
+        <a class="book__card" href={`/book/${book.id}`}>
+          <div class="book__card-img">
+            <img src={book.cover} alt={book.title} />
+          </div>
+          <div class="book__card-title">
+            {book.title}
+          </div>
+        </a>
+      </li>
+    ))}
+  </ul>
+</MainGridLayout>
+
+<style lang="scss">
+  .category {
+    &__list {
+      margin-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      @include mixin.phone {
+        padding-block: 0.75rem;
+        gap: 0.5rem;
+      }
+    }
+    &__link {
+      padding: 0.4rem 0.5rem;
+      @include mixin.phone {
+        font-size: 0.785rem;
+        padding: 0.3rem 0.4rem;
+      }
+    }
+  }
+  .book {
+    &__list {
+      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+      @include mixin.mobile {
+        grid-template-columns: repeat(4, 1fr);
+        margin-bottom: 2.5rem;
+      }
+      @include mixin.phone {
+        grid-template-columns: repeat(2, 1fr);
+        margin-inline: 0.5rem;
+      }
+    }
+    &__card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      @include mixin.hover {
+        .book__card-img {
+          border-color: var(--primary);
+        }
+        .book__card-title {
+          color: var(--primary);
+        }
+      }
+    }
+    &__card-img {
+      border: 4px solid var(--card-bg);
+      transition: 0.3s;
+    }
+    &__card-title {
+      font-size: 0.875rem;
+      transition: 0.3s;
+    }
+  }
+</style>

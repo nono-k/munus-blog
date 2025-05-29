@@ -5,10 +5,11 @@ import { omitBackgroundHeadings } from "@/config";
 
 interface Props {
   title: string;
+  lead?: string;
   omitBackgroundHeading?: boolean;
 }
 
-const { title, omitBackgroundHeading } = Astro.props;
+const { title, lead, omitBackgroundHeading } = Astro.props;
 const isOmitTitle = omitBackgroundHeadings.includes(title) || omitBackgroundHeading;
 ---
 <div class="background-image">
@@ -16,6 +17,9 @@ const isOmitTitle = omitBackgroundHeadings.includes(title) || omitBackgroundHead
   {!isOmitTitle && (
     <h1 class="background-image__title">{title}</h1>
   )}
+  {lead &&
+    <p class="background-image__lead for-large">{lead}</p>
+  }
 </div>
 
 <style lang="scss">
@@ -43,6 +47,13 @@ const isOmitTitle = omitBackgroundHeadings.includes(title) || omitBackgroundHead
       width: 100%;
       text-align: center;
     }
+  }
+  &__lead {
+    position: absolute;
+    top: 10.5rem;
+    left: 50%;
+    translate: -50% 0;
+    color: oklch(1 0.0 0);
   }
 }
 </style>
