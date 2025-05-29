@@ -3,6 +3,7 @@ import "katex/dist/katex.min.css";
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import MarkdownBody from "@/components/MarkdownBody.astro";
+import PostBookArea from "@/components/PostBookArea.astro";
 import PostMeta from "@/components/PostMeta.astro";
 import PostNavLinks from "@/components/PostNavLinks.astro";
 import Figure from "@/components/markdown/Figure.astro";
@@ -59,7 +60,13 @@ const blogOgp = entry.data.ogp ||`/api/og/${entry.slug}.png`;
       <Content components={{ img: Figure }} />
     </MarkdownBody>
   </div>
+
   <PostNavLinks entry={entry} />
+
+  <div class="post-book-area">
+    <PostBookArea />
+  </div>
+
 </MainGridLayout>
 
 <style lang="scss">
@@ -85,22 +92,10 @@ const blogOgp = entry.data.ogp ||`/api/og/${entry.slug}.png`;
     }
   }
   .title {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+    margin-left: 1rem;
     margin-bottom: 0.75rem;
     @include mixin.mobile {
       font-size: 1.25rem;
-    }
-    &::before {
-      content: '';
-      width: 0.25rem;
-      height: 1.2rem;
-      background: var(--primary);
-      border-radius: 0.375rem;
-      @include mixin.mobile {
-        display: none;
-      }
     }
   }
   .adLink-info {
@@ -113,6 +108,14 @@ const blogOgp = entry.data.ogp ||`/api/og/${entry.slug}.png`;
     margin-inline: 2rem;
     @include mixin.mobile {
       margin-inline: 0;
+    }
+  }
+
+  .post-book-area {
+    margin-top: 2rem;
+    @include mixin.mobile {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
     }
   }
 </style>
