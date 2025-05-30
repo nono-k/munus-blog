@@ -8,4 +8,5 @@ export const tagsList: Tags[] = [
   { name: 'Astro', slug: 'astro' },
   { name: 'GitHub', slug: 'github' },
   { name: 'Markdown', slug: 'markdown' },
+  { name: 'CMS', slug: 'cms' },
 ];
