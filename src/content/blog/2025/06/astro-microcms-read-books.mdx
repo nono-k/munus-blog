@@ -1,0 +1,383 @@
+---
+title: Astro製のブログで読んだ本リストを管理するためにmicroCMSを使ってみた
+slug: astro-microcms-read-books
+pubDate: 2025-06-01
+category: プログラミング
+tags:
+  - Astro
+  - CMS
+description: このブログに読んだ本リストを追加した
+---
+
+## はじめに
+
+[Web クリエイターボックス](https://www.webcreatorbox.com/)みたいに読んだ本リストを自分のプラットフォームで管理したいと思い、このブログ内に[読んだ本リスト](/book)を追加しました。サイドバーにリンクがあるので覗いてみてください！
+
+読んだ本の管理に microCMS を使ったので、Astro 製のブログで本の管理を microCMS で行う方法をまとめます。まだ、データ数が少ないのでページネーションは実装してないのですが、実装したら追記します。
+
+## microCMS の準備
+
+microCMS のアカウントを作成して、コンテンツ(API)を作成し API 設定をしましょう。下記のように設定します。
+
+![APIスキーマ](https://res.cloudinary.com/dy8ftemi0/image/upload/v1748511089/astro-microcms-read-books-01_bazhvg.jpg "APIスキーマ")
+
+読んだ本リスト API のエンドポイントは book にしました。
+
+### API スキーマの例
+
+本のリストなので、自分は下記のように設定しました。
+
+| フィールド ID |    表示名     |        種類        |
+| :-----------: | :-----------: | :----------------: |
+|     title     |   タイトル    | テキストフィールド |
+|    review     |   レビュー    |   リッチエディタ   |
+|      url      | Amazon リンク | テキストフィールド |
+|     cover     |   表紙画像    | テキストフィールド |
+|    author     |     著者      | テキストフィールド |
+| publishedDate |    発売日     |        日時        |
+|   category    |  カテゴリー   |   コンテンツ参照   |
+|   postlink    |   紹介記事    | テキストフィールド |
+
+## 環境変数の設定
+
+microCMS の API にアクセスするために、登録情報と API キーを環境変数に設定しましょう。
+クライアントサイドで記事ページの下にも読んだ本を表示したかったので、`PUBLIC`を先頭につけています。`PUBLIC`を先頭に付けるとクライアントサイドでも環境変数を読み込めるようになります。
+
+```text title=".env"
+PUBLIC_MICROCMS_SERVICE_DOMAIN=<YOUR_SERVICE>
+PUBLIC_MICROCMS_API_KEY=<YOUR_API_KEY>
+```
+
+## microCMS JavaScript SDK のインストール
+
+microCMS を Astro で使うために、[microcms-js-sdk](https://github.com/microcmsio/microcms-js-sdk) をインストールしましょう。
+
+```
+npm install microcms-js-sdk
+```
+
+## 読んだ本リストを作成する
+
+microCMS の API を使って、読んだ本リストを作成しましょう。今回は`/book`ページに読んだ本リストの一覧を表示するサイトを想定します。
+
+まずは、microCMS にある読んだ本リストの全件とカテゴリーを取得するコードを書きます。`src/scripts/library/microcms.ts`に API 呼び出しのコードを書きます。
+
+```ts title="src/scripts/library/microcms.ts"
+// SDK利用準備
+import type { MicroCMSListContent, MicroCMSQueries } from "microcms-js-sdk";
+import { createClient } from "microcms-js-sdk";
+
+// クライアントの作成
+const client = createClient({
+  serviceDomain: import.meta.env.PUBLIC_MICROCMS_SERVICE_DOMAIN,
+  apiKey: import.meta.env.PUBLIC_MICROCMS_API_KEY,
+});
+
+// 型定義
+export type Books = {
+  title: string;
+  review: string;
+  url: string;
+  cover: string;
+  author: string;
+  category: BooksCategory;
+  publishedDate: Date;
+  postlink: string;
+} & MicroCMSListContent;
+
+export type BooksCategory = {
+  name: string;
+  slug: string;
+} & MicroCMSListContent;
+
+// 本の一覧を全件取得
+export const getBooks = async (queries?: MicroCMSQueries) => {
+  return await client.getAllContents<Books>({ endpoint: "books", queries });
+};
+
+// カテゴリーの一覧を取得
+export const getBooksCategory = async (queries?: MicroCMSQueries) => {
+  return await client.getList<BooksCategory>({ endpoint: "category", queries });
+};
+```
+
+`client.getList`メソッドもありますが、こちらは取得数に制限があるので、全件取得する`client.getAllContents`を使っています。引数にはエンドポイント(books や category)を設定して、クエリは関数の引数から渡すことができます。
+
+詳しいクエリパラメータに関しては、[公式ドキュメント](https://document.microcms.io/content-api/get-list-contents#h929d25d495)を参照してください。
+
+次に、`src/pages/book/index.astro`に読んだ本リストを表示するコードを書いていきましょう。
+
+```ts title="src/pages/book/index.astro"
+---
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { getBooks, getBooksCategory } from "@/scripts/library/microcms";
+
+// 本リストとカテゴリーを取得
+const books = await getBooks({ fields: ['id', 'title', 'cover', 'category']});
+const categories = await getBooksCategory({ fields: ['id', 'name', 'slug']});
+---
+
+<MainGridLayout>
+  <ul class="category__list card-base">
+    {categories.contents.map((category) => (
+      <li class="category__item">
+        <a class="category__link btn-regular" href={`/book/category/${category.slug}`}>
+          {category.name}
+        </a>
+      </li>
+    ))}
+  </ul>
+  <ul class="book__list">
+    {books.map((book) => (
+      <li>
+        <a class="book__card" href={`/book/${book.id}`}>
+          <div class="book__card-img">
+            <img src={book.cover} alt={book.title} />
+          </div>
+          <div class="book__card-title">
+            {book.title}
+          </div>
+        </a>
+      </li>
+    ))}
+  </ul>
+</MainGridLayout>
+```
+
+ここでは、先程作成した`getBooks`と`getBooksCategory`を使って、読んだ本リストとカテゴリーを取得し map で回して表示しています。fields には取得したいデータのキーを指定します。
+
+次に本の詳細ページとカテゴリー別のページを作成しましょう。
+
+## 本の詳細ページを作成する
+
+本の詳細データを取得するコードを書きます。`src/scripts/library/microcms.ts`にコードを追加しましょう。
+
+```ts title="src/scripts/library/microcms.ts"
+export const getBooksDetail = async (
+  contentId: string,
+  queries?: MicroCMSQueries
+) => {
+  return await client.getListDetail<Books>({
+    endpoint: "books",
+    contentId,
+    queries,
+  });
+};
+```
+
+`getListDetail`メソッドは contentId を指定して、指定した ID のデータを取得することができます。
+
+続いて本の詳細ページ用に`src/pages/book/[bookId].astro`を作成しましょう。`getBooksDetail`関数を使って、本の詳細データを取得して表示します。
+
+```ts title="src/pages/book/[bookId].astro"
+---
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { getBooks, getBooksDetail } from "@/scripts/library/microcms";
+import { Icon } from "astro-icon/components";
+
+// 詳細記事ページの全パスを取得
+export async function getStaticPaths() {
+  const response = await getBooks({ fields: ['id'] });
+  return response.map((content) => ({
+    params: { bookId: content.id },
+  }));
+}
+
+// 詳細記事ページのデータを取得
+const { bookId } = Astro.params;
+const book = await getBooksDetail(bookId as string);
+// 日付をフォーマット
+const date = new Date(book.publishedDate as Date);
+const year = date.getFullYear();
+const month = date.getMonth() + 1;
+const day = date.getDate();
+---
+
+<MainGridLayout>
+  <div class="book__detail card-base">
+    <h1 class="book__detail-title">{book.title}</h1>
+    <div class="book__detail-body">
+      <div class="book__detail-right">
+        <a href={book.url} class="book__detail-img" target="_blank">
+          <img src={book.cover} alt={book.title} />
+        </a>
+        <div class="book__detail-links">
+          <a href={book.url} class="book__detail-link btn-regular" target="_blank">Amazon</a>
+          {book.postlink && (
+            <a href={`/blog/${book.postlink}`} class="book__detail-link btn-regular">記事を見る</a>
+          )}
+        </div>
+      </div>
+      <dl class="book__detail-info">
+        <div class="book__detail-info-category-wrap">
+          <a href=`/book/category/${book.category.slug}` class="book__detail-info-category">
+            {book.category.name}
+          </a>
+        </div>
+        <div class="book__detail-info-item">
+          <dt>著者</dt>
+          <dd>{book.author}</dd>
+        </div>
+        <div class="book__detail-info-item">
+          <dt>発売日</dt>
+          <dd>{`${year}年${month}月${day}日`}</dd>
+        </div>
+        <div class="book__detail-info-body" set:html={book.review}></div>
+      </dl>
+    </div>
+    <div class="book__detail-bottom-link-wrap">
+      <a href="/book" class="book__detail-bottom-link">
+        <span class="link__icon">
+          <Icon name="material-symbols:chevron-left-rounded" />
+        </span>
+        <span class="book__detail-bottom-link-text">読んだ本リストに戻る</span>
+      </a>
+    </div>
+  </div>
+</MainGridLayout>
+```
+
+`getStaticPaths`関数は動的なパスがどういう値をとるかを定義します。ここでは、`getBooks`関数で取得した ID をパスとして設定しています。
+
+`book.review`はリッチエディタで入力したデータなので、改行などを正しくレンダリングするため`set:html`を使って HTML をそのまま表示します。
+
+これで本の詳細ページができました。
+
+## カテゴリーページを作成する
+
+カテゴリー別のページを作成しましょう。`src/pages/book/category/[slug]/index.astro`を作成します。
+
+```ts title="src/pages/book/category/[slug]/index.astro"
+---
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { getBooks, getBooksCategory } from "@/scripts/library/microcms";
+
+// カテゴリー別のパスを取得
+export async function getStaticPaths() {
+  const response = await getBooks({ fields: ['id', 'category'] });
+
+  return response.map((content) => ({
+    params: { slug: content.category.slug },
+    props: {
+      categoryId: content.category.id,
+      slug: content.category.slug,
+      name: content.category.name,
+    },
+  }));
+}
+
+const { categoryId, slug, name } = Astro.props;
+
+// カテゴリー別の本のリストを取得
+const books = await getBooks({
+  fields: ['id', 'title', 'cover', 'category'],
+  filters: `category[equals]${categoryId}`
+});
+
+const categories = await getBooksCategory({ fields: ['id', 'name', 'slug']});
+---
+
+<MainGridLayout>
+  <ul class="category__list card-base">
+    {categories.contents.map((category) => (
+      <li class="category__item">
+        <a class="category__link btn-regular" href={`/book/category/${category.slug}`}>
+          {category.name}
+        </a>
+      </li>
+    ))}
+  </ul>
+  <ul class="book__list">
+    {books.map((book) => (
+      <li>
+        <a class="book__card" href={`/book/${book.id}`}>
+          <div class="book__card-img">
+            <img src={book.cover} alt={book.title} />
+          </div>
+          <div class="book__card-title">
+            {book.title}
+          </div>
+        </a>
+      </li>
+    ))}
+  </ul>
+</MainGridLayout>
+```
+
+ここでも`getStaticPaths`関数を使って、カテゴリー別のパスを取得しています。`getBooks`の引数に`filters`をでカテゴリー ID を指定することで、そのカテゴリーの本のリストを取得できます。
+
+`category[equals]${categoryId}`のように`[equals]`を使うことで、id と一致する本のデータを取得できます。
+
+以上で、本の一覧・詳細・カテゴリー別のページができました！
+最後におまけでブログ記事の下に PR として本のリストをランダムで 4 件表示する方法を紹介します。
+
+## おまけ: ブログ記事の下に本のリストをランダムで 4 件表示する
+
+新しくコンポーネントとして`PostBookArea.astro`を作成しました。このコンポーネントではクライアントサイドで JavaScript を使って、microCMS の API からデータを取得しています。
+
+このブログは SSG として公開しているので、Astro のコードフェンスの中で取得すると、ビルド時にデータを取得するので固定になってしまいます。なので、クライアントサイドで取得するように`<script>`の中で microCMS の API からデータを取得するコードを書いていきます。
+
+```ts title="src/components/PostBookArea.astro"
+<div class="post-book-area card-base">
+  <h2>PR</h2>
+
+  <ul class="post-book-area__list"></ul>
+</h2>
+
+<script>
+  import { getBooks } from "@/scripts/library/microcms";
+
+  const allBooks = await getBooks({ fields: ['title', 'cover', 'url'] });
+  const randomBooks = allBooks.sort(() => Math.random() - 0.5).slice(0, 4);
+  const bookList = document.querySelector(".post-book-area__list");
+
+
+  if (randomBooks && bookList) {
+    bookList.innerHTML = randomBooks.map((book) => `
+      <li class="post-book-area__item">
+        <a class="post-book-area__link" href="${book.url}" target="_blank">
+          <div class="post-book-area__img">
+            <img src="${book.cover}" alt="${book.title}" />
+          </div>
+          <div class="post-book-area__title">${book.title}</div>
+        </a>
+      </li>
+    `).join('');
+  }
+</script>
+```
+
+ここでは microCMS の API から取得したデータをランダムに 4 件取得して表示しています。
+このコンポーネントをブログ記事の詳細ページに追加します。
+
+```ts {11-13} title="src/pages/blog/[slug]/index.astro"
+---
+import PostBookArea from "@/components/PostBookArea.astro";
+---
+
+<MainGridLayout>
+  <div class="article card-base">
+    <MarkdownBody>
+      <Content components={{ img: Figure }} />
+    </MarkdownBody>
+
+  <div class="post-book-area">
+    <PostBookArea />
+  </div>
+
+</MainGridLayout>
+```
+
+これでブログ記事の下に本のリストをランダムで 4 件表示することができました。
+
+## まとめ
+
+Astro 製のブログに microCMS で管理した読んだ本リストを表示する方法を紹介しました。読書メーターも使ってましたが、自分のプラットフォームで読んだ本を管理することができるようになったので、気軽に読んだ感想を残せるようになってよかったです！
+
+サイドバーにリンクがあるのと、この[ページ](/book)にあるので覗いてみてください！
+
+## 参考
+
+- [Astro と microCMS でつくるブログサイト](https://blog.microcms.io/astro-microcms-introduction/)
+
+- [WordPress から microCMS にデータを移行する方法](https://www.webcreatorbox.com/blog/wp-microcms-migration)
