@@ -11,7 +11,6 @@ export const siteConfig: SiteConfig = {
 };
 
 export const headerLinks: HeaderLink[] = [
-  { name: 'Home', url: '/' },
   {
     name: 'Blog',
     url: '/blog',
@@ -23,6 +22,7 @@ export const headerLinks: HeaderLink[] = [
   },
   { name: 'Work', url: '/work' },
   { name: 'About', url: '/about' },
+  { name: 'Book', url: '/book' },
   { name: 'Contact', url: '/contact' },
 ];
 
