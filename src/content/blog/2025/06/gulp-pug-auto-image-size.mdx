@@ -1,0 +1,160 @@
+---
+title: GulpとPugの制作環境で画像のwidthとheight属性を自動で付与されるようにする
+slug: gulp-pug-auto-image-size
+pubDate: 2025-06-05
+category: プログラミング
+tags:
+  - Gulp
+  - Pug
+  - 時短
+description: なるべく自動化したい
+---
+
+## はじめに
+
+普段、仕事では Astro などのフロントエンドフレームワークは使えず、Pug と Gulp で制作しています。
+毎回、`img`タグに`width`と`height`属性を手動で付けるのは大変なので、自動で付与されるようにしました。
+
+以前、技術ブログの方で解説した Gulp と Pug の制作環境に追加していきますので、こちらの記事も参考にしてください。
+
+https://hypb.dev/articles/gulp-template
+
+リポジトリはこちらになります。
+
+https://github.com/nono-k/gulp-template
+
+## インストール
+
+ざっくりとした方針としては、Pug で画像を表示する Mixin を作成し、その引数に画像のパスを渡すことで、画像のサイズを取得して、`width`と`height`属性を自動で付与できるようにします。
+
+インストールするものとして、Node.js から Pug ファイル内にデータを渡せるように、`pug-data`を。また、画像ファイルのサイズを取得できる`image-size`もインストールします。
+
+```bash
+npm install --save-dev pug-data image-size@1.0.0
+```
+
+> [!warning] Warning
+> 自分の環境だと、`image-size`のバージョンが 2 だと上手くコンパイルできなかったので、1.0.0 を指定してください。
+
+## gulpfile.js の編集
+
+`gulpfile.js`を編集しましょう。
+Pug のコンパイル部分を抜粋します。
+
+```js title="gulpfile.js"
+const gulp = require("gulp");
+const pug = require("gulp-pug");
+const plumber = require("gulp-plumber");
+const browserSync = require("browser-sync").create();
+
+const gulpData = require("gulp-data"); // Pugにデータを渡すためのプラグイン
+const imageSize = require("image-size"); // 画像のサイズ（width/height）を取得するライブラリ
+const path = require("path");
+
+// ** Pug のコンパイル **
+const compilePug = () => {
+  return (
+    gulp
+      .src(["src/pages/**/*.pug", "!src/pug/**"])
+      .pipe(plumber())
+      // 各ファイルごとにPugで使用可能なデータを追加
+      .pipe(
+        gulpData((file) => {
+          return {
+            imageSize: (src) => {
+              // 画像パスから /common/ を除外（ビルド用の実ファイルパスに変換）
+              const replaceSrc = src.replace("/common/", "");
+
+              // 実際のファイルシステム上の画像の絶対パスを解決
+              const imagePath = path.resolve(
+                __dirname,
+                "src/public",
+                replaceSrc
+              );
+              try {
+                // 指定画像の幅と高さを取得して返す
+                return imageSize(imagePath);
+              } catch (error) {
+                console.error(`Error: ${error.message}`);
+                return { width: null, height: null };
+              }
+            },
+          };
+        })
+      )
+      .pipe(pug({ pretty: true })) // PugをHTMLに変換（圧縮しない）
+      .pipe(gulp.dest("dist")) // 出力先
+      .pipe(browserSync.stream())
+  );
+};
+```
+
+自分の制作環境では、画像の置き場所としてコンパイル前は、`src/public/images`に配置しており、、コンパイル後は`dist/common/images`に配置されるようにしています。
+なので、`replaceSrc`で`/common/`を除外しています。
+
+最後に画像に関しての Mixin を作成しましょう！
+
+## Pug で画像を表示する Mixin の作成
+
+`img`タグと`picture`タグを表示する Mixin を作成します。
+
+```pug title="mixin.pug"
+-
+  const rootDir = '/common/';
+  const bpMobile = '959px';
+
+mixin img(src, alt)
+  - const _src = rootDir + 'images/' + src;
+  - const { width, height } = imageSize(_src);
+  img(src=_src, alt=alt, width=width, height=height)&attributes(attributes)
+
+mixin pic(pc, sp, alt)
+  - const _pc = rootDir + 'images/' + pc;
+  - const _sp = rootDir + 'images/' + sp;
+  - const { width: pcw, height: pch } = imageSize(_pc);
+  - const { width: spw, height: sph } = imageSize(_sp);
+  picture
+    source(media=`(max-width: ${bpMobile})`, srcset= rootDir + 'images/' + sp, width=spw, height=sph)
+    img(src= rootDir + 'images/' + pc, alt=alt, width=pcw, height=pch)&attributes(attributes)
+```
+
+`gulpData`で Pug ファイル内で使用できるようになった`imageSize`を使って、画像のサイズを取得しています。サイズを取得できたら、そのまま`width`と`height`属性に渡しています。
+
+この Mixin の使用例は下記になるでしょう。
+
+```pug title="index.pug"
+// 通常の画像
++img('hoge.png', '画像の説明')
+
+// pictureタグ
++pic('hoge-pc.png', 'hoge-sp.png', '画像の説明')
+```
+
+これをコンパイルすると、下記のような HTML になります。
+
+```html
+// 通常の画像
+<img src="/common/images/hoge.png" alt="画像の説明" width="100" height="100" />
+
+// pictureタグ
+<picture>
+  <source
+    media="(max-width: 959px)"
+    srcset="/common/images/hoge-sp.png"
+    width="100"
+    height="100"
+  />
+  <img
+    src="/common/images/hoge-pc.png"
+    alt="画像の説明"
+    width="100"
+    height="100"
+  />
+</picture>
+```
+
+これで、画像のサイズを自動で付与できるようになり、わざわざ画像サイズを手動で付与する必要がなくなりました！
+
+## 参考
+
+- [Pug で img タグに width, height 属性を自動で付加する方法](https://zenn.dev/ko_yelie/articles/2d040d2750b751)
