@@ -2,11 +2,15 @@
 
 [data-rehype-pretty-code-figure] {
   position: relative;
-  margin-top: 2.5rem;
+  margin-top: 4rem;
+
+  &:not(:has(> [data-rehype-pretty-code-title])) {
+    margin-top: 2.5rem;
+  }
 
   [data-rehype-pretty-code-title] {
     position: absolute;
-    top: -1.2rem;
+    top: -1.5rem;
     left: 0;
     padding: 0.5rem 1rem;
     background: #303446;
