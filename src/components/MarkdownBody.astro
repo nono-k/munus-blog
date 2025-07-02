@@ -10,7 +10,7 @@
     line-height: 1.75;
     @include mixin.large {
       margin-inline: 1rem;
-      font-size: 1rem;
+      font-size: 1.075rem;
     }
     > * + * {
       margin-top: var(--stack-space, 2rem);
@@ -122,6 +122,63 @@
       font-weight: 500;
       color: #000;
       color: var(--black);
+    }
+    details {
+      margin-top: 2rem;
+      margin-inline: 2rem;
+      font-size: 1rem;
+      &[open] {
+        summary {
+          border-bottom-right-radius: 0px;
+          border-bottom-left-radius: 0px;
+          border-color: var(--primary);
+          &::after {
+            rotate: 180deg;
+            margin-top: 0.2rem;
+          }
+        }
+      }
+      summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        background-color: var(--btn-regular-bg);
+        border: 1px solid var(--btn-regular-bg-hover);
+        color: var(--btn-content);
+        border-radius: 0.5rem;
+        transition-property: background-color;
+        transition-duration: 0.3s;
+
+        @include mixin.hover {
+          background-color: var(--btn-regular-bg-hover);
+        }
+        cursor: pointer;
+        &::after {
+          content: '▼';
+        }
+        + div {
+          padding: 1.5rem 1rem;
+          border-radius: 0 0 0.5rem 0.5rem;
+          border: 1px solid var(--primary);
+          border-top: none;
+          border-bottom-right-radius: 0.5rem;
+          border-bottom-left-radius: 0.5rem;
+          @include mixin.mobile {
+            padding-inline: 2rem 1rem;
+          }
+          > * + * {
+            margin-top: 1.5rem;
+          }
+          figure {
+            margin-bottom: 0;
+          }
+          > ul {
+            margin-top: 0;
+          }
+        }
+      }
     }
     span code {
       background: var(--btn-regular-bg) !important;
