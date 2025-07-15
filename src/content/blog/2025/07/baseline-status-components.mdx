@@ -1,0 +1,168 @@
+---
+title: 技術ブログにブラウザの対応状況を表示するBaseline Status Webコンポーネントを入れる方法
+slug: baseline-status-components
+pubDate: 2025-07-16
+category: プログラミング
+tags:
+  - ブログ
+  - Astro
+description: 技術ブログに入れておくと良さそう🚀
+---
+
+import BaseLineStatus from "@/components/markdown/BaseLineStatus.astro";
+
+## はじめに
+
+技術ブログを複数運営しているのですが、CSS などのプロパティで一部のブラウザのみでしか対応していないものがあります。その際に、ブラウザの対応状況を表示するコンポーネントを入れておくと、ブラウザの対応状況が分かるので、ブログを見ている人にも分かりやすいと思います。
+
+↓ 運営している技術ブログ
+
+https://hypb.dev
+
+https://feylo.dev
+
+今回紹介する Baseline Status Web コンポーネントは、ブラウザの対応状況を表示するための Web コンポーネントです。このコンポーネントをブログ内で使用することで、ブラウザの対応状況を簡単に表示することができます。この Web コンポーネントを Astro 製のブログと Nuxt 製のブログで使う方法を紹介します。
+
+使用イメージは ↓ のような感じになります。
+
+<BaseLineStatus featureId="anchor-positioning" />
+
+## Baseline Status Web コンポーネントの使い方
+
+### npm で使う場合
+
+npm で`baseline-status`をインストールします。
+
+```bash
+npm install baseline-status
+```
+
+使用する際はそのまま import して表示する featureId を指定するだけで上記のような感じで表示されます。
+
+```js
+import "baseline-status";
+```
+
+```html
+<baseline-status featureId="anchor-positioning" />
+```
+
+### CDN で使う場合
+
+CDN を使う場合は、以下のようにします。
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/baseline-status@1/baseline-status.min.js"></script>
+
+<baseline-status featureId="anchor-positioning" />
+```
+
+### featureId の調べ方
+
+コンポーネントの中で使う featureId は、以下から探せるのでこの値を指定します。
+
+https://webstatus.dev/
+
+https://github.com/web-platform-dx/web-features/tree/main/features
+
+## フレームワークで使う
+
+最後に技術ブログを作る際に使っている Astro と Nuxt での使用方法を紹介します。
+注意点としては、`baseline-status`では`HTMLElement`が使われているので、SSR や SSG ではエラーになることがあるので、それぞれクライアントサイドだけで読み込み・実行するようにしましょう。
+
+### Astro での使用方法
+
+`components/BaselineStatus.astro`というファイルを作成して以下のように書きましょう。
+
+```astro title="components/BaselineStatus.astro"
+---
+interface Props {
+  featureId: string;
+}
+
+const { featureId } = Astro.props;
+---
+
+<baseline-status featureId={featureId} class="baseline-status" />
+
+<script>
+  import "baseline-status";
+</script>
+
+<style>
+  .baseline-status {
+    --baseline-status-color-outline: var(--primary);
+    padding: 1rem 1rem 0.5rem;
+    margin-inline: auto;
+  }
+</style>
+```
+
+ここでは先述の通りに、クライアントサイドだけで使うように、ダイナミックインポートを使って読み込んでいます。
+実際の使用方法としては下記のようになります。
+
+```astro
+import BaseLineStatus from "@/components/BaseLineStatus.astro";
+
+<BaseLineStatus featureId="anchor-positioning" />
+```
+
+実際のコンポーネントのリポジトリはこちらになります。
+
+### Nuxt での使用方法
+
+Nuxt では、npm での import で使用する方法がうまくいかなかったので、CDN で読み込む方法を使いました。
+Nuxt Content を想定して、`components/content/BaselineStatus.vue`というファイルを作成して以下のように書きましょう。
+
+```vue title="components/content/BaselineStatus.vue"
+<script setup lang="ts">
+if (import.meta.client) {
+  const script = document.createElement("script");
+  script.type = "module";
+  script.src =
+    "https://cdn.jsdelivr.net/npm/baseline-status@1/baseline-status.min.js";
+  document.head.appendChild(script);
+}
+
+const props = defineProps<{
+  featureId: string;
+}>();
+</script>
+
+<template>
+  <baseline-status :feature-id="props.featureId"></baseline-status>
+</template>
+
+<style scoped lang="scss">
+baseline-status {
+  margin-block: 2rem;
+  padding-top: 1rem;
+  padding-inline: 1.5rem;
+}
+</style>
+```
+
+ここでも同様にクライアントサイドだけで使用するようにしてます。
+実際の使用方法としては下記のようになります。
+
+```bash
+::baseline-status
+---
+featureId: anchor-positioning
+---
+::
+```
+
+実際のコンポーネントのリポジトリはこちらになります。
+
+https://github.com/nono-k/feylo/blob/main/components/contnet/BaselineStatus.vue
+
+## まとめ
+
+Baseline Status Web コンポーネントを使って、技術ブログ(Astro と Nuxt)にブラウザの対応状況を表示する方法を紹介しました。技術ブログを運営している方は、ぜひ使ってみてください！
+
+## 参考
+
+- [ブログ投稿やプレゼンテーションにベースラインのステータスを表示する - web.dev](https://web.dev/blog/show-baseline-status?hl=ja)
+
+- [ブログにブラウザの対応状況を表示する](https://bcrikko.github.io/til/posts/2024-11-18/astro-baseline/)

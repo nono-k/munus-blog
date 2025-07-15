@@ -120,7 +120,6 @@
     strong {
       background: linear-gradient(transparent 60%, var(--btn-regular-bg) 40%);
       font-weight: 500;
-      color: #000;
       color: var(--black);
     }
     details {
@@ -150,11 +149,10 @@
         border-radius: 0.5rem;
         transition-property: background-color;
         transition-duration: 0.3s;
-
+        cursor: pointer;
         @include mixin.hover {
           background-color: var(--btn-regular-bg-hover);
         }
-        cursor: pointer;
         &::after {
           content: '▼';
         }

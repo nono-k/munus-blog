@@ -1,0 +1,21 @@
+---
+interface Props {
+  featureId: string;
+}
+
+const { featureId } = Astro.props;
+---
+
+<baseline-status featureId={featureId} class="baseline-status" />
+
+<style>
+  .baseline-status {
+    --baseline-status-color-outline: var(--primary);
+    padding: 1rem 1rem 0.5rem;
+    margin-inline: auto;
+  }
+</style>
+
+<script>
+  import "baseline-status";
+</script>
