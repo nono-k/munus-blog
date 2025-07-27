@@ -69,6 +69,27 @@ const description = `「${book.title}」の読書記録です。`;
 
 </MainGridLayout>
 
+<style lang="scss" is:global>
+  .book {
+    &__detail-info-body {
+      ul, ol {
+        padding-left: 0.5rem;
+        > * + * {
+          margin-top: 0.5rem;
+        }
+        ul {
+          margin-top: 0.5rem;
+          padding-left: 0;
+        }
+      }
+      li {
+        list-style: unset;
+        margin-left: 1.5rem;
+      }
+    }
+  }
+</style>
+
 <style lang="scss">
   .book {
     &__detail {
