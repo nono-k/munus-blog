@@ -27,7 +27,8 @@ const { imageId, linkId, title, author} = Astro.props;
     grid-template-columns: 22% auto;
     border: 3px solid transparent;
     border-radius: 0.5rem;
-    background: #303446;
+    background: var(--code-bg);
+    padding: 1rem;
     transition: border-color 0.3s;
     a {
       color: #c6d0f5;
@@ -35,8 +36,7 @@ const { imageId, linkId, title, author} = Astro.props;
     }
     @include mixin.phone {
       grid-template-columns: 1fr;
-      gap: 1rem;
-      padding: 1rem 1rem 1.5rem;
+      padding: 0.75rem 1rem;
     }
     @media (hover: hover) {
       &:hover {
@@ -56,6 +56,7 @@ const { imageId, linkId, title, author} = Astro.props;
         padding: 0;
       }
       &.-img {
+        padding: 1rem;
         @include mixin.phone {
           max-width: 180px;
           margin-inline: auto;
@@ -64,7 +65,8 @@ const { imageId, linkId, title, author} = Astro.props;
       &.-text {
         display: flex;
         flex-direction: column;
-        padding-inline: 2rem 1rem;
+        justify-content: center;
+        padding-inline: 1rem;
         @include mixin.phone {
           padding-inline: 0;
         }
@@ -83,7 +85,7 @@ const { imageId, linkId, title, author} = Astro.props;
       margin-top: 0.5rem;
     }
     .btn {
-      margin-top: auto;
+      margin-top: 1rem;
       padding: 0.5rem;
       border-radius: 0.25rem;
       font-size: 0.875rem;

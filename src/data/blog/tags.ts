@@ -8,6 +8,8 @@ export const tagsList: Tags[] = [
   { name: 'Web', slug: 'web' },
   { name: 'Astro', slug: 'astro' },
   { name: 'GitHub', slug: 'github' },
+  { name: 'Obsidian', slug: 'obsidian' },
+  { name: 'メモ術', slug: 'memo' },
   { name: '時短', slug: 'time-saving' },
   { name: 'Markdown', slug: 'markdown' },
   { name: 'CMS', slug: 'cms' },

@@ -1,0 +1,91 @@
+---
+interface Props {
+  text?: string;
+  items: {
+    title: string;
+    link: string;
+    image: string;
+  }[];
+}
+
+const { text = 'あわせて読みたい', items } = Astro.props;
+---
+
+<div class="recommend-link">
+  <div class="recommend-link__text">{text}</div>
+  <ul class="recommend-link__list">
+    {items.map((item) => (
+      <li class="recommend-link__item">
+        <a href=`/blog/${item.link}` class="recommend-link__link">
+          <img src=`/recommendLink/${item.image}` alt={item.title} width="1200" height="675" />
+          <span class="recommend-link__title">{item.title}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style lang="scss">
+  .recommend-link {
+    margin-top: 2rem;
+    padding: 1.75rem 1.5rem 1.5rem;
+    border: 1px solid var(--black);
+    position: relative;
+    @include mixin.phone {
+      padding-inline: 1.25rem;
+    }
+    &__text {
+      position: absolute;
+      top: -1.5rem;
+      left: 1rem;
+      background-color: var(--white);
+      padding: 0.5rem;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    &__list {
+      margin-top: 0 !important;
+      padding-left: 0;
+      list-style: none;
+      > * + * {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--black);
+      }
+    }
+    &__item {
+      list-style: none;
+      margin-left: 0;
+    }
+    &__link {
+      display: grid;
+      grid-template-columns: 1fr 2.5fr;
+      align-items: center;
+      column-gap: 1rem;
+      color: var(--black) !important;
+      text-decoration: none !important;
+      border: 1px solid var(--black);
+      padding: 0;
+      overflow: hidden;
+      transition-property: background-color;
+      transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+      transition-duration: .15s;
+      @include mixin.phone {
+        grid-template-columns: 1fr;
+        row-gap: 0.5rem;
+      }
+      @include mixin.hover {
+        background-color: var(--btn-plain-bg-hover);
+      }
+    }
+    &__title {
+      font-size: 1rem;
+      font-weight: 700;
+      @include mixin.phone {
+        padding: 0 1rem 1rem;
+      }
+    }
+  }
+</style>

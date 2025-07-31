@@ -1,0 +1,142 @@
+---
+title: メモを貯めるためにObsidianをはじめてみました
+slug: obsidian-start
+pubDate: 2025-08-01
+image: ../../../../assets/images/obsidian.jpg
+category: 雑記
+tags:
+  - Obsidian
+  - メモ術
+description: Obsidianをはじめてみた🔷
+isAdLink: true
+---
+
+import AmazonLink from "@/components/markdown/AmazonLink.astro";
+
+最近、[TAKE NOTES!――メモで、あなただけのアウトプットが自然にできるようになる](https://amzn.to/4o8lfyX)という本を読みました。この本を読んで、Zettelkasten というメモの方法を知り、自分の言葉で考えてメモを書くことの大切さを知ったので、Zettelkasten の手法を実現できるツールとして[Obsidian](https://obsidian.md/)をはじめてみました。
+
+この記事では、整理のために自分の Obsidian の設定と使い方を紹介します。
+
+<AmazonLink
+  imageId="71taKZfhhWL._SY522_"
+  linkId="4o8lfyX"
+  title="TAKE NOTES!――メモで、あなただけのアウトプットが自然にできるようになる"
+  author="ズンク・アーレンス"
+/>
+
+## Obsidian をはじめたきっかけ
+
+Obsidian を始める前から、手帳やメモ帳などに、休みの日にやったことや、本や映画の感想を書いていました。このブログをはじめたきっかけも、それらを手書きで書いていても、見返さないのがもったいないのと、どうせなら公開を意識して残しておこうと思い、このブログをはじめました。
+
+ブログをはじめたのは良かったですが、意外に手軽に公開するのもハードルに感じていたので、ローカルでメモを管理できるツールとして Obsidian をはじめてみました。
+
+## Obsidian とは
+
+Obsidian(オブシディアン)とは、マークダウンエディタでもあり、ナレッジベースアプリでもあります。ローカルで使えるため、ネットに繋がっていない環境でも使えますし、自身でデータを所持し管理できます。
+
+Markdown 形式で書くことができ、豊富なプラグインなどが用意されてあり、自分好みに**カスタマイズ**することができます。下図は Obsidian の編集画面です。リアルタイムにマークダウンを変換してくれます。
+
+![Obsidianの編集画面](https://res.cloudinary.com/dy8ftemi0/image/upload/v1753771619/obsidian-start-01_egznb4.jpg "Obsidianの編集画面")
+
+### Obsidian のテーマ
+
+Obsidian には外観を変更するために、たくさんのテーマがあります。自分の場合は、いろいろテーマを試してみたのですが、しっくりくるものがなかったので、上記の画像のようにデフォルトのテーマでダークモードで使用しています。
+
+見た目については、CSS でカスタマイズできるみたいなので、時間がある時にちょくちょくいじってみようかと思います。
+
+## フォルダ構成
+
+Obsidian や Zettelkasten の思想的に、フォルダを切らないでタグで管理するのが良さそうですが、自分はフォルダで書く場所を管理する方針にしました。タグで管理するのも悩まずにメモを書けそうで良さそうですが、メモが増えた時に一つのフォルダにまとまってしまうのが嫌なので、とりあえずフォルダで分けてます。
+
+自分のフォルダ構成としては、下記のようになっています。
+
+```text title="Obsidian のフォルダ構成"
+├── _Assets           -- 画像など
+├── _Template         -- テンプレート
+├── 00_Rule           -- Obsidianの方針ルール
+├── 01_Daily          -- ディリーノート・Thino
+├── 02_Zettelkasten   -- ツェッテルカステン用
+│   ├── FleetingNote
+│   └── PermanentNote
+├── 03_Wiki           -- Wiki的な調べ物のメモ
+├── 04_Reviews        -- 本・映画・美術館の感想
+│   ├── Books
+│   ├── Movies
+│   └── Museum
+├── 05_Knowledge      -- 知識管理
+├── 06_Projects       -- プロジェクト
+└── 07_Quote          -- 使いたい引用まとめ
+```
+
+Obsidian を使っている他の方と比べると、フォルダが多くなっていますが、メモを書く前から、このフォルダに入れるぞって思いながら日々を過ごせそうなので、とりあえずはこの構成でやってみます。
+
+まだ Zettelkasten の手法は活用できていないですが、Zettelkasten でいうところの「Literature Notes(文献ノート)」は、`04_Reviews`に、本・映画・美術館の感想を書く場所にしようと考えています。
+
+### ブログ記事ネタは GitHub で管理
+
+`06_Projects`には、今まで作成した技術ブログや今後の個人開発に関してのメモを管理する予定です。
+
+このフォルダに記事にしたいブログネタなどを忘れないように管理しようと思っていたのですが、[azukiazusa さんのブログ](https://azukiazusa.dev/)を参考に GitHub Projects のカンバンで管理していたので、Obsidian で管理する必要はないと思いこのフォルダの活用法は模索中です。
+
+![ブログ記事ネタなどはGitHub Projectsで管理](https://res.cloudinary.com/dy8ftemi0/image/upload/v1753780299/obsidian-start-04_trxlbt.jpg "ブログ記事ネタなどはGitHub Projectsで管理")
+
+## VSCode ライクなショートカットにする
+
+VSCode は、普段から慣れ親しんでいるので、Obsidian のショートカットも VSCode に近づけたいと思います。そのための設定を紹介します。
+
+### ホットキーの設定方法
+
+右下の歯車アイコンか、「Cmd + ,」で設定画面が開きます。左サイドバーから「ホットキー」を選択し、右上のフィルターから変更したいホットキーを検索できます。
+
+![Obsidian のホットキー設定画面](https://res.cloudinary.com/dy8ftemi0/image/upload/v1753778036/obsidian-start-02_pwn9cx.jpg "Obsidian のホットキー設定画面")
+
+### VSCode ライクなホットキー設定
+
+下記は、自分が設定している VSCode ライクなホットキーの設定になります。
+
+![自分のホットキーの設定一覧](https://res.cloudinary.com/dy8ftemi0/image/upload/v1753778801/obsidian-start-03_xnhhfk.jpg "自分のホットキーの設定一覧")
+
+| 説明                           | ホットキー        |
+| ------------------------------ | ----------------- |
+| コマンドパレット               | `Cmd + Shift + P` |
+| クイックスイッチャー           | `Cmd + P`         |
+| ファイルエクスプローラーの表示 | `Cmd + Shift + E` |
+| カレンダーの表示               | `Cmd + Shift + C` |
+| 次のタブに移動                 | `Cmd + Opt + →`   |
+| 前のタブに移動                 | `Cmd + Opt + ←`   |
+| 右のサイドバーを開閉           | `Cmd + Opt + R`   |
+| 左のサイドバーを開閉           | `Cmd + Opt + L`   |
+
+## Notion と Obsidian の使い分け
+
+Obsidian を使う前は、Notion でメモ書きやスニペットなどを残していました。
+具体的には下記の通りです。
+
+- コピペで使えるプログラミングのスニペットを CodePen で管理
+- バグなど発生したときの解決法などのメモ
+- 個人開発で参考にした・したいサイトのまとめ
+
+なので、上記の Notion で管理していた内容も Obsidian に移行しようかと思ったのですが、Obsidian では CodePen の貼り付けでプレビューができなかったり、Notion のように URL 貼り付けでカードリンクにするには設定が必要だったりするので、プログラミング関係に関しては、まだ Notion を活用したいと思います。
+
+## Obsidian で実現したいこと
+
+Obsidian でメモを貯め実現したいことは、**自分の言葉で考え続けること**です。普段、あまり考えごとをしなく、アナログで読書メモを付けていた時も、文章を書き写すだけで、全然読んだ本の繋がりが付けられなかったので、日常的にメモを取り続けることで接着点をつくり、そこから自分の考えを出せるようになれたらと思います。
+
+また、このブログは雑記に書いていいのもあるので、Zettelkasten でいう PermanentNote(永久保存版のメモ)がまとまったら、記事にしていきたいと思います。
+
+## まとめ
+
+[TAKE NOTES!――メモで、あなただけのアウトプットが自然にできるようになる](https://amzn.to/4o8lfyX)という本を読み、Obsidian をはじめました。この本の通りに Zettelkasten の手法を活用していくかは、今後検討したいですが、日々の読書や生活などで、自分の言葉で考えて暮らしていく習慣になればいいなと思っています。
+
+Obsidian には、他にもいろいろな機能があるので、今後はその機能も使いながら記事にしていけたらと思います！
+
+## Obsidian の使い方を本で学びたい
+
+Obsidian の使い方を本で学びたい方はこちらをおすすめします。
+
+<AmazonLink
+  imageId="71cavpnJJEL._SY522_"
+  linkId="3GVC3IM"
+  title="Obsidianで“育てる”最強ノート術 —— あらゆる情報をつなげて整理しよう"
+  author="増井 敏克"
+/>
