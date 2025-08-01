@@ -78,13 +78,13 @@ const blogOgp = entry.data.ogp ||`/api/og/${entry.slug}.png`;
     &__image {
       border-radius: 0.75rem;
       overflow: hidden;
-      margin-inline: 1rem;
+      margin-inline: 3rem;
       margin-top: 1.5rem;
     }
     &__dot {
       height: 2px;
       margin-top: 1.5rem;
-      margin-inline: 1rem;
+      margin-inline: 3rem;
       background-image: radial-gradient(circle,#0000001a 1px,transparent 1px);
       background-position: left top;
       background-repeat: repeat-x;
@@ -107,7 +107,8 @@ const blogOgp = entry.data.ogp ||`/api/og/${entry.slug}.png`;
     margin-top: 1rem;
     margin-inline: 2rem;
     @include mixin.mobile {
-      margin-inline: 0;
+      margin-inline: -1rem;
+      font-size: 0.75rem;
     }
   }
 
