@@ -1,0 +1,65 @@
+---
+import { Icon } from "astro-icon/components";
+const { title } = Astro.props;
+
+const apiURL = `https://ja.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`;
+
+const response = await fetch(apiURL);
+const data = await response.json();
+---
+
+<a href={data.content_urls.desktop.page} class="wikipedia" target="_blank">
+  <div class="wikipedia__img">
+    {data.thumbnail && <img src={data.thumbnail.source} alt={data.title} width="200" />}
+  </div>
+  <div class="wikipedia__body">
+    <div class="wikipedia__title">{data.title}</div>
+    <p class="wikipedia__extract">{data.extract}</p>
+    <div class="wikipedia__icon-wrap">
+      <div class="wikipedia__icon">
+        <img src="/icon/wikipedia.ico" alt="" width="22" height="16" />
+      </div>
+      <div class="wikipedia__icon-text">Wikipedia</div>
+    </div>
+  </div>
+</a>
+
+<style lang="scss">
+  .wikipedia {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    color: oklch(1 0.0 0);
+    text-decoration: none;
+    background: var(--code-bg);
+    border: 1px solid var(--primary);
+    padding: 0;
+    overflow: hidden;
+    &__img {
+    }
+    &__body {
+      padding: 1rem 1.5rem;
+    }
+    &__title {
+      font-weight: 700;
+      margin-bottom: 0.25em;
+    }
+    &__extract {
+      font-size: 0.875rem;
+      margin-bottom: 0.5em;
+    }
+    &__icon-wrap {
+      display: grid;
+      grid-template-columns: 22px 1fr;
+      align-items: center;
+      column-gap: 0.5rem;
+    }
+    &__icon {
+      img {
+        vertical-align: sub;
+      }
+    }
+    &__icon-text {
+      font-size: 0.75rem;
+    }
+  }
+</style>
