@@ -12,6 +12,7 @@ isAdLink: true
 ---
 
 import AmazonLink from "@/components/markdown/AmazonLink.astro";
+import RecommendLink from "@/components/markdown/RecommendLink.astro";
 
 最近、[TAKE NOTES!――メモで、あなただけのアウトプットが自然にできるようになる](https://amzn.to/4o8lfyX)という本を読みました。この本を読んで、Zettelkasten というメモの方法を知り、自分の言葉で考えてメモを書くことの大切さを知ったので、Zettelkasten の手法を実現できるツールとして[Obsidian](https://obsidian.md/)をはじめてみました。
 
@@ -22,6 +23,19 @@ import AmazonLink from "@/components/markdown/AmazonLink.astro";
   linkId="4o8lfyX"
   title="TAKE NOTES!――メモで、あなただけのアウトプットが自然にできるようになる"
   author="ズンク・アーレンス"
+/>
+
+この本の紹介記事はこちら
+
+<RecommendLink
+  items={[
+    {
+      title:
+        "「TAKE NOTES!――メモで、あなただけのアウトプットが自然にできるようになる」を読んだので紹介",
+      link: "take-notes-book",
+      image: "take-notes-book.jpg",
+    },
+  ]}
 />
 
 ## Obsidian をはじめたきっかけ
@@ -122,7 +136,7 @@ Obsidian を使う前は、Notion でメモ書きやスニペットなどを残�
 
 Obsidian でメモを貯め実現したいことは、**自分の言葉で考え続けること**です。普段、あまり考えごとをしなく、アナログで読書メモを付けていた時も、文章を書き写すだけで、全然読んだ本の繋がりが付けられなかったので、日常的にメモを取り続けることで接着点をつくり、そこから自分の考えを出せるようになれたらと思います。
 
-また、このブログは雑記に書いていいのもあるので、Zettelkasten でいう PermanentNote(永久保存版のメモ)がまとまったら、記事にしていきたいと思います。
+また、このブログは雑記になんでも書いていいのもあるので、Zettelkasten でいう PermanentNote(永久保存版のメモ)がまとまったら、記事にしていきたいと思います。
 
 ## まとめ
 
