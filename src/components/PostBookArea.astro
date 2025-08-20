@@ -47,6 +47,10 @@
     &__img {
       margin-inline: 0.5rem;
       transition: 0.3s;
+      @include mixin.mobile {
+        max-width: 150px;
+        margin-inline: auto;
+      }
     }
     &__title {
       font-size: 0.875rem;
