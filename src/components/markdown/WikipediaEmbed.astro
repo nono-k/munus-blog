@@ -1,8 +1,8 @@
 ---
 import { Icon } from "astro-icon/components";
-const { title } = Astro.props;
+const { title, lang = "ja" } = Astro.props;
 
-const apiURL = `https://ja.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`;
+const apiURL = `https://${lang}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`;
 
 const response = await fetch(apiURL);
 const data = await response.json();
@@ -34,7 +34,17 @@ const data = await response.json();
     border: 1px solid var(--primary);
     padding: 0;
     overflow: hidden;
+    transition: opacity 0.3s;
+    @include mixin.hover {
+      opacity: 0.9;
+      background: var(--code-bg);
+    }
     &__img {
+      img {
+        max-height: 160px;
+        height: 100%;
+        object-fit: cover;
+      }
     }
     &__body {
       padding: 1rem 1.5rem;
@@ -46,6 +56,12 @@ const data = await response.json();
     &__extract {
       font-size: 0.875rem;
       margin-bottom: 0.5em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
     }
     &__icon-wrap {
       display: grid;
