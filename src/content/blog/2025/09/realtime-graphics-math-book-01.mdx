@@ -1,0 +1,248 @@
+---
+title: 「リアルタイムグラフィックスの数学」勉強ログ - 第1章補間
+slug: realtime-graphics-math-book-01
+pubDate: 2025-09-07
+image: ../../../../assets/images/realtime-graphics.jpg
+category: プログラミング
+tags:
+  - シェーダ
+  - 数学
+  - 勉強ログ
+description: 第1章の補間についての勉強ログ
+isAdLink: true
+---
+
+import AmazonLink from "@/components/markdown/AmazonLink.astro";
+import RecommendLink from "@/components/markdown/RecommendLink.astro";
+import WikipediaEmbed from "@/components/markdown/WikipediaEmbed.astro";
+
+## はじめに
+
+「リアルタイムグラフィックスの数学」の第 1 章の補間についての勉強ログです。
+
+<AmazonLink
+  imageId="61CP8Asy52L._SY522_"
+  linkId="3Iy0agT"
+  title="リアルタイムグラフィックスの数学 ― GLSLではじめるシェーダプログラミング"
+  author="巴山竜来"
+/>
+
+## 線形補間とグラデーション
+
+### mix 関数について
+
+GLSL における mix 関数は以下のような数式になります。
+
+$$
+\bm{a} + x\overrightarrow{AB} = \bm{a} + x(\bm{b} - \bm{a}) = (1 - x)\bm{a} + x\bm{b}
+$$
+
+これは、線分 AB があり、その線分上を動く 0 以上 1 以下の x に対して、線分 AB を x: (1 - x)に内分する点の位置ベクトルを表しています。上記の式のベクトルを`mix(a, b, x)`として定義しています。このように 2 点間をつなぐことを**補間**と呼び、上記の式は線形補間（Linear Interpolation）の公式です。
+
+コード 1.1 のように、赤(1, 0, 0)と青(0, 0, 1)を mix 関数でつなぐことで 2 色のグラデーションを作ることができます。
+
+```glsl title="コード1.1"
+vec2 RED = vec3(1.0, 0.0, 0.0);
+vec3 BLUE = vec3(0.0, 0.0, 1.0);
+vec3 col = mix(RED, BLUE, pos.x);
+```
+
+![赤と青のグラデーション](https://res.cloudinary.com/dy8ftemi0/image/upload/v1756742916/realtime-graphics-math-book-01-01_yefzqz.jpg "赤と青のグラデーション")
+
+### 双線形補間
+
+補間関数を 2 変数にすると、2 次元区間上の補間を考えることができる。下記の 2 変数関数を考える。
+
+$$
+f(x, y) = \mathrm{mix}(\mathrm{mix}(\bm{a}, \bm{b}, x), \mathrm{mix}(\bm{c}, \bm{d}, x), y)
+$$
+
+$x$ と $y$ に $0$ と $1$ を代入するとそれぞれ、$f(0, 0)=\bm{a}$、$f(1, 0)=\bm{b}$、$f(0, 1)=\bm{c}$、$f(1, 1)=\bm{d}$になるのを確認してみてください。
+
+コード 1.3 では、4 色をつなぐグラデーションを作成してます。
+
+![4色をつなぐグラデーション](https://res.cloudinary.com/dy8ftemi0/image/upload/v1756744675/realtime-graphics-math-book-01-02_okg45i.jpg "4色をつなぐグラデーション")
+
+$(0, 0)$が赤で、$(0, 1)$が青、$(1, 0)$が緑で、$(1, 1)$が黄色となり、その間はグラデーションになっているのが確認できるでしょう。
+
+## 階段関数によるポスタリゼーション
+
+線形補間は連続的につなぐ補間ですが、ポスタリゼーションは離散的な値で補間を行う方法です。コード 1.4 では、step 関数と fract 関数,floor 関数を用いてポスタリゼーションを実装してます。
+
+次のコード 1.4 では、双線形補間で$(0, 0)$が赤で、$(0, 1)$がピンク、$(1, 0)$が黄色で、$(1, 1)$が白となるグラデーションを作成し、ポスタリゼーションで階段状に補間しています。
+
+![ポスタリゼーション](https://res.cloudinary.com/dy8ftemi0/image/upload/v1756912943/realtime-graphics-math-book-01-03_rrrq2i.jpg "ポスタリゼーション")
+
+```glsl title="コード1.4"
+void main(){
+  vec2 pos = gl_FragCoord.xy / u_resolution.xy;
+  vec3[4] col4 = vec3[](
+    vec3(1.0, 0.0, 0.0),
+    vec3(1.0, 1.0, 0.0),
+    vec3(1.0, 0.0, 1.0),
+    vec3(1.0, 1.0, 1.0)
+  );
+
+  float n = 4.0;
+  pos *= n;
+  pos = floor(pos) + step(0.5, fract(pos));
+  pos /= n;
+
+  vec3 col = mix(mix(col4[0], col4[1], pos.x), mix(col4[2], col4[3], pos.x), pos.y);
+  fragColor = vec4(col, 1.0);
+}
+```
+
+ここで階段状に補間してる部分の数式を床関数を[]で表すと以下のようになってます。
+
+$$
+([nx] + step(0.5, fract(x))) / n
+$$
+
+サンプルコードでは フラグメント座標範囲を[0, 4]にスケールし、4 分割しています。
+
+---
+
+ここで、Desmos 上で先程のポスタリゼーションの数式を見てみましょう。分かりやすいように 5 分割にしています。
+
+![Desmos上で5分割](https://res.cloudinary.com/dy8ftemi0/image/upload/v1756915072/realtime-graphics-math-book-01-04_athbra.jpg "Desmos上で5分割")
+
+$1/5 = 0.2$になるので、y 軸方向では 0.2 ずつ増加してるのが分かるかと思います。x 軸方向も同様に 0.2 ずつ増加していますが、[0.0, 0.1]と[0.9, 1.0]の範囲は 0.1 の増加になります。
+
+なので、先程のサンプルコードの画像も両端は半分の区切りになります。実際に値を代入してみて、グラフ通りになるか確認してみてください。
+
+## 極座標を使ったマッピング
+
+### 極座標について
+
+直交座標(デカルト座標)では点を$(x, y)$の形で表しますが、極座標では、点を**距離**と**角度**を使って表します。極座標では次のようになります。
+
+$$
+(r, \theta)
+$$
+
+- $r$ : 原点からの距離(動径)
+- $\theta$ : x 軸正方向からの角度(偏角)
+
+極座標と直交座標の変換は以下のようになります。
+
+$$
+x = r \cos(\theta), y = r \sin(\theta)
+$$
+
+$$
+r = \sqrt{x^2 + y^2}, \theta = \arctan(y / x)
+$$
+
+GLSL では、動径は組み込み関数の`length`で計算できます。偏角の arctan は`atan`で計算できますが、$x=0$上では定義されてないので、拡張した`atan2`関数を作ります。
+
+```glsl title="atan2"
+const float PI = 3.1415926;
+
+float atan2(float y, float x) {
+  return x == 0.0 ? sign(y) * PI / 2.0 : atan(y, x);
+}
+```
+
+`sign`関数は、値が正なら 1、負なら-1、$0$ なら $0$ を返します。ここでは、$x=0$ の場合なので、y が正なら$\pi/2$になり 90 度、負なら$-\pi/2$になり-90 度となることを表してます。
+
+この`atan2`関数を使用し、直交座標を極座標に変換する`xy2pol`関数は次のようになります。
+
+```glsl title="xy2pol"
+vec2 xy2pol(vec2 xy) {
+  return vec2(atan2(xy.y, xy.x), length(xy));
+}
+```
+
+極座標を直交座標に変換する`pol2xy`関数は次のようになります。
+
+```glsl title="pol2xy"
+vec2 pol2xy(vec2 pol) {
+  return pol.y * vec2(cos(pol.x), sin(pol.x));
+}
+```
+
+引数の`pol`は、極座標の形で表されます。`pol.x`は偏角、`pol.y`は動径です。
+
+### マッピング
+
+ここでは、サンプルコード 1.2 の直交座標での 3 色(赤・青・緑)をつなぐグラデーションを極座標にマッピングしてみます。
+
+![赤・青・緑を極座標にマッピング](https://res.cloudinary.com/dy8ftemi0/image/upload/v1757084352/realtime-graphics-math-book-01-05_mt8jlc.jpg "赤・青・緑を極座標にマッピング")
+
+```glsl title="赤・青・緑を極座標にマッピング"
+// 0~2πの範囲で返す関数
+float atan2PI(float y, float x) {
+  float a = atan2(y, x);
+  return (a < 0.0) ? a + 2.0 * PI : a;
+}
+
+void main(){
+  vec2 pos = gl_FragCoord.xy / u_resolution.xy;
+  pos = 2.0 * pos.xy - vec2(1.0);
+  pos.x = atan2PI(pos.y, pos.x) / PI;
+
+  vec3[3] col3 = vec3[](
+    vec3(1.0, 0.0, 0.0),
+    vec3(0.0, 0.0, 1.0),
+    vec3(0.0, 1.0, 0.0)
+  );
+
+  int ind = int(pos.x);
+
+  vec3 col = mix(col3[ind], col3[ind + 1], fract(pos.x));
+  fragColor = vec4(col, 1.0);
+}
+```
+
+まず極座標にマッピングするため、画面中央が(0.0, 0.0)になるように、フラグメント座標範囲を[-1.0, 1.0]に変換します。
+
+```glsl
+vec2 pos = gl_FragCoord.xy / u_resolution.xy;
+pos = 2.0 * pos.xy - vec2(1.0); // [-1.0, 1.0] に変換
+```
+
+GLSL の`atan`は、[-π,π] の範囲を返すので、3 色のグラデーションにするために、偏角を [0,2π] の範囲で返す関数`atan2PI`を作ります。
+
+```glsl
+float atan2PI(float y, float x) {
+  float a = atan2(y, x);
+  return (a < 0.0) ? a + 2.0 * PI : a;
+}
+```
+
+GLSL の`atan`は、座標の第 1 象限と第 2 象限の場合は正の値、第 3 象限と第 4 象限の場合は負の値を返します。なので、正の値の時はそのまま返して、負の値の時は 2π を加えて返すことで、[0,2π] の範囲で返すことができます。
+
+`atan2PI`で返ってきた値を π で割ることで、0~2 の範囲が得られるので、サンプルコード 1.2 のように`int`で整数にして、3 色の配列のインデックスを使い`mix`関数でグラデーションを作ることができます。
+
+ここで見たように、極座標を使ったマッピングでは**原点に近い部分では、1 周が短くなります**
+
+![極座標を使ったテクスチャマッピング](https://res.cloudinary.com/dy8ftemi0/image/upload/v1757085892/realtime-graphics-math-book-01-06_mbfrmn.jpg "極座標を使ったテクスチャマッピング")
+
+なので書籍のコード 1.8 では、テクスチャの端でつなぎ目がうまくつながるように白色のグラデーションをつくっています。この部分に関しては書籍を参照してください。
+
+{/* ## 次回リンク */}
+
+## 後で詳しく調べるものリスト
+
+- バイリニア補間、双線形補間
+
+  <WikipediaEmbed title="バイリニア補間" />
+
+- ポスタリゼーションによる画像処理
+
+  <WikipediaEmbed title="Posterization" lang="en" />
+
+- smoothstep の数式の導入方法
+
+- HSV 色空間
+  <WikipediaEmbed title="HSV色空間" />
+
+## 参考書籍
+
+<AmazonLink
+  imageId="61CP8Asy52L._SY522_"
+  linkId="3Iy0agT"
+  title="リアルタイムグラフィックスの数学 ― GLSLではじめるシェーダプログラミング"
+  author="巴山竜来"
+/>
