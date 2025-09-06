@@ -10,6 +10,7 @@ export const tagsList: Tags[] = [
   { name: 'Web', slug: 'web' },
   { name: 'シェーダ', slug: 'shader' },
   { name: '数学', slug: 'math' },
+  { name: '勉強ログ', slug: 'study-log' },
   { name: 'Astro', slug: 'astro' },
   { name: 'GitHub', slug: 'github' },
   { name: 'Obsidian', slug: 'obsidian' },
