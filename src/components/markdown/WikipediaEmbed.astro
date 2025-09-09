@@ -14,7 +14,7 @@ const data = await response.json();
   </div>
   <div class="wikipedia__body">
     <div class="wikipedia__title">{data.title}</div>
-    <p class="wikipedia__extract">{data.extract}</p>
+    <p class="wikipedia__extract for-large">{data.extract}</p>
     <div class="wikipedia__icon-wrap">
       <div class="wikipedia__icon">
         <img src="/icon/wikipedia.ico" alt="" width="22" height="16" />
@@ -44,10 +44,18 @@ const data = await response.json();
         max-height: 160px;
         height: 100%;
         object-fit: cover;
+        @include mixin.mobile {
+          max-height: 120px;
+        }
       }
     }
     &__body {
       padding: 1rem 1.5rem;
+      @include mixin.mobile {
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+      }
     }
     &__title {
       font-weight: 700;
@@ -68,6 +76,9 @@ const data = await response.json();
       grid-template-columns: 22px 1fr;
       align-items: center;
       column-gap: 0.5rem;
+      @include mixin.mobile {
+        margin-top: auto;
+      }
     }
     &__icon {
       img {
