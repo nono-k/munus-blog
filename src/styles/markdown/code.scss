@@ -3,9 +3,10 @@
 [data-rehype-pretty-code-figure] {
   position: relative;
   margin-top: 4rem;
+  margin-bottom: 3rem;
 
   &:not(:has(> [data-rehype-pretty-code-title])) {
-    margin-top: 2.5rem;
+    margin-top: 2rem;
   }
 
   [data-rehype-pretty-code-title] {

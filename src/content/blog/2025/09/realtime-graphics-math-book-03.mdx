@@ -1,0 +1,308 @@
+---
+title: 「リアルタイムグラフィックスの数学」勉強ログ - 第3章値ノイズ
+slug: realtime-graphics-math-book-03
+pubDate: 2025-09-16
+image: ../../../../assets/images/realtime-graphics.jpg
+category: プログラミング
+tags:
+  - シェーダ
+  - 数学
+  - 勉強ログ
+description: 第3章の値ノイズについての勉強ログ
+isAdLink: true
+---
+
+import AmazonLink from "@/components/markdown/AmazonLink.astro";
+import RecommendLink from "@/components/markdown/RecommendLink.astro";
+import WikipediaEmbed from "@/components/markdown/WikipediaEmbed.astro";
+
+## はじめに
+
+「リアルタイムグラフィックスの数学」の第 3 章の値ノイズについての勉強ログです。
+
+<AmazonLink
+  imageId="61CP8Asy52L._SY522_"
+  linkId="3Iy0agT"
+  title="リアルタイムグラフィックスの数学 ― GLSLではじめるシェーダプログラミング"
+  author="巴山竜来"
+/>
+
+## 値ノイズの構成法
+
+まずは 2 次元の値ノイズの構成法について見てみましょう。
+
+![平面上の正方形の4つの頂点（格子点）](https://res.cloudinary.com/dy8ftemi0/image/upload/v1757604466/realtime-graphics-math-book-03-01_lpzbvm.jpg "平面上の正方形の4つの頂点（格子点）")
+
+平面上の正方形の 4 つの頂点（格子点）を用いて、値ノイズを構成します。各格子点での乱数値、または乱数ベクトルを使って生成されるノイズを**格子ノイズ**と呼びます。格子点の成分は整数になるようにします。点$(x, y)$に対して床値$[]$を使って、$(x, y)$を取り囲むマスの格子点は次の 4 つのベクトルで表します。
+
+$$
+e_{00} = ([x], [y]),　e_{10} = ([x] + 1, [y])
+$$
+
+$$
+e_{01} = ([x], [y] + 1),　e_{11} = ([x] + 1, [y] + 1)
+$$
+
+この格子点のハッシュ値を取得して、第 1 章でみた双線形補間を使用して$(x, y)$での値をつくります。このようにしてつくられたノイズ関数を**値ノイズ**と呼びます。
+
+2 次元の値ノイズの関数は次のようになります。
+
+```glsl title="2次元の値ノイズ"
+float vnoise21(vec2 p){
+  vec2 n = floor(p);
+  float[4] v;
+  for (int j = 0; j < 2; j ++){
+    for (int i = 0; i < 2; i++){
+      v[i+2*j] = hash21(n + vec2(i, j));
+    }
+  }
+  vec2 f = fract(p);
+  return mix(mix(v[0], v[1], f[0]), mix(v[2], v[3], f[0]), f[1]);
+}
+```
+
+`for`文で回している箇所は複雑なので、マスの 4 頂点のハッシュ値の`v[]`をそれぞれ見てみましょう。
+
+```glsl
+vec2 n = floor(p);
+
+v[0] = hash21(n);
+v[1] = hash21(n + vec2(1.0, 0.0));
+v[2] = hash21(n + vec2(0.0, 1.0));
+v[3] = hash21(n + vec2(1.0, 1.0));
+```
+
+先ほどの 4 つのベクトルと同様になっているのが確認できるかと思います。この格子点のハッシュ値を双線形補間して返してます。
+
+```glsl
+return mix(mix(v[0], v[1], f[0]), mix(v[2], v[3], f[0]), f[1]);
+```
+
+---
+
+サンプルコードでは双線形補間とエルミート補間を比較しています。エルミート補間は`smoothstep(0, 1, x)`と同じ関数であり、コードで表すと次のようになります。
+
+```glsl title="エルミート補間"
+f = f * f * (3.0 - 2.0 * f);
+```
+
+比較してみると、エルミート補間の方がグラデーションが滑らかであることが分かるかと思います。
+
+![双線形補間とエルミート補間の比較](https://res.cloudinary.com/dy8ftemi0/image/upload/v1757606625/realtime-graphics-math-book-03-02_lnhkb3.jpg "双線形補間とエルミート補間の比較")
+
+## 値ノイズを RGB カラーで色付け
+
+問題 3.1 の値ノイズを RGB カラーで色付けしてみましょう。先ほど作成した`vnoise21`関数の引数に RGB の値を渡せるようにし、ハッシュ関数の中に加えます。
+
+```glsl
+float vnoise21(vec2 p, float l) {
+  // ...
+  for (int j = 0; j < 2; j++) {
+    for (int i = 0; i < 2; i++) {
+      v[i + 2 * j] = hash21(n + l + vec2(i, j));
+    }
+  }
+}
+```
+
+新たに 3 次ベクトルを返す`vnoise23`関数を作成し、RGB を適当な値で`vnoise21`の引数に入れてみましょう。
+
+```glsl
+vec3 vnoise23(vec2 p) {
+  return vec3(vnoise21(p, 14.0), vnoise21(p, 34.0), vnoise21(p, 64.0));
+}
+```
+
+この`vnoise23`関数を main 関数で使用すれば、値ノイズを RGB カラーで色付けすることができます。下図では、2 変数と 3 変数の値ノイズをエルミート補間した例になります。
+
+![値ノイズを RGB カラーで色付け](https://res.cloudinary.com/dy8ftemi0/image/upload/v1757607664/realtime-graphics-math-book-03-03_n81meg.jpg "値ノイズを RGB カラーで色付け")
+
+## グラデーションの滑らかさと微分
+
+先ほど見たように双線形補間よりもエルミート補間の方が滑らかです。この節では微分を用いてなぜエルミート補間の方が滑らかであるかを確認します。
+
+例として、3 つの数値 0.3,0.9,0.6 が与えられたときに、$[-1, 1]$区画上で線形補間する関数$l(x)$とエルミート補間する関数$h(x)$を比較します。$c(x) = x^2(3 - 2x)$とすれば次のようになります。長くなるので$h(x)$は途中式を省略しています。
+
+$$
+l(x) =
+\begin{cases}
+  \mathrm{mix}(0.3, 0.9, x + 1) = -0.3x + 0.9(x + 1) = 0.9 + 0.6x & (-1 \le x \le 0)\\
+  \mathrm{mix}(0.9, 0.6, x) = 0.9(1 - x) + 0.6x = 0.9 - 0.3x & (0 \le x \le 1)
+\end{cases}
+$$
+
+$$
+h(x) =
+\begin{cases}
+  \mathrm{mix}(0.3, 0.9, c(x + 1)) = 0.9 - 1.8x^2 - 1.2x^3 & (-1 \le x \le 0)\\
+  \mathrm{mix}(0.9, 0.6, c(x)) = 0.9 - 0.9x^2 + 0.6^3 & (0 \le x \le 1)
+\end{cases}
+$$
+
+これをグラフにすると下図になります。$l(x)$が赤で$h(x)$が青で表示されています。
+
+![l(x),h(x)のグラフ](https://res.cloudinary.com/dy8ftemi0/image/upload/v1757693407/realtime-graphics-math-book-03-04_ok85uo.jpg "l(x),h(x)のグラフ")
+
+このグラフより$l(x)$は$x=0$で折れ曲がっているのに対し、$h(x)$は滑らかにつながっていることが分かります。
+
+この微分可能性について計算すると、$l(x)$は$x=0$で傾きが変わり、左微分係数は $0.6$、右微分係数は$-0.3$ なので、$x=0$では微分可能ではありません。$h(x)$の場合の左微分係数と右微分係数は次のように計算すると、
+
+$$
+\dfrac{h(-\varepsilon) - h(0)}{\varepsilon} = \dfrac{-1.8\varepsilon^2 + 1.2\varepsilon^3}{\varepsilon} \to 0
+$$
+
+$$
+\dfrac{h(\varepsilon) - h(0)}{\varepsilon} = \dfrac{-0.9\varepsilon^2 + 0.6\varepsilon^3}{\varepsilon} \to 0
+$$
+
+のため左微分係数と右微分係数が一致するため微分可能であり、微分係数は 0 になります。エルミート補間関数は、微分係数が 0 となるように補間するので、**つなぎ目は常に平ら**になります。
+
+## 導関数
+
+ある区間上の関数$f(x)$に対し、区間上のすべての点が微分可能であるとき、微分係数を対応させる関数は導関数と呼ばれ$f'(x)$と表記されます。導関数が存在し、それが連続となる関数は$C^1 級関数と呼ばれます。
+
+エルミート補間関数$h(x)$で考えると、
+
+$$
+h'(x) =
+\begin{cases}
+  -3.6x(1 + x) \\
+  1.8x(-1 +x)
+\end{cases}
+$$
+
+となり、$h'(x)$は$x = 0$でも連続であるので、$h(x)$は$[-1, 1]$区画上の$C^1$級関数であることが分かります。
+
+### 5 次エルミート補間
+
+$f'(x)$に導関数$f''(x)$が存在し、それが連続となる場合、$f(x)$は$C^2$級関数と呼ばれます。$h'(x)$を微分すると、
+
+$$
+h''(x) =
+\begin{cases}
+  -3.6 -7.2x \\
+  -1.8 +3.6x
+\end{cases}
+$$
+
+となり、$x = 0$でつながらないので、$h(x)$は$C^2$級関数ではありません。
+
+ここで$c(x)$を 3 次式の$x^2(3 - 2x)$から、5 次式の$x^3(10 - 15x + 6x^2)$に変更してみましょう。$h(x)$は次のようになります。
+
+$$
+h(x) =
+\begin{cases}
+  \mathrm{mix}(0.3, 0.9, c(x + 1)) = 0.9 + 6x^3 + 9x^4 + 3.6x^5 & (-1 \le x \le 0)\\
+  \mathrm{mix}(0.9, 0.6, c(x)) = 0.9 - 3x^3 + 4.5x^4 - 1.8x^5 & (0 \le x \le 1)
+\end{cases}
+$$
+
+$h'(x)$と$h''(x)$の計算は次のようになります。
+
+$$
+h'(x) =
+\begin{cases}
+  18x^2 + 36x^3 + 18x^4 = 18x^2(1 + 2x + x^2) \\
+  -9x^2 + 18x^3 - 9x^4 = -9x^2(1 - 2x + x^2)
+\end{cases}
+$$
+
+$$
+h''(x) =
+\begin{cases}
+  36x + 108x^2 + 72x^3 = 36x(1 + 3x + 2x^2) \\
+  -18x + 54x^2 - 36x^3 = -18x(1 - 3x + 2x^2)
+\end{cases}
+$$
+
+$h'(x)$と$h''(x)$は$x=0$でつながっているので、$h(x)$を$C^2$級にすることができたのを確認できました。
+
+この$c(x)$の滑らかさの異なるエルミート補間を、それぞれ**3 次**と**5 次**のエルミート補間と呼ぶことにします。
+
+## 勾配の可視化
+
+サンプルコード 3.3 では、この 3 次エルミート補間と 5 次エルミート補間の違いを数値微分を使って勾配を計算し、定数ベクトルとの内積を取ることで可視化しています。
+
+まずは、数値微分による勾配を取得している`grad`関数のコードを見てみましょう。
+
+```glsl title="grad"
+// 数値微分による勾配の取得
+vec2 grad(vec2 p) {
+  float eps = 0.001; // 微小な増分
+  return 0.5 * (vec2(
+    vnoise21(p + vec2(eps, 0.0)) - vnoise21(p - vec2(eps, 0.0)),
+    vnoise21(p + vec2(0.0, eps)) - vnoise21(p - vec2(0.0, eps))
+  )) / eps;
+}
+```
+
+微分係数の近似値は、コンピュータを使えば導関数を求めずとも直接計算することができます。
+$f(x)$が$C^1$級であるのなら、微分の定義より十分小さい$\varepsilon$をとれば、$f'(x)$の近似値が得られます。
+
+$$
+f'(x) \fallingdotseq \frac{f(x + \varepsilon) - f(x)}{\varepsilon}
+$$
+
+これを使って微分係数の近似値を求めることを**数値微分**と呼びます。上記の式は**前方差分**と呼び、**後方差分**は次の式になります。
+
+$$
+f'(x) \fallingdotseq \frac{f(x) - f(x - \varepsilon)}{\varepsilon}
+$$
+
+さらに、前方差分と後方差分の平均値を**中央差分**と呼び、式は次のように定義されます。
+
+$$
+中央差分 = \frac{(前方差分 + 後方差分)}{2} = \frac{f(x + \varepsilon) - f(x - \varepsilon)}{2\varepsilon}
+$$
+
+`grad`関数では、x 方向は y 方向を固定して`f(p+eps, p) - f(p-eps, p)`を計算しています。y 方向も同様に x 方向を固定して`f(p, p+eps) - f(p, p-eps)`を計算しています。この値を微小な増分`eps`の 2 倍で割ることで、数値微分による勾配を取得しています。
+
+最後に計算した勾配と、定数ベクトルとの内積を取ることで、勾配の可視化を行っています。
+
+```glsl
+void main() {
+  // ...
+  fragColor.rgb = vec3(dot(vec2(1.0), grad(pos))); // 定数ベクトルとの内積
+}
+```
+
+内積(`dot`)の計算は下記のようになります。
+
+```glsl
+dot(vec2(1.0), grad(pos))
+= grad(pos).x * 1.0 + grad(pos).y * 1.0
+= grad(pos).x + grad(pos).y
+```
+
+このように定数ベクトルとの内積をとることで、「勾配ベクトルを$(1, 1)$方向に射影」しています。
+
+---
+
+3 次エルミート補間と 5 次エルミート補間は`vnoise21`関数で使っています。下図はそれぞれの比較になり、$C^2$級の 5 次エルミート補間の方が滑らかになるでしょう。
+
+![3 次と 5 次のエルミート補間の比較](https://res.cloudinary.com/dy8ftemi0/image/upload/v1757780168/realtime-graphics-math-book-03-05_efhbcu.jpg "3 次と 5 次のエルミート補間の比較")
+
+---
+
+> [!warning] 注意事項
+> 数値微分は一般に計算コストが高いので、高校で習うような普通の微分（解析微分）を使って導関数を求めたほうが描画を高速にできるでしょう。実装としては、問題 3.4 の解答の[こちら](https://tetunori.github.io/MathOfRealTimeGraphics-samples/docs/chapter3/exercise_3_4/)を参考にして実装したい
+
+{/* ## 次回リンク */}
+
+## 後で詳しく調べるものリスト
+
+- 多項式補間
+
+  <WikipediaEmbed title="多項式補間" />
+
+- 勾配・ベクトル場の可視化の説明を詳しく調べる
+
+## 参考書籍
+
+<AmazonLink
+  imageId="61CP8Asy52L._SY522_"
+  linkId="3Iy0agT"
+  title="リアルタイムグラフィックスの数学 ― GLSLではじめるシェーダプログラミング"
+  author="巴山竜来"
+/>
+$$

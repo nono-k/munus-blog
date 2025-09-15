@@ -80,6 +80,9 @@ const blogOgp = entry.data.ogp ||`/api/og/${entry.slug}.png`;
       overflow: hidden;
       margin-inline: 3rem;
       margin-top: 1.5rem;
+      @include mixin.mobile {
+        margin-inline: 0;
+      }
     }
     &__dot {
       height: 2px;
