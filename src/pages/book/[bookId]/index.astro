@@ -94,6 +94,21 @@ const description = `「${book.title}」の読書記録です。`;
         padding-left: 1rem;
         border-left: 0.25rem solid var(--primary);
       }
+      a {
+        color: var(--primary);
+        text-decoration-line: underline;
+        text-decoration-style: dashed;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 4px;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.5rem;
+        transition-property: background-color;
+        transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+        transition-duration: .15s;
+        @include mixin.hover {
+          background-color: var(--btn-plain-bg-hover);
+        }
+      }
     }
   }
 </style>
