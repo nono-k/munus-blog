@@ -72,6 +72,9 @@ const { text = 'あわせて読みたい', items } = Astro.props;
       transition-property: background-color;
       transition-timing-function: cubic-bezier(.4, 0, .2, 1);
       transition-duration: .15s;
+      @include mixin.large {
+        padding-right: 1rem;
+      }
       @include mixin.phone {
         grid-template-columns: 1fr;
         row-gap: 0.5rem;
