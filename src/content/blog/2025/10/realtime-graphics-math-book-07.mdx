@@ -1,0 +1,155 @@
+---
+title: 「リアルタイムグラフィックスの数学」勉強ログ - 第7章 距離とSDF
+slug: realtime-graphics-math-book-07
+pubDate: 2025-10-05
+image: ../../../../assets/images/realtime-graphics-math-book-07.jpg
+category: プログラミング
+tags:
+  - シェーダ
+  - 数学
+  - 勉強ログ
+description: 第7章の距離とSDFについての勉強ログ
+isAdLink: true
+---
+
+import AmazonLink from "@/components/markdown/AmazonLink.astro";
+import RecommendLink from "@/components/markdown/RecommendLink.astro";
+import WikipediaEmbed from "@/components/markdown/WikipediaEmbed.astro";
+
+## はじめに
+
+「リアルタイムグラフィックスの数学」の第 7 章の距離と SDF についての勉強ログです。
+
+<AmazonLink
+  imageId="61CP8Asy52L._SY522_"
+  linkId="3Iy0agT"
+  title="リアルタイムグラフィックスの数学 ― GLSLではじめるシェーダプログラミング"
+  author="巴山竜来"
+/>
+
+## 2 次元 SDF
+
+胞体ノイズでは近傍点との距離を返す関数でしたが、近くの「点」ではなく「図形」との距離を返す関数を考えます。ここでは図形との**負の値もありうる距離**を返す関数を導入します。これが**SDF**(Signed Distance Function, 符号付き距離関数)となります。
+
+### 円の SDF
+
+円の SDF について考えてみます。円は中心点 C と半径 r から決まりますが、C からの距離が r より小さければ円の「内部」、r より大きければ円の「外部」となり、r と等しい場合は円の「境界」です。平面上の点 P に対して、円の外部では値は正、内部では値が負とします。これが円の SDF を定めます。
+
+![円のSDF](https://res.cloudinary.com/dy8ftemi0/image/upload/v1759419611/realtime-graphics-math-book-07-01_xxyjyj.jpg "円のSDF")
+
+ここで、円の SDF の等高線を描くようにします。SDF の特徴は、**等間隔に値をとると、その値の等高線も等間隔にあらわれる**ことです。サンプルコードでは$f(x, y) = (x^2 + y^2)^d - 1$として間隔$a$ごとに$f(x, y) = 0, \pm{a}, \pm{2a}, ...$を満たす等高線を描きます。
+
+```glsl title="円のSDF"
+float circle(vec2 p, vec2 c, float r){
+  float d = 0.5 + u_mouse.x / u_resolution.x; // マウスのx座標に合わせて指数を動かす
+  return pow(dot(p - c, p - c), d) - r;
+}
+```
+
+ここで d が 0.5 の場合、すなわち$\sqrt{x^2 + y^2}$の場合は等高線は等間隔にあらわれます。それ以外の場合は等間隔ではないので、SDF である場合は$d = 0.5$の場合のみになります。
+
+![(x^2 + y^2)^d - 1の等高線](https://res.cloudinary.com/dy8ftemi0/image/upload/v1759420851/realtime-graphics-math-book-07-02_ipgdqz.jpg "(x^2 + y^2)^d - 1の等高線")
+
+### 矩形の SDF
+
+円の SDF はシンプルな式で表せましたが、矩形の SDF は少し複雑になります。次は矩形の SDF のコードになります。
+
+```glsl title="矩形のSDF"
+float rect(vec2 p, vec2 c, vec2 d) {
+  p = abs(p - c);
+  return length(max(p - d, vec2(0.0))) + min(max(p.x - d.x, p.y - d.y), 0.0);
+}
+```
+
+この SDF のコードの意味を考えてみます。
+矩形の中心を原点に写し、座標$(\pm{d_1}, \pm{d_2})$が頂点となる矩形を考えてみます。
+
+![折りたたまれた矩形の境界への距離](https://res.cloudinary.com/dy8ftemi0/image/upload/v1759422467/realtime-graphics-math-book-07-03_jspvfz.jpg "折りたたまれた矩形の境界への距離")
+
+図のように直線$x = d_1$と$y = d_2$を境界として第 1 象限を$D_{--}, D_{+-}, D_{-+}, D_{++}$と分け、それぞれの領域で矩形の境界への最短距離を考えます。$D_{+-}$では x 軸方向、$D_{-+}$では y 軸方向の直線距離が最短になります。$D_{++}$では頂点$(d_1, d_2)$への直線距離が最短になり、$D_{--}$では x 軸方向、y 軸方向の直線距離の小さい方が境界への最短距離を与えます。
+
+#### 外部に対する SDF の値
+
+矩形の外部は$D_{+-}, D_{-+}, D_{++}$の領域になります。これらの領域では、プラスとなり`min(max(p.x - d.x, p.y - d.y), 0.0)`の値は 0 となるので、`length(max(p - d, vec2(0.0)))`が SDF の値となります。
+
+ここで各領域での`length(max(p - d, vec2(0.0)))`の値は次のようになります。
+
+- $D_{++}$ : `length(p - d)`
+- $D_{+-}$ : `p.x - d.x`
+- $D_{-+}$ : `p.y - d.y`
+
+#### 内部に対する SDF の値
+
+矩形の内部は$D_{--}$の領域になります。これらの領域では、`length(max(p - d, vec2(0.0)))`の値は 0 となるので、`min(max(p.x - d.x, p.y - d.y), 0.0)`が SDF の値となります。実際に`p.x - d.x`と`p.y - d.y`はどちらも負の値になり、その大きい方は境界への最短距離となるので SDF の定義を満たします。
+
+#### 矩形の SDF の等高線
+
+![矩形のSDFの等高線](https://res.cloudinary.com/dy8ftemi0/image/upload/v1759467363/realtime-graphics-math-book-07-04_ru1j3v.jpg "矩形のSDFの等高線")
+
+上図は矩形の SDF の等高線になります。この図を見ると矩形の外部の等高線は角が丸くなっているのが分かると思います。この部分は、先ほどの$D_{++}$の領域になり頂点への距離が SDF の値になるので角が丸くなります。
+
+## ユークリッド距離・マンハッタン距離・チェビシェフ距離
+
+今までのユークリッド距離ではない、距離の測り方をみていきます。マンハッタン距離・チェビシェフ距離について紹介します。
+
+![ユークリッド距離・マンハッタン距離・チェビシェフ距離](https://res.cloudinary.com/dy8ftemi0/image/upload/v1759508064/realtime-graphics-math-book-07-05_khwf73.jpg "ユークリッド距離・マンハッタン距離・チェビシェフ距離")
+
+それぞれの距離の測り方の特徴は次のようになります。
+
+- ユークリッド距離：点と点をつなぐ線分（常に 1 通り）
+- マンハッタン距離：縦方向・横方向に沿って直線距離を取る（1 通りとは限らない）
+- チェビシェフ距離：距離が最大の方向に沿って直線距離を取る
+
+### マンハッタン距離・チェビシェフ距離の定義
+
+2 点$A(a_0, a_1)$と$B(b_0, b_1)$に対し、マンハッタン距離$d_m$とチェビシェフ距離$d_c$は、それぞれ次のように定義されます。
+
+$$
+d_m = |a_0 - b_0| + |a_1 - b_1|
+$$
+
+$$
+d_c = \max(|a_0 - b_0|, |a_1 - b_1|)
+$$
+
+先ほどは円の SDF をユークリッド距離における中心点からの近傍を定めましたが、これをマンハッタン距離・チェビシェフ距離で定めると、等高線の形状が変わります。
+
+```glsl title="マンハッタン距離"
+float sdfManhattan(vec2 p) {
+  p = abs(p);
+  return dot(p, vec2(1.0)); // p.x + p.yと同等
+}
+```
+
+```glsl title="チェビシェフ距離"
+float sdfChebyshev(vec2 p) {
+  p = abs(p);
+  return max(p.x, p.y);
+}
+```
+
+マンハッタン距離とチェビシェフ距離の円の SDF の等高線の結果は下図のようになります。
+
+![距離を変えた等高線](https://res.cloudinary.com/dy8ftemi0/image/upload/v1759509184/realtime-graphics-math-book-07-06_n4cpfk.jpg "距離を変えた等高線")
+
+ユークリッド距離では円形であった等高線が、マンハッタン距離では斜めに倒した正方形、チェビシェフ距離では正方形になります。
+
+{/* ## 次回リンク */}
+
+## 後で詳しく調べるものリスト
+
+- Lp 空間,Lp ノルム
+
+  <WikipediaEmbed title="Lp空間" />
+
+- 様々な距離の測り方で極座標変換をする
+  https://qiita.com/7CIT/items/589cba0a739b9d8803cf
+
+## 参考書籍
+
+<AmazonLink
+  imageId="61CP8Asy52L._SY522_"
+  linkId="3Iy0agT"
+  title="リアルタイムグラフィックスの数学 ― GLSLではじめるシェーダプログラミング"
+  author="巴山竜来"
+/>
