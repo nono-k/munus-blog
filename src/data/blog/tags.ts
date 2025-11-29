@@ -2,6 +2,7 @@ import type { Tags } from '@/types/config';
 
 export const tagsList: Tags[] = [
   { name: 'ブログ', slug: 'blog' },
+  { name: '月報', slug: 'monthly-report' },
   { name: '美術館', slug: 'museum' },
   { name: '映画', slug: 'movie' },
   { name: '小説', slug: 'novel' },
