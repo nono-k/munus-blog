@@ -14,7 +14,7 @@ const description = "個人開発したものの一覧です。";
 >
   <div class="stack">
     {workPosts.map((post) => (
-      <a href={post.data.link} class="card-base card" target="_blank">
+      <a href={post.data.link} class="card-base card" target="_blank" rel="noreferrer">
         <div class="card__img">
           <Image src={post.data.image} alt={post.data.title} />
         </div>
