@@ -5,5 +5,6 @@ export const categoryList: Category[] = [
   { name: '映画感想', slug: 'movie' },
   { name: '美術館', slug: 'museum' },
   { name: 'プログラミング', slug: 'programming' },
+  { name: '勉強ノート', slug: 'study' },
   { name: '雑記', slug: 'note' },
 ];
