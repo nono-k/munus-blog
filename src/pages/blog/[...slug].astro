@@ -10,6 +10,7 @@ import Figure from "@/components/markdown/Figure.astro";
 import Tboc from "@/components/widget/Tboc.astro";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
 import { getSortedBlogs } from "@/utils/content-utils";
+import { getGitInfo } from "@/utils/git";
 
 interface Props {
   entry: CollectionEntry<"blog">;
@@ -29,6 +30,8 @@ const {
   data: { title, pubDate, category, tags, description, isAdLink }
 } = entry;
 const blogOgp = entry.data.ogp ||`/api/og/${entry.slug}.png`;
+const gitInfo = getGitInfo(entry.filePath);
+const updateAt = gitInfo?.updateAt || null;
 ---
 <MainGridLayout
   pageTitle={title}
@@ -39,7 +42,7 @@ const blogOgp = entry.data.ogp ||`/api/og/${entry.slug}.png`;
   <div class="article card-base">
     <header class="header">
       <h1 class="title">{title}</h1>
-      <PostMeta date={pubDate} category={category} tags={tags} />
+      <PostMeta date={pubDate} updateAt={updateAt} category={category} tags={tags}  />
       {entry.data.image ? (
         <div class="header__image">
           <Image src={entry.data.image} alt={title} />
