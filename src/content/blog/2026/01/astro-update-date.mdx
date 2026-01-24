@@ -1,0 +1,93 @@
+---
+title: Astroで作ったブログで更新日時を自動で取得する方法
+slug: astro-update-date
+pubDate: 2026-01-25
+category: 雑記
+tags:
+  - Astro
+description: 手動で設定しなくていいので楽
+---
+
+## はじめに
+
+このブログのデザインを大幅に変更したいのと、記事の一覧を更新順で表示したいと思ってたのですが、更新日の取得方法に悩んでいました。
+
+Astro の公式のチュートリアルでは更新日は記事のフロントマターに設定する方法が紹介されていましたが、毎回手動で設定するのは面倒です。
+
+そこで自動で取得する方法を考えた結果、Git のコミット日時を取得してその日付を更新日として表示する方法を実装できたので紹介します。
+
+## Git のコミット日時を取得する
+
+それでは、Git のコミット日時を取得する方法について説明します。
+Git 関連の情報は`git log`コマンドで取得できます。
+次のようにコマンドを打ってみましょう。
+
+```bash
+# 指定したファイルの最新のコミット日時を取得する
+## -1 : 最新の1件のみ取得
+## %ai : 日付
+## filePath : 調べたいファイル
+git log -1 --format=%ai -- filePath
+```
+
+オプションについてはコメントの通りになります。
+
+それでは Git 関連のユーティリティ関数を作成します。
+このブログでは`src/utils`に`git.ts`を作成しました。
+
+```ts title="git.ts"
+import { execSync } from "node:child_process";
+
+export function getGitInfo(filePath: string | undefined) {
+  let updateAt: string | null = null;
+
+  if (filePath) {
+    try {
+      updateAt = execSync(`git log -1 --format=%ai -- "${filePath}"`, {
+        stdio: "pipe",
+      })
+        .toString()
+        .trim();
+    } catch (error) {
+      console.error(`Error getting git info for ${filePath}:`, error);
+    }
+  }
+
+  return { updateAt };
+}
+```
+
+現状、更新日のみ取得して返すだけですが、後々他の情報も取得する可能性があるので、関数名を`getGitInfo`としています。
+
+## 記事ページで使用する
+
+今のこのブログでは記事ページでのみ、記事が更新されていたら表示するようにしているので、`src/pages/blog/[...slug].astro`で使用しています。
+
+雑ですがこのような感じです。
+
+```astro title="[...slug].astro"
+---
+import { getGitInfo } from "@/utils/git";
+
+const { entry } = Astro.props;
+const gitInfo = getGitInfo(entry.filePath);
+const updateAt = gitInfo?.updateAt || null;
+---
+
+<PostMeta
+  date={pubDate}
+  updateAt={updateAt}
+  category={category}
+  tags={tags}
+  />
+```
+
+更新日は、記事作成日やカテゴリーなどを表示する`PostMeta`コンポーネントで使用できるようにしています。
+
+これからデザインを変更していくので、使用方法が変わりそうですが、今回の更新日を表示するようにした修正の diff は[こちら](https://github.com/nono-k/munus-blog/commit/10df894ca34df9721ce358bcefd232a9c533139e)で見れますので参考にしてみてください。
+
+## まとめ
+
+Astro で作成したブログの記事の更新日時を Git のコミット日時から取得し、自動で表示できるようになりました。
+
+技術記事の場合は、更新日時の表示が大切だとは思いますが、手動での実装例が多く自動でやっている人が少なかったのでぜひ参考にしてみてください！
