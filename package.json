@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "@iconify-json/basil": "^1.2.4",
     "@iconify-json/devicon": "^1.2.16",
     "@iconify-json/fa6-brands": "^1.2.5",
     "@iconify-json/material-symbols": "^1.2.14",
