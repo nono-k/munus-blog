@@ -9,7 +9,7 @@ body {
   color: var(--text-color);
   background: var(--page-bg);
   line-height: 1.5;
-  letter-spacing: 0.05em;
+  letter-spacing: -0.025em;
 }
 
 a {
@@ -65,7 +65,7 @@ table {
   border-collapse: collapse;
 
   thead {
-    background: var(--btn-regular-bg);
+    background: #dcdad3;
   }
 
   th,

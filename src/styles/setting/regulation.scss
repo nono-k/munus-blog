@@ -11,7 +11,7 @@
   --btn-plain-bg-hover: oklch(.95 .025 var(--hue));
   --btn-card-bg-hover: oklch(.98 .005 var(--hue));
 
-  --page-bg: oklch(0.95 0.01 var(--hue));
+  --page-bg: #E6E4DD;
   --card-bg: oklch(1 0.0 0);
   --code-bg: #303446;
   --text-color: oklch(0.3 0.0 0);
@@ -20,8 +20,19 @@
   --black: oklch(0.3 0.0 0);
   --white: oklch(1 0.0 0);
 
+  --gray: #C8C7C2;
+
+  --border-color: #8c8b84;
+
+  --fz-base: 0.8125rem;
+
+  --ff-jp: "Kiwi Maru", sans-serif;
+
+  --side-width: 11.5rem;
+
   --page-width: 78rem;
-  --header-height: 4rem;
+  --header-height: 1.5rem;
+  --title-header-height: 1.75rem;
 }
 
 @include mixin.mobile {

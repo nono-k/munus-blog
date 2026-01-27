@@ -1,14 +1,14 @@
 @use '../mixin.scss';
 
 .rlc-container {
-  width: 100%;
+  // width: 100%;
   max-height: 160px;
-  margin: 1rem auto 2.5rem;
+  margin: 2.5rem;
   color: var(--black);
   text-decoration: none !important;
   padding: 0 !important;
-  background: var(--white);
-  border: 1px solid currentColor;
+  // background: var(--white);
+  border: 1px solid var(--border-color);
   border-radius: 0.5rem;
   display: flex;
   align-items: stretch;
