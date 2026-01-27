@@ -6,12 +6,13 @@ const blog = defineCollection({
     z.object({
       title: z.string(),
       pubDate: z.date(),
+      updateDate: z.date().optional(),
       image: image().optional(),
       ogp: z.string().optional(),
-      category: z.string(),
       tags: z.array(z.string()),
       description: z.string(),
       draft: z.boolean().optional(),
+      pin: z.boolean().optional(),
       isAdLink: z.boolean().optional(),
     }),
 });
