@@ -2,7 +2,6 @@
 title: 技術ブログにブラウザの対応状況を表示するBaseline Status Webコンポーネントを入れる方法
 slug: baseline-status-components
 pubDate: 2025-07-16
-category: プログラミング
 tags:
   - ブログ
   - Astro
@@ -10,6 +9,8 @@ description: 技術ブログに入れておくと良さそう🚀
 ---
 
 import BaseLineStatus from "@/components/markdown/BaseLineStatus.astro";
+
+{/* start */}
 
 ## はじめに
 
@@ -46,6 +47,8 @@ import "baseline-status";
 ```html
 <baseline-status featureId="anchor-positioning" />
 ```
+
+{/* end */}
 
 ### CDN で使う場合
 
