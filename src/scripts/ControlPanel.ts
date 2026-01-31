@@ -23,7 +23,7 @@ class ControlPanelInstance {
   private index = 0;
   private total = 0;
   private cardWidth = 0;
-  private visibleCount = 2;
+  private visibleCount = 3;
   private maxIndex = 0;
 
   constructor(el: HTMLElement) {

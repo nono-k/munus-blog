@@ -7,7 +7,8 @@ import PostBookArea from "@/components/PostBookArea.astro";
 import PostMeta from "@/components/PostMeta.astro";
 import PostNavLinks from "@/components/PostNavLinks.astro";
 import Figure from "@/components/markdown/Figure.astro";
-import Tboc from "@/components/widget/Tboc.astro";
+import TbocAccordion from "@/components/widget/TbocAccordion.astro";
+import TbocSide from "@/components/widget/TbocSide.astro";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
 import { getSortedBlogs } from "@/utils/content-utils";
 import { getGitInfo } from "@/utils/git";
@@ -27,82 +28,84 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content, headings } = await entry.render();
 const {
-  data: { title, pubDate, category, tags, description, isAdLink }
+  data: { title, pubDate, updateDate, tags, description, isAdLink }
 } = entry;
 const blogOgp = entry.data.ogp ||`/api/og/${entry.slug}.png`;
-const gitInfo = getGitInfo(entry.filePath);
-const updateAt = gitInfo?.updateAt || null;
 ---
 <MainGridLayout
   pageTitle={title}
   description={description}
   blogOgp={blogOgp}
-  omitBackgroundHeading=true
+  gridType="post"
   >
-  <div class="article card-base">
-    <header class="header">
-      <h1 class="title">{title}</h1>
-      <PostMeta date={pubDate} updateAt={updateAt} category={category} tags={tags}  />
-      {entry.data.image ? (
-        <div class="header__image">
-          <Image src={entry.data.image} alt={title} />
-        </div>
-      ) : (
-        <div class="header__dot"></div>
-      )}
-      { isAdLink && (
-        <div class="adLink-info">
-          記事内に商品プロモーションを含む場合があります
-        </div>
-      )}
-    </header>
+
+  <div class="side-left">
     {headings.length > 0 && (
-      <Tboc headings={headings} />
+      <TbocSide headings={headings} />
     )}
-    <MarkdownBody>
-      <Content components={{ img: Figure }} />
-    </MarkdownBody>
   </div>
 
-  <PostNavLinks entry={entry} />
+  <article class="article">
+    <div class="u-header-height-area"></div>
+    <div class="article-container">
+      <header class="header">
 
-  <div class="post-book-area">
+        <h1 class="title">{title}</h1>
+
+        { isAdLink && (
+          <div class="adLink-info">
+            記事内に商品プロモーションを含む場合があります
+          </div>
+        )}
+      </header>
+
+      {headings.length > 0 && (
+        <TbocAccordion headings={headings} />
+      )}
+
+      <MarkdownBody>
+        <Content components={{ img: Figure }} />
+      </MarkdownBody>
+    </div>
+  </article>
+
+  <div class="side-right">
+    <PostMeta date={pubDate} updateAt={updateDate} tags={tags}  />
+
+    {entry.data.image && (
+      <div class="side-title">image</div>
+      <div class="side-image">
+        <Image src={entry.data.image} alt={title} />
+      </div>
+    )}
+  </div>
+
+  <!-- <PostNavLinks entry={entry} /> -->
+
+  <!-- <div class="post-book-area">
     <PostBookArea />
-  </div>
+  </div> -->
 
 </MainGridLayout>
 
 <style lang="scss">
+
   .article {
-    padding: 1.5rem 1rem 2.5rem;
   }
+
+  .article-container {
+    max-width: var(--post-max-width);
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+
   .header {
-    margin-bottom: 2rem;
-    &__image {
-      border-radius: 0.75rem;
-      overflow: hidden;
-      margin-inline: 3rem;
-      margin-top: 1.5rem;
-      @include mixin.mobile {
-        margin-inline: 0;
-      }
-    }
-    &__dot {
-      height: 2px;
-      margin-top: 1.5rem;
-      margin-inline: 3rem;
-      background-image: radial-gradient(circle,#0000001a 1px,transparent 1px);
-      background-position: left top;
-      background-repeat: repeat-x;
-      background-size: 10px 2px;
-    }
-  }
-  .title {
-    margin-left: 1rem;
     margin-bottom: 0.75rem;
-    @include mixin.mobile {
-      font-size: 1.25rem;
-    }
+  }
+
+  .title {
+    font-size: 1.05rem;
+    margin-top: 0.25rem;
   }
   .adLink-info {
     background: linear-gradient(135deg,transparent 25%,rgba(0,0,0,.05) 25%,rgba(0,0,0,.05) 50%,transparent 50%,transparent 75%,rgba(0,0,0,.05) 75%,rgba(0,0,0,.05));

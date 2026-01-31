@@ -1,42 +1,42 @@
 ---
 import Fotter from '@/components/base/Fotter.astro';
+import InfoControlPanel from '@/components/widget/ControlPanel/InfoControlPanel.astro';
 import SideBar from '@/components/widget/SideBar.astro';
 import Layout from '@/layouts/Layout.astro';
 
 const props = Astro.props;
+const { gridType } = props;
+const gridTypeClass = gridType ? `grid-${gridType}` : '';
 ---
 
 <Layout {...props} pageTitle={props.pageTitle}>
   <main class="main">
-    <SideBar />
-    <div class="container">
+    <div class={`container ${gridTypeClass}`}>
       <slot />
     </div>
+    <InfoControlPanel />
     <Fotter />
   </main>
 </Layout>
 
 <style lang="scss">
   .main {
-    max-width: var(--page-width);
-    margin-inline: auto;
-    margin-top: -5rem;
-    padding-inline: 1rem;
-    display: grid;
-    grid-template-columns: 16rem auto;
-    grid-template-rows: 1fr 5rem;
-    column-gap: 1rem;
-    row-gap: 1rem;
     @include mixin.mobile {
-      grid-template-columns: 1fr;
-      grid-template-rows: repeat(3, auto);
-      margin-top: -3rem;
     }
     @include mixin.phone {
-      padding-inline: 0;
     }
     .container {
-      overflow: hidden;
+      padding-top: var(--header-height);
+
+      &.grid-post {
+        display: grid;
+        grid-template-columns: var(--side-width) minmax(0, 1fr) 15.5rem;
+      }
+
+      &.grid-list {
+        display: grid;
+        grid-template-columns: var(--side-width) minmax(0, 1fr);
+      }
     }
   }
 </style>

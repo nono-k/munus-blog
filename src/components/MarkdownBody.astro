@@ -7,14 +7,13 @@
 
 <style lang="scss" is:global>
   .stack {
-    line-height: 1.75;
+    line-height: 1.65;
     @include mixin.large {
-      margin-inline: 3rem;
-      font-size: 1.075rem;
+      font-size: 0.95rem;
       letter-spacing: 0.025em;
     }
     > * + * {
-      margin-top: var(--stack-space, 2rem);
+      margin-top: var(--stack-space, 1.25rem);
       @include mixin.mobile {
         --stack-space: 1.5rem;
       }
@@ -23,39 +22,28 @@
       margin-top: 0;
     }
     h2 {
-      --stack-space: 4.5rem;
-      font-size: 1.75rem;
-      background: var(--code-bg);
-      padding: 0.5rem 1rem;
-      color: #fff;
-      border-left: 6px solid var(--primary);
-      line-height: 1.5;
-      margin-inline: -2rem;
+      --stack-space: 3.75rem;
+      font-size: 1.1rem;
       @include mixin.mobile {
         margin-inline: -1rem;
         border-left-width: 4px;
       }
+      &::before {
+        content: '#';
+        font-family: var(--ff-jp);
+      }
       .anchor {
-        font-size: 1.5rem;
+        font-size: 1rem;
       }
     }
     h3 {
       --stack-space: 3.25rem;
-      font-size: 1.35rem;
+      font-size: 1rem;
       padding-bottom: 0.5rem;
       position: relative;
-      @include mixin.large {
-        padding-inline: 0.5rem;
-        margin-inline: -1rem;
-      }
       &::before {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background: repeating-linear-gradient(90deg, var(--primary) 0%, var(--primary) 30%, var(--line-color) 30%, var(--line-color) 100%);
+        content: '##';
+        font-family: var(--ff-jp);
       }
       + * {
         --stack-space: 1rem;
@@ -134,7 +122,6 @@
       }
     }
     a {
-      color: var(--primary);
       text-decoration-line: underline;
       text-decoration-style: dashed;
       text-decoration-thickness: 1px;

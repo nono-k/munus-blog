@@ -7,6 +7,7 @@ const client = createClient({
 });
 
 export type Books = {
+  publishedAt: Date;
   title: string;
   review: string;
   url: string;
@@ -14,12 +15,19 @@ export type Books = {
   author: string;
   category: BooksCategory;
   publishedDate: Date;
+  tags: BooksTag[];
   postlink: string;
 } & MicroCMSListContent;
 
 export type BooksCategory = {
   name: string;
   slug: string;
+} & MicroCMSListContent;
+
+export type BooksTag = {
+  name: string;
+  slug: string;
+  order: number;
 } & MicroCMSListContent;
 
 export const getBooks = async (queries?: MicroCMSQueries) => {
@@ -30,6 +38,13 @@ export const getBooksCategory = async (queries?: MicroCMSQueries) => {
   return await client.getList<BooksCategory>({ endpoint: 'category', queries });
 };
 
+export const getBooksTags = async (queries?: MicroCMSQueries) => {
+  return await client.getList<BooksTag>({
+    endpoint: 'tags',
+    queries: { limit: 100 },
+  });
+};
+
 export const getBooksDetail = async (
   contentId: string,
   queries?: MicroCMSQueries,
@@ -38,5 +53,14 @@ export const getBooksDetail = async (
     endpoint: 'books',
     contentId,
     queries,
+  });
+};
+
+export const getBooksByTags = async (tags: { id: string }[]) => {
+  return await client.getList<Books>({
+    endpoint: 'books',
+    queries: {
+      filters: `tags[contains]${tags.map(tag => tag.id).join(',')}`,
+    },
   });
 };

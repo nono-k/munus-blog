@@ -1,0 +1,27 @@
+---
+import { getBooksTags } from "@/scripts/library/microcms";
+
+const tags = await getBooksTags({ fields: ['id', 'name', 'slug', 'order'] });
+
+const sortedTags = tags.contents.sort((a, b) => a.order - b.order);
+---
+
+<div class="side-title">読んだ本のタグ一覧</div>
+<ul class="list">
+  {sortedTags.map(tag => (
+    <li class="item">
+      <a href={`/book/tags/${tag.slug}`} class="link">{tag.name}</a>
+    </li>
+  ))}
+</ul>
+
+<style lang="scss">
+.list {
+  font-size: var(--fz-base);
+}
+.link {
+  display: block;
+  padding: 0.25rem 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+</style>

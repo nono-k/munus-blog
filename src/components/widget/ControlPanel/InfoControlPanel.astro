@@ -1,0 +1,45 @@
+---
+import { infoList } from '@/data/info';
+
+
+---
+
+<div class="controlPanel">
+  <div class="controlPanel-side">
+    <div class="controlPanel-side__header">
+      <span class="controlPanel-side__title">Info</span>
+      <div class="controlPanel-side__btn-wrap">
+        <button class="controlPanel-side__btn -prev">←</button>
+        <button class="controlPanel-side__btn -next">→</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="controlPanel-main">
+    <div class="controlPanel-main__wrap">
+      {infoList.map((info) => (
+        <article class="controlPanel-card">
+          <a href={`/${info.slug}/`} class="controlPanel-card__link">
+            <div class="controlPanel-card__title-wrap">
+              <span class="controlPanel-card__title text-ellipsis">
+                {info.title}
+              </span>
+                {/* {post.data.pin ?
+                  <span class="controlPanel-card__icon">
+                    <Icon name="basil:pin-solid" />
+                  </span>
+                : null} */}
+            </div>
+            {/* <ControlPanelCard post={post} /> */}
+          </a>
+        </article>
+      ))}
+      <div class="controlPanel-main__link-wrap">
+        <!-- <a href={link} class="controlPanel-main__link">
+          View More
+          <Icon name="material-symbols:arrow-forward" />
+        </a> -->
+      </div>
+    </div>
+  </div>
+</div>

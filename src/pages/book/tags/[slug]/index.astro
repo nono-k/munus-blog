@@ -1,12 +1,31 @@
 ---
 import BookSideTagList from "@/components/pages/book/BookSideTagList.astro";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
-import { getBooks } from "@/scripts/library/microcms";
+import { getBooks, getBooksTags } from "@/scripts/library/microcms";
 
-const books = await getBooks({ fields: ['id', 'title', 'cover', 'tags']});
+export async function getStaticPaths() {
+  const { contents: tags} = await getBooksTags();
 
-const pageTitle = "読んだ本リスト";
-const description = "かめののが読んだ本の一覧です。";
+
+  return tags.map((tag) => ({
+    params: { slug: tag.slug },
+    props: {
+      tagId: tag.id,
+      slug: tag.slug,
+      name: tag.name,
+    },
+  }));
+}
+
+const { tagId, slug, name } = Astro.props;
+
+const books = await getBooks({
+  fields: ['id', 'title', 'cover', 'tags'],
+  filters: `tags[contains]${tagId}`
+});
+
+const pageTitle = `タグ「${name}」本の一覧です。`;
+const description = `タグ「${name}」本の一覧です。`;
 ---
 
 <MainGridLayout

@@ -32,3 +32,8 @@
     text-box: unset;
   }
 }
+
+.u-header-height-area {
+  height: var(--title-header-height);
+  border-bottom: 1px solid var(--border-color);
+}

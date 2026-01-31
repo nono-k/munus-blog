@@ -1,0 +1,55 @@
+---
+import type { Books } from '@/scripts/library/microcms';
+import { Icon } from "astro-icon/components";
+import BookControlPanelCard from "./BookControlPanelCard.astro";
+
+interface Props {
+  title: string;
+  books: Books[];
+  link: string;
+}
+
+const { title, books, link } = Astro.props;
+---
+
+<div class="controlPanel">
+  <div class="controlPanel-side">
+    <div class="controlPanel-side__header">
+      <span class="controlPanel-side__title">{title}</span>
+      <div class="controlPanel-side__btn-wrap">
+        <button class="controlPanel-side__btn -prev">←</button>
+        <button class="controlPanel-side__btn -next">→</button>
+      </div>
+    </div>
+    <div class="controlPanel-side__content">
+      <a href={link} class="controlPanel-side__link">
+        View More
+        <Icon name="material-symbols:arrow-forward" />
+      </a>
+    </div>
+  </div>
+
+  <div class="controlPanel-main">
+    <div class="controlPanel-main__wrap">
+      {books.map((book) => (
+        <article class="controlPanel-card">
+          <a href={`/book/${book.id}`} class="controlPanel-card__link">
+            <div class="controlPanel-card__title-wrap">
+              <span class="controlPanel-card__title text-ellipsis">
+                {book.title}
+              </span>
+            </div>
+            <BookControlPanelCard book={book} />
+          </a>
+        </article>
+      ))}
+      <div class="controlPanel-main__link-wrap">
+        <a href="/book/" class="controlPanel-main__link">
+          View More
+          <Icon name="material-symbols:arrow-forward" />
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+

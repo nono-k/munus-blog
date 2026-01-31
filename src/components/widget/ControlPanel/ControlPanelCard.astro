@@ -1,0 +1,142 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import type { BlogPostData } from '@/types/config';
+import { formatDateToYYYYMMDD } from "@/utils/date-utils";
+import markdownit from 'markdown-it';
+
+interface Props {
+  post: { body: string; data: BlogPostData; slug: string };
+}
+
+
+export function renderExcerpt(markdown: string) {
+  const match = markdown.match(
+    /\{\s*\/\*\s*start\s*\*\/\s*\}([\s\S]*?)\{\s*\/\*\s*end\s*\*\/\s*\}/
+  );
+
+  if (!match) return '';
+
+  const md = new markdownit();
+  md.renderer.rules.link_open = () => '';
+  md.renderer.rules.link_close = () => '';
+
+  return md.render(match[1].trim());
+}
+
+const { post } = Astro.props;
+const html = renderExcerpt(post.body);
+const dateString = formatDateToYYYYMMDD(post.data.pubDate);
+const isUpdate = post.data.updateDate !== undefined;
+const updateDateString = isUpdate ? formatDateToYYYYMMDD(post.data.updateDate as Date) : null;
+---
+
+<div class="controlPanel-card">
+  <div class="controlPanel-card__left">
+
+    {post.data.image ? (
+      <div class="controlPanel-card__meta-image-title">image</div>
+      <div class="controlPanel-card__meta-image">
+        <Image src={post.data.image} alt="" />
+      </div>
+    ) : <div class="controlPanel-card__top" />}
+
+    <div class="controlPanel-card__body" set:html={html} />
+  </div>
+  <div class="controlPanel-card__right">
+    <div class="controlPanel-card__meta-title">Meta Data</div>
+    <div class="controlPanel-card__meta-content">
+      <div class="controlPanel-card__meta-item">公開日:{dateString}</div>
+      {isUpdate && (
+        <div class="controlPanel-card__meta-item">更新日:{updateDateString}</div>
+      )}
+      <div class="controlPanel-card__meta-tags">
+        Tags:
+        <div class="controlPanel-card__meta-tag-wrap">
+          {post.data.tags.map((tag, i) => (
+            <div class="controlPanel-card__meta-tag">#{tag}</div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style lang="scss" is:global>
+  .controlPanel-card__body {
+    padding: 0.25rem;
+    font-size: 0.5rem;
+
+    > * + * {
+      margin-top: 0.25rem;
+    }
+
+    img {
+      filter: grayscale(1);
+    }
+
+    h2, h3, h4 {
+      font-size: 0.55rem;
+    }
+
+    table {
+      th,
+      td {
+        padding: 0.25rem;
+      }
+    }
+  }
+</style>
+
+<style lang="scss">
+  .controlPanel-card {
+    font-size: 0.75rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) 1fr;
+    height: 100%;
+
+    img {
+      filter: grayscale(0.8);
+    }
+
+    &__left {
+      border-right: 1px solid var(--border-color);
+    }
+
+    &__top,
+    &__meta-title,
+    &__meta-image-title {
+      height: 1.25rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-left: 0.25rem;
+    }
+
+    &__meta-content {
+      padding: 0.25rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    &__meta-tags {
+      display: flex;
+      column-gap: 0.25rem;
+    }
+    &__meta-tag-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: 0.4rem;
+      row-gap: 0.25rem;
+      // flex-direction: column;
+    }
+    &__meta-tag {
+      font-family: var(--ff-jp);
+      letter-spacing: -0.05em;
+      font-size: 0.7rem;
+    }
+
+    &__meta-image {
+      padding: 0.45rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+  }
+</style>

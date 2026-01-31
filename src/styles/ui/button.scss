@@ -4,14 +4,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--btn-regular-bg);
-  color: var(--btn-content);
-  border-radius: 0.5rem;
-  transition-property: background-color;
+  background-color: var(--black);
+  color: var(--white);
+  border: 1px solid var(--black);
+  transition-property: background-color, color;
   transition-duration: 0.3s;
 
   @include mixin.hover {
-    background-color: var(--btn-regular-bg-hover);
+    background-color: transparent;
+    color: var(--black);
   }
 }
 

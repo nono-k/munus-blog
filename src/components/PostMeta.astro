@@ -32,11 +32,12 @@ const getTagSlug = (tag: string) => {
 
     <div class="post-meta__tags">
       Tags:
-      {tags.map((tag, i) => (
-        <div class:list={[{"hidden": i == 0}, "separator"]}>/</div>
-        <a href=`/blog/tag/${getTagSlug(tag)}` class="post-meta__tag">#{tag}</a>
-        )
-      )}
+      <div class="post-meta__tags-wrap">
+        {tags.map((tag, i) => (
+          <a href=`/blog/tag/${getTagSlug(tag)}` class="post-meta__tag">#{tag}</a>
+          )
+        )}
+      </div>
     </div>
   </div>
 </div>
@@ -55,16 +56,19 @@ const getTagSlug = (tag: string) => {
     }
     &__tags {
       display: flex;
-      .hidden {
-        display: none;
-      }
-      .separator {
-        margin-inline: 0.25rem;
-      }
+      column-gap: 0.25rem;
+    }
+    &__tags-wrap {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      column-gap: 0.4rem;
+      row-gap: 0.25rem;
     }
     &__tag {
       font-family: var(--ff-jp);
       letter-spacing: -0.05em;
+      font-size: 0.875rem;
     }
   }
 </style>

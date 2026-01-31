@@ -1,6 +1,9 @@
 ---
+import BookSideRelated from "@/components/pages/book/BookSideRelated.astro";
+import BookSideTagList from "@/components/pages/book/BookSideTagList.astro";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
 import { getBooks, getBooksDetail } from "@/scripts/library/microcms";
+import { formatDateToYYYYMMDD } from "@/utils/date-utils";
 import { Icon } from "astro-icon/components";
 
 export async function getStaticPaths() {
@@ -17,6 +20,8 @@ const year = date.getFullYear();
 const month = date.getMonth() + 1;
 const day = date.getDate();
 
+const dateString = formatDateToYYYYMMDD(new Date(book.publishedAt));
+
 const pageTitle = book.title;
 const description = `「${book.title}」の読書記録です。`;
 ---
@@ -24,47 +29,76 @@ const description = `「${book.title}」の読書記録です。`;
 <MainGridLayout
   pageTitle={pageTitle}
   description={description}
-  omitBackgroundHeading=true
+  gridType="post"
 >
-  <div class="book__detail card-base">
-    <h1 class="book__detail-title">{book.title}</h1>
-    <div class="book__detail-body">
-      <div class="book__detail-right">
-        <a href={book.url} class="book__detail-img" target="_blank">
-          <img src={book.cover} alt={book.title} />
+
+  <div class="side-left">
+    <BookSideTagList />
+  </div>
+
+  <div class="book__detail">
+    <div class="u-header-height-area"></div>
+    <div class="book__detail-wrap">
+      <h1 class="book__detail-title">{book.title}</h1>
+      <div class="book__detail-body">
+        <div class="book__detail-right">
+          <a href={book.url} class="book__detail-img" target="_blank">
+            <img src={book.cover} alt={book.title} width="184" />
+          </a>
+          <div class="book__detail-links">
+            <a href={book.url} class="book__detail-link btn-regular" target="_blank">Amazon</a>
+            {book.postlink && (
+              <a href={`/blog/${book.postlink}`} class="book__detail-link btn-regular">記事を見る</a>
+            )}
+          </div>
+        </div>
+        <dl class="book__detail-info">
+          <div class="book__detail-info-tags">
+            {book.tags.map(tag =>
+              <a href={`/book/tag/${tag.slug}`} class="book__detail-info-tag">
+                {tag.name}
+              </a>
+            )}
+          </div>
+          <div class="book__detail-info-item">
+            <dt>著者</dt>
+            <dd>{book.author}</dd>
+          </div>
+          <div class="book__detail-info-item">
+            <dt>発売日</dt>
+            <dd>{`${year}年${month}月${day}日`}</dd>
+          </div>
+          <div class="book__detail-info-body" set:html={book.review}></div>
+        </dl>
+      </div>
+      <div class="book__detail-bottom-link-wrap">
+        <a href="/book" class="book__detail-bottom-link">
+          <span class="link__icon">
+            <Icon name="material-symbols:chevron-left-rounded" />
+          </span>
+          <span class="book__detail-bottom-link-text">読んだ本リストに戻る</span>
         </a>
-        <div class="book__detail-links">
-          <a href={book.url} class="book__detail-link btn-regular" target="_blank">Amazon</a>
-          {book.postlink && (
-            <a href={`/blog/${book.postlink}`} class="book__detail-link btn-regular">記事を見る</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="side-right">
+    <div class="side-title">Meta Data</div>
+    <div class="book__meta-content">
+      <div class="book__meta-item">公開日: {dateString}</div>
+
+      <div class="book__meta-tags">
+        Tags:
+        <div class="book__meta-tags-wrap">
+          {book.tags.map(tag =>
+            <a href={`/book/tag/${tag.slug}`} class="book__meta-tag">
+              #{tag.name}
+            </a>
           )}
         </div>
       </div>
-      <dl class="book__detail-info">
-        <div class="book__detail-info-category-wrap">
-          <a href=`/book/category/${book.category.slug}` class="book__detail-info-category">
-            {book.category.name}
-          </a>
-        </div>
-        <div class="book__detail-info-item">
-          <dt>著者</dt>
-          <dd>{book.author}</dd>
-        </div>
-        <div class="book__detail-info-item">
-          <dt>発売日</dt>
-          <dd>{`${year}年${month}月${day}日`}</dd>
-        </div>
-        <div class="book__detail-info-body" set:html={book.review}></div>
-      </dl>
     </div>
-    <div class="book__detail-bottom-link-wrap">
-      <a href="/book" class="book__detail-bottom-link">
-        <span class="link__icon">
-          <Icon name="material-symbols:chevron-left-rounded" />
-        </span>
-        <span class="book__detail-bottom-link-text">読んだ本リストに戻る</span>
-      </a>
-    </div>
+    <BookSideRelated tags={book.tags} />
   </div>
 
 </MainGridLayout>
@@ -116,25 +150,24 @@ const description = `「${book.title}」の読書記録です。`;
 <style lang="scss">
   .book {
     &__detail {
-      padding: 1.5rem 2rem 2.5rem;
-      @include mixin.mobile {
-        padding-inline: 1rem;
-      }
-      @include mixin.phone {
-        padding-bottom: 1.5rem;
-      }
+
+    }
+    &__detail-wrap {
+      max-width: var(--post-max-width);
+      margin-inline: auto;
+      padding-inline: 1rem;
+      margin-bottom: 2.5rem;
     }
     &__detail-title {
-      @include mixin.mobile {
-        font-size: 1.25rem;
-      }
+      font-size: 1.05rem;
+      margin-top: 0.25rem;
     }
     &__detail-img {
       display: block;
-      border: 4px solid var(--btn-plain-bg-hover);
+      border: 4px solid var(--gray);
       transition: 0.3s;
       @include mixin.hover {
-        border-color: var(--primary);
+        border-color: var(--black);
       }
     }
     &__detail-links {
@@ -144,8 +177,8 @@ const description = `「${book.title}」の読書記録です。`;
       row-gap: 1rem;
     }
     &__detail-link {
-      padding-block: 0.75rem;
-      font-size: 1.25rem;
+      padding-block: 0.5rem;
+      font-size: 1rem;
       @include mixin.phone {
         padding-block: 0.5rem;
         font-size: 1rem;
@@ -153,9 +186,8 @@ const description = `「${book.title}」の読書記録です。`;
     }
     &__detail-body {
       display: grid;
-      grid-template-columns: 14.75rem 1fr;
+      grid-template-columns: 11.5rem 1fr;
       column-gap: 1.5rem;
-      margin-inline: 1rem;
       margin-top: 1.5rem;
       @include mixin.phone {
         grid-template-columns: 1fr;
@@ -164,19 +196,28 @@ const description = `「${book.title}」の読書記録です。`;
         margin-top: 1rem;
       }
     }
-    &__detail-info-category-wrap {
-      margin-bottom: 1rem;
+    &__detail-info-tags {
+      margin-bottom: 0.75rem;
+      display: flex;
+      gap: 0.5rem;
     }
-    &__detail-info-category {
-      padding: 0.25rem 0.5rem;
+    &__detail-info-tag {
+      padding: 0.2rem 0.5rem;
       border-radius: 0.25rem;
-      font-size: 0.875rem;
-      border: 1px solid var(--btn-plain-bg-hover);
+      font-size: 0.75rem;
+      border: 1px solid var(--border-color);
+      transition-property: background-color, color;
+      transition-duration: 0.3s;
+      transition-duration: .15s;
+      @include mixin.hover {
+        background-color: var(--black);
+        color: var(--white);
+      }
     }
     &__detail-info-item {
       display: grid;
       grid-template-columns: 5rem 1fr;
-      border-bottom: 1px solid var(--btn-plain-bg-hover);
+      border-bottom: 1px solid var(--border-color);
       padding: 1rem;
     }
     &__detail-info-body {
@@ -189,10 +230,9 @@ const description = `「${book.title}」の読書記録です。`;
     &__detail-bottom-link-wrap {
       margin-top: 3rem;
       display: flex;
-      justify-content: center;
+      justify-content: flex-end;
     }
     &__detail-bottom-link {
-      color: var(--primary);
       display: flex;
       justify-content: center;
       gap: 0.25rem;
@@ -205,6 +245,28 @@ const description = `「${book.title}」の読書記録です。`;
         vertical-align: middle;
         font-size: 1.25rem;
       }
+    }
+
+    &__meta-content {
+      padding: 0.75rem 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    &__meta-tags {
+      display: flex;
+      column-gap: 0.25rem;
+    }
+    &__meta-tags-wrap {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      column-gap: 0.4rem;
+      row-gap: 0.25rem;
+    }
+    &__meta-tag {
+      font-family: var(--ff-jp);
+      letter-spacing: -0.05em;
+      font-size: 0.875rem;
     }
   }
 </style>

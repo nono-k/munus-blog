@@ -1,0 +1,176 @@
+---
+import type { Books } from '@/scripts/library/microcms';
+import { formatDateToYYYYMMDD } from "@/utils/date-utils";
+
+interface Props {
+  book: Books;
+}
+
+const { book } = Astro.props;
+
+const date = new Date(book.publishedDate as Date);
+const year = date.getFullYear();
+const month = date.getMonth() + 1;
+const day = date.getDate();
+const dateString = formatDateToYYYYMMDD(new Date(book.publishedAt));
+---
+
+<div class="controlPanel-card">
+  <div class="controlPanel-card__left">
+    <div class="book__detail-wrap">
+      <div class="book__detail-title">{book.title}</div>
+      <div class="book__detail-body">
+        <div class="book__detail-right">
+          <div class="book__detail-img">
+            <img src={book.cover} alt={book.title} width="184" />
+          </div>
+        </div>
+        <dl class="book__detail-info">
+          <div class="book__detail-info-tags">
+            {book.tags.map(tag =>
+              <div class="book__detail-info-tag">
+                {tag.name}
+              </div>
+            )}
+          </div>
+          <div class="book__detail-info-item">
+            <dt>著者</dt>
+            <dd>{book.author}</dd>
+          </div>
+          <div class="book__detail-info-item">
+            <dt>発売日</dt>
+            <dd>{`${year}年${month}月${day}日`}</dd>
+          </div>
+          <div class="book__detail-info-body" set:html={book.review}></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <div class="controlPanel-card__right">
+    <div class="controlPanel-card__meta-title">Meta Data</div>
+    <div class="controlPanel-card__meta-content">
+      <div class="controlPanel-card__meta-item">公開日:{dateString}</div>
+      <div class="controlPanel-card__meta-tags">
+        Tags:
+        <div class="controlPanel-card__meta-tag-wrap">
+          {book.tags.map((tag, i) => (
+            <div class="controlPanel-card__meta-tag">#{tag.name}</div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style lang="scss" is:global>
+  .controlPanel-card__body {
+    padding: 0.25rem;
+    font-size: 0.4rem;
+
+    > * + * {
+      margin-top: 0.25rem;
+    }
+
+    img {
+      filter: grayscale(1);
+    }
+
+    h2, h3, h4 {
+      font-size: 0.55rem;
+    }
+
+    table {
+      th,
+      td {
+        padding: 0.25rem;
+      }
+    }
+  }
+</style>
+
+<style lang="scss">
+  .controlPanel-card {
+    font-size: 0.75rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) 1fr;
+    height: 100%;
+
+    img {
+      filter: grayscale(0.8);
+    }
+
+    &__left {
+      border-right: 1px solid var(--border-color);
+    }
+
+    &__top,
+    &__meta-title,
+    &__meta-image-title {
+      height: 1.25rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-left: 0.25rem;
+    }
+
+    &__meta-content {
+      padding: 0.25rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    &__meta-tags {
+      display: flex;
+      column-gap: 0.25rem;
+    }
+    &__meta-tag-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: 0.4rem;
+      row-gap: 0.25rem;
+    }
+    &__meta-tag {
+      font-family: var(--ff-jp);
+      letter-spacing: -0.05em;
+      font-size: 0.7rem;
+    }
+  }
+
+  .book {
+    &__detail-wrap {
+      font-size: 0.5rem;
+      padding-inline: 0.35rem;
+    }
+    &__detail-title {
+      margin-top: 0.25rem;
+    }
+    &__detail-img {
+      display: block;
+      border: 1px solid var(--gray);
+    }
+    &__detail-body {
+      display: grid;
+      grid-template-columns: 4.5rem 1fr;
+      column-gap: 0.45rem;
+      margin-top: 0.25rem;
+    }
+    &__detail-info-tags {
+      margin-bottom: 0.25rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+    &__detail-info-tag {
+      font-size: 0.4rem;
+      padding: 0.1rem 0.15rem;
+      border: 1px solid var(--border-color);
+    }
+    &__detail-info-item {
+      display: grid;
+      grid-template-columns: 2.25rem 1fr;
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.25rem;
+      font-size: 0.45rem;
+    }
+    &__detail-info-body {
+      padding: 0.5rem 0.25rem;
+    }
+  }
+</style>

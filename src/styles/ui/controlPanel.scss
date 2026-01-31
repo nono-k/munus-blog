@@ -1,0 +1,116 @@
+.controlPanel {
+  display: grid;
+  grid-template-columns: var(--side-width) 1fr;
+}
+
+.controlPanel-side {
+  border-bottom: 1px solid var(--border-color);
+  border-right: 2px solid #cbc9c3;
+
+  &__header {
+    font-size: var(--fz-base);
+    background: #dcdad3;
+    border-top: 1px solid #a2a19e;
+    border-bottom: 1px solid #a2a19e;
+    display: flex;
+    height: var(--title-header-height);
+  }
+
+  &__title {
+    padding: 0.25rem 0.5rem;
+  }
+
+  &__btn-wrap {
+    margin-left: auto;
+    display: flex;
+    border-left: 1px solid #a2a19e;
+
+    button {
+      width: 1.5rem;
+      border-top: 3px solid rgb(236, 235, 229);
+      border-right: 3px solid rgb(196, 194, 188);
+      border-bottom: 3px solid rgb(175, 173, 168);
+      border-left: 3px solid rgb(234, 232, 226);
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    height: calc(100% - var(--title-header-height));
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--fz-base);
+    margin-top: auto;
+    margin-bottom: 0.5rem;
+    margin-right: 0.5rem;
+  }
+}
+
+.controlPanel-main {
+  overflow: hidden;
+
+  &__wrap {
+    display: flex;
+    transition-property: transform;
+    transition-duration: 0.3s;
+  }
+
+  &__link-wrap {
+    width: 23.25rem;
+    height: 16.25rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-end;
+    background: #dcdad3;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    column-gap: 0.5rem;
+    font-size: var(--fz-base);
+    margin-left: 1rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.controlPanel-card {
+  width: 23.25rem;
+  height: 16.25rem;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+
+  &__link {
+    display: block;
+    height: 100%;
+  }
+
+  &__title-wrap {
+    display: flex;
+    justify-content: space-between;
+    height: var(--title-header-height);
+    border-bottom: 1px solid var(--border-color);
+    background: #dcdad3;
+  }
+
+  &__title {
+    font-size: var(--fz-base);
+    padding: 0.25rem 0.5rem;
+  }
+
+  &__icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 1.5rem;
+    border-left: 1px solid var(--border-color);
+  }
+}

@@ -1,0 +1,61 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { BlogPostData } from '@/types/config';
+import { Icon } from "astro-icon/components";
+import ControlPanelCard from "./ControlPanelCard.astro";
+
+interface Props {
+  title: string;
+  page: { body: string; data: BlogPostData; slug: string }[];
+  link: string;
+}
+
+const { title, page, link } = Astro.props;
+---
+
+<div class="controlPanel">
+  <div class="controlPanel-side">
+    <div class="controlPanel-side__header">
+      <span class="controlPanel-side__title">{title}</span>
+      <div class="controlPanel-side__btn-wrap">
+        <button class="controlPanel-side__btn -prev">←</button>
+        <button class="controlPanel-side__btn -next">→</button>
+      </div>
+    </div>
+    <div class="controlPanel-side__content">
+      <a href={link} class="controlPanel-side__link">
+        View More
+        <Icon name="material-symbols:arrow-forward" />
+      </a>
+    </div>
+  </div>
+
+  <div class="controlPanel-main">
+    <div class="controlPanel-main__wrap">
+      {page.map((post) => (
+        <article class="controlPanel-card">
+          <a href={`/blog/${post.slug}`} class="controlPanel-card__link">
+            <div class="controlPanel-card__title-wrap">
+              <span class="controlPanel-card__title text-ellipsis">
+                {post.data.title}
+              </span>
+                {post.data.pin ?
+                  <span class="controlPanel-card__icon">
+                    <Icon name="basil:pin-solid" />
+                  </span>
+                : null}
+            </div>
+            <ControlPanelCard post={post} />
+          </a>
+        </article>
+      ))}
+      <div class="controlPanel-main__link-wrap">
+        <a href={link} class="controlPanel-main__link">
+          View More
+          <Icon name="material-symbols:arrow-forward" />
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
