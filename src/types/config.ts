@@ -43,7 +43,7 @@ export type Tags = {
 export type Info = {
   title: string;
   slug: string;
-  // body: string;
+  body?: string;
 };
 
 export type BlogPostData = {
