@@ -11,8 +11,7 @@
 
 $mobile: 959px;
 $large: 960px;
-$large-2: 550px;
-$phone: 549px;
+$phone: 649px;
 
 @mixin mobile {
   @media (max-width: ($mobile)) {
@@ -28,12 +27,6 @@ $phone: 549px;
 
 @mixin large {
   @media (min-width: ($large)) {
-    @content;
-  }
-}
-
-@mixin large-2 {
-  @media (max-width: ($large-2)) {
     @content;
   }
 }

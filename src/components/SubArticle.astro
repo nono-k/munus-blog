@@ -1,9 +1,11 @@
-<div class="card-base article">
+<div class="article">
   <slot />
 </div>
 
 <style lang="scss">
   .article {
     padding: 1.5rem 1rem 2.5rem;
+    max-width: var(--post-max-width);
+    margin-inline: auto;
   }
 </style>

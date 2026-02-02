@@ -1,0 +1,82 @@
+---
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+interface TOCHeading extends MarkdownHeading {
+  children: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+
+const generateToc = (headings: MarkdownHeading[]): TOCHeading[] => {
+  const toc: TOCHeading[] = [];
+  let lastH2: TOCHeading | null = null;
+
+  for (const heading of headings) {
+    if (heading.depth === 2) {
+      lastH2 = { ...heading, children: [] };
+      toc.push(lastH2);
+    } else if (heading.depth === 3 && lastH2) {
+      lastH2.children.push(heading);
+    }
+  }
+
+  return toc;
+};
+
+const toc = generateToc(headings);
+---
+
+<div class="tboc">
+  <div class="tboc__title">◯目次</div>
+  <div class="tboc__body">
+    <ul class="tboc__list">
+      {toc.map((h2) => (
+        <li class="tboc__item">
+          <a href={`#${h2.slug}`} class="tboc__link text-ellipsis">
+            {h2.text}
+          </a>
+          {h2.children.length > 0 && (
+            <ul>
+              {h2.children.map((h3) => (
+                <li class="tboc__item">
+                  <a href={`#${h3.slug}`} class="tboc__link text-ellipsis">{h3.text}</a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
+
+<style lang="scss">
+  .tboc {
+    font-size: var(--fz-base);
+    &__title {
+      padding: 0.25rem 0.5rem;
+      border: 1px solid var(--btn-regular-bg-hover);
+      border-bottom: 1px solid var(--border-color);
+      height: var(--title-header-height);
+    }
+    &__body {
+    }
+    &__list {
+    }
+    &__item {
+    }
+    &__link {
+      display: block;
+      width: 100%;
+      padding: 0.25rem 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+      transition: background-color 0.3s;
+      @include mixin.hover {
+        background-color: var(--hover-color);
+      }
+    }
+  }
+</style>

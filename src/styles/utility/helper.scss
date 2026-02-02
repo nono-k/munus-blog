@@ -6,14 +6,32 @@
   }
 }
 
-@include mixin.large-2 {
-  .for-large-2 {
+@include mixin.mobile {
+  .for-large {
     display: none !important;
   }
 }
 
-@include mixin.mobile {
-  .for-large {
-    display: none !important;
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &.-line-clamp-2 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    white-space: wrap;
+    text-box: unset;
+  }
+}
+
+.u-header-height-area {
+  height: var(--title-header-height);
+  border-bottom: 1px solid var(--border-color);
+
+  @include mixin.phone {
+    display: none;
   }
 }

@@ -3,7 +3,6 @@ title: 「リアルタイムグラフィックスの数学」勉強ログ - 第8
 slug: realtime-graphics-math-book-08
 pubDate: 2025-10-11
 image: ../../../../assets/images/realtime-graphics-math-book-08.jpg
-category: プログラミング
 tags:
   - シェーダ
   - 数学
@@ -15,6 +14,8 @@ isAdLink: true
 import AmazonLink from "@/components/markdown/AmazonLink.astro";
 import RecommendLink from "@/components/markdown/RecommendLink.astro";
 import WikipediaEmbed from "@/components/markdown/WikipediaEmbed.astro";
+
+{/* start */}
 
 ## はじめに
 
@@ -38,6 +39,8 @@ float text(vec2 st) {
 ```
 
 ここで 3D 空間のカメラの設定をします。カメラの向きを$\bm{x} = (0, 0, -1)$とし、カメラの上方向を$\bm{y} = (0, 1, 0)$とします。この値に対して外積をとることで、撮影する向きに対する水平方向$(1, 0, 0)$を得ることができます。実際の計算は次のようになります。
+
+{/* end */}
 
 $$
 \bm{x}\times\bm{y} = (x_2y_3 - x_3y_2, x_3y_1 - x_1y_3, x_1y_2 - x_2y_1) \\

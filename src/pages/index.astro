@@ -1,0 +1,34 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BookControlPanel from "@/components/widget/ControlPanel/BookControlPanel.astro";
+import ControlPanel from "@/components/widget/ControlPanel/ControlPanel.astro";
+import { COUNT_PER_PAGE } from "@/config";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { getBooks } from "@/scripts/library/microcms";
+import { getMonthlyReportList, getUpdateBlogs } from "@/utils/content-utils";
+
+const allBlogPosts = await getUpdateBlogs();
+const reportData = await getMonthlyReportList();
+const books = await getBooks();
+---
+
+<MainGridLayout>
+  <ControlPanel
+    title="NEW BLOG"
+    page={allBlogPosts.slice(0, 10)}
+    link="/blog/"
+  />
+
+  <ControlPanel
+    title="月報"
+    page={reportData}
+    link="/blog/tag/monthly-report"
+  />
+
+  <BookControlPanel
+    title="読んだ本リスト"
+    books={books.slice(0, 10)}
+    link="/book/"
+  />
+
+</MainGridLayout>

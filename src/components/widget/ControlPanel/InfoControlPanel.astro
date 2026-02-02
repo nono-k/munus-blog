@@ -1,0 +1,182 @@
+---
+import { Image } from "astro:assets";
+import avatar from "@/assets/images/profile.jpg";
+import { infoList, infoListSub } from '@/data/info';
+
+---
+
+<div class="controlPanel">
+  <div class="controlPanel-side">
+    <div class="controlPanel-side__header">
+      <span class="controlPanel-side__title">Info</span>
+      <!-- <div class="controlPanel-side__btn-wrap">
+        <button class="controlPanel-side__btn -prev">←</button>
+        <button class="controlPanel-side__btn -next">→</button>
+      </div> -->
+    </div>
+  </div>
+
+  <div class="controlPanel-main">
+    <div class="controlPanel-main__wrap">
+      {infoList.map((info) => (
+        <article class="controlPanel-card">
+          <a href={`${info.slug}`} class="controlPanel-card__link">
+            <div class="controlPanel-card__title-wrap">
+              <span class="controlPanel-card__title text-ellipsis">
+                {info.title}
+              </span>
+            </div>
+
+            {info.body && info.title === 'About' &&
+              <div class="controlPanel-card-main">
+                <div class="controlPanel-card__body" set:html={info.body} />
+                <div class="controlPanel-card__side">
+                  <div class="controlPanel-card__side-title">Image</div>
+                  <div class="controlPanel-card__side-content">
+                    <Image src={avatar} alt="かめのの" />
+                  </div>
+                </div>
+              </div>
+            }
+
+            {info.body && info.title === 'Work' &&
+              <div class="controlPanel-card-work-wrap">
+                <div class="controlPanel-card__body" set:html={info.body} />
+              </div>
+            }
+
+          </a>
+        </article>
+      ))}
+      <div class="controlPanel-main__link-wrap">
+        <ul>
+          {infoListSub.map((info) => (
+            <li>
+              <a href={info.slug}>{info.title}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style lang="scss" is:global>
+  .controlPanel-card__body {
+    padding: 0.25rem;
+    font-size: 0.5rem;
+
+    > * + * {
+      margin-top: 0.25rem;
+    }
+
+    img {
+      filter: grayscale(1);
+    }
+
+    h2, h3, h4 {
+      font-size: 0.55rem;
+    }
+
+    table {
+      th,
+      td {
+        padding: 0.25rem;
+      }
+    }
+  }
+</style>
+
+<style lang="scss">
+  .controlPanel-main {
+  }
+
+  .controlPanel-card {
+    background: var(--page-bg);
+    transition-property: background-color;
+    transition-duration: 0.3s;
+
+    @include mixin.hover {
+      background-color: var(--hover-color);
+    }
+  }
+
+  .controlPanel-card-main {
+    font-size: 0.75rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) 1fr;
+    height: 100%;
+
+    @include mixin.phone {
+      display: none;
+    }
+  }
+
+  .controlPanel-card-work-wrap {
+    @include mixin.phone {
+      display: none;
+    }
+  }
+
+  .controlPanel-card__side {
+    border-left: 1px solid var(--border-color);
+  }
+
+  .controlPanel-card__side-title {
+    border-bottom: 1px solid var(--border-color);
+    padding-left: 0.25rem;
+  }
+
+  .controlPanel-card__side-content {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .controlPanel-main__link-wrap {
+    align-items: start;
+
+    @include mixin.phone {
+      justify-content: start;
+      padding-top: 0;
+    }
+
+    ul {
+      border-right: 1px solid var(--border-color);
+      height: 100%;
+
+      @include mixin.phone {
+        border-right: none;
+      }
+    }
+
+    a {
+      display: block;
+      font-size: var(--fz-base);
+      padding: 0.25rem 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+      background: var(--page-bg);
+      transition-property: background-color;
+      transition-duration: 0.3s;
+
+      @include mixin.phone {
+        border-bottom: none;
+        display: flex;
+        align-items: center;
+        margin-left: 0.5rem;
+        column-gap: 0.5rem;
+
+        &::before {
+          content: '';
+          width: 3px;
+          height: 3px;
+          background: var(--black);
+          border-radius: 50%;
+        }
+      }
+
+      @include mixin.hover {
+        background-color: var(--hover-color);
+      }
+    }
+  }
+</style>

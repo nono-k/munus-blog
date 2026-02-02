@@ -1,6 +1,29 @@
 import { getCollection } from 'astro:content';
 import type { BlogPostData } from '@/types/config';
 
+export async function getUpdateBlogs(): Promise<
+  { body: string; data: BlogPostData; slug: string }[]
+> {
+  const allBlogPosts = await getCollection('blog');
+  const nonDraftBlogs = allBlogPosts.filter(
+    blog => !blog.data.draft,
+  ) as unknown as { body: string; data: BlogPostData; slug: string }[];
+
+  const updateSorted = nonDraftBlogs.sort((a, b) => {
+    const aPin = a.data.pin === true;
+    const bPin = b.data.pin === true;
+    if (aPin && !bPin) return -1;
+    if (!aPin && bPin) return 1;
+
+    const aTime = (a.data.updateDate ?? a.data.pubDate).getTime();
+    const bTime = (b.data.updateDate ?? b.data.pubDate).getTime();
+
+    return bTime - aTime;
+  });
+
+  return updateSorted;
+}
+
 export async function getSortedBlogs(): Promise<
   { body: string; data: BlogPostData; slug: string }[]
 > {
@@ -29,12 +52,12 @@ export async function getSortedBlogs(): Promise<
   return sorted;
 }
 
-export async function getCategoryList(
-  categoryName: string,
-): Promise<{ body: string; data: BlogPostData; slug: string }[]> {
+export async function getMonthlyReportList(): Promise<
+  { body: string; data: BlogPostData; slug: string }[]
+> {
   const sortedBlogs = await getSortedBlogs();
-  const filteredPosts = sortedBlogs.filter(
-    blog => blog.data.category === categoryName,
+  const filteredPosts = sortedBlogs.filter(blog =>
+    blog.data.tags.some(tag => tag === '月報'),
   );
   return filteredPosts;
 }
@@ -42,18 +65,9 @@ export async function getCategoryList(
 export async function getTagList(
   tagName: string,
 ): Promise<{ body: string; data: BlogPostData; slug: string }[]> {
-  const sortedBlogs = await getSortedBlogs();
+  const sortedBlogs = await getUpdateBlogs();
   const filteredPosts = sortedBlogs.filter(blog =>
     blog.data.tags.some(tag => tag === tagName),
   );
   return filteredPosts;
 }
-
-export const countCategory = async (category: string): Promise<number> => {
-  const allBlogs = await getCollection('blog');
-  const nonDraftBlogs = allBlogs.filter(blog => !blog.data.draft);
-  const filteredBlogs = nonDraftBlogs.filter(
-    blog => blog.data.category === category,
-  );
-  return filteredBlogs.length;
-};

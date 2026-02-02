@@ -8,54 +8,55 @@
 <style lang="scss" is:global>
   .stack {
     line-height: 1.75;
-    @include mixin.large {
-      margin-inline: 3rem;
-      font-size: 1.075rem;
-      letter-spacing: 0.025em;
+    font-size: 0.975rem;
+    letter-spacing: 0.025em;
+
+    @include mixin.phone {
+      font-size: 0.9rem;
+      line-height: 1.5;
     }
+
     > * + * {
-      margin-top: var(--stack-space, 2rem);
+      margin-top: var(--stack-space, 1.25rem);
       @include mixin.mobile {
-        --stack-space: 1.5rem;
+        --stack-space: 1rem;
       }
     }
     meta + h2 {
       margin-top: 0;
     }
     h2 {
-      --stack-space: 4.5rem;
-      font-size: 1.75rem;
-      background: var(--code-bg);
-      padding: 0.5rem 1rem;
-      color: #fff;
-      border-left: 6px solid var(--primary);
-      line-height: 1.5;
-      margin-inline: -2rem;
-      @include mixin.mobile {
-        margin-inline: -1rem;
-        border-left-width: 4px;
+      --stack-space: 3.75rem;
+      font-size: 1.25rem;
+
+      @include mixin.phone {
+        --stack-space: 2.5rem;
+        font-size: 1.15rem;
+      }
+
+      &::before {
+        content: '#';
+        font-family: var(--ff-jp);
+        margin-right: 0.25rem;
       }
       .anchor {
-        font-size: 1.5rem;
+        font-size: 1rem;
       }
     }
     h3 {
       --stack-space: 3.25rem;
-      font-size: 1.35rem;
+      font-size: 1.1rem;
       padding-bottom: 0.5rem;
       position: relative;
-      @include mixin.large {
-        padding-inline: 0.5rem;
-        margin-inline: -1rem;
+      @include mixin.phone {
+        --stack-space: 2rem;
+        font-size: 1rem;
       }
       &::before {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background: repeating-linear-gradient(90deg, var(--primary) 0%, var(--primary) 30%, var(--line-color) 30%, var(--line-color) 100%);
+        content: '##';
+        font-family: var(--ff-jp);
+        letter-spacing: -0.1em;
+        margin-right: 0.25rem;
       }
       + * {
         --stack-space: 1rem;
@@ -63,9 +64,6 @@
     }
     h2, h3 {
       font-weight: 500;
-      @include mixin.mobile {
-        font-size: 1.25rem;
-      }
       @include mixin.hover {
         .anchor {
           opacity: 1;
@@ -79,10 +77,11 @@
         margin-top: -0.25rem;
         margin-left: 0.2rem;
         opacity: 0;
-        transition-property: background, opacity;
+        transition-property: background, color;
         transition-duration: 0.2s;
         @include mixin.hover {
-          background: var(--btn-plain-bg-hover);
+          background: var(--black);
+          color: var(--white);
         }
         @include mixin.mobile {
           display: none;
@@ -97,11 +96,14 @@
       display: flex;
       align-items: center;
       column-gap: 0.5rem;
+      @include mixin.phone {
+        font-size: 1rem;
+      }
       &::before {
         content: '';
         width: 0.5rem;
         height: 0.5rem;
-        background: var(--primary);
+        background: var(--black);
         border-radius: 50%;
       }
       + * {
@@ -111,16 +113,20 @@
     p {
       & + p {
         margin-top: 2.5rem;
+
+        @include mixin.phone {
+          margin-top: 1.5rem;
+        }
       }
     }
     ul, ol {
       margin-top: 1.5rem;
       padding-left: 0.5rem;
       > * + * {
-        margin-top: 0.75rem;
+        margin-top: 0.15rem;
       }
       ul {
-        margin-top: 0.75rem;
+        margin-top: 0.25rem;
         padding-left: 0;
       }
     }
@@ -134,34 +140,32 @@
       }
     }
     a {
-      color: var(--primary);
       text-decoration-line: underline;
       text-decoration-style: dashed;
       text-decoration-thickness: 1px;
       text-underline-offset: 4px;
       padding: 0.25rem 0.5rem;
       border-radius: 0.5rem;
-      transition-property: background-color;
+      transition-property: background-color, color;
       transition-timing-function: cubic-bezier(.4, 0, .2, 1);
       transition-duration: .15s;
       @include mixin.hover {
-        background-color: var(--btn-plain-bg-hover);
+        background-color: var(--black);
+        color: var(--white);
       }
     }
     strong {
-      background: linear-gradient(transparent 60%, var(--btn-regular-bg) 40%);
+      background: #f3ffc4;
+      padding: 1px 3px;
       font-weight: 500;
       color: var(--black);
     }
     details {
       margin-top: 2rem;
-      margin-inline: 2rem;
-      font-size: 1rem;
       &[open] {
         summary {
           border-bottom-right-radius: 0px;
           border-bottom-left-radius: 0px;
-          border-color: var(--primary);
           &::after {
             rotate: 180deg;
             margin-top: 0.2rem;
@@ -172,28 +176,26 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0.75rem 1rem;
-        border-radius: 0.5rem;
-        background-color: var(--btn-regular-bg);
-        border: 1px solid var(--btn-regular-bg-hover);
-        color: var(--btn-content);
-        border-radius: 0.5rem;
-        transition-property: background-color;
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+        border: 1px solid var(--border-color);
+        transition-property: background-color, color;
         transition-duration: 0.3s;
         cursor: pointer;
         @include mixin.hover {
-          background-color: var(--btn-regular-bg-hover);
+          background-color: var(--black);
+          color: var(--white);
         }
         &::after {
           content: '▼';
         }
         + div {
           padding: 1.5rem 1rem;
-          border-radius: 0 0 0.5rem 0.5rem;
-          border: 1px solid var(--primary);
+          border-bottom-right-radius: 0.25rem;
+          border-bottom-left-radius: 0.25rem;
+          border: 1px solid var(--border-color);
           border-top: none;
-          border-bottom-right-radius: 0.5rem;
-          border-bottom-left-radius: 0.5rem;
+          background: var(--hover-color);
           @include mixin.mobile {
             padding-inline: 2rem 1rem;
           }
@@ -210,9 +212,8 @@
       }
     }
     span code {
-      background: var(--btn-regular-bg) !important;
+      background: #dcdad3 !important;
       border-radius: 0.375rem;
-      color: var(--btn-content) !important;
       padding: 0.2rem 0.35rem;
       font-family: JetBrains Mono Variable,ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;
       font-size: 0.85rem;
@@ -225,11 +226,9 @@
     }
     blockquote {
       --stack-space: 2rem;
-      background: var(--primary-color-transparent);
-      border-radius: 0.25rem;
       padding: 0.5rem 0.75rem;
       padding-left: 1rem;
-      border-left: 0.25rem solid var(--primary);
+      border-left: 0.25rem solid var(--border-color);
     }
     hr {
       border: 0;
@@ -242,13 +241,6 @@
         content: '•••';
         font-size: 1.25em;
         letter-spacing: .2em;
-      }
-    }
-  }
-  .dark {
-    .stack {
-      strong {
-        background: linear-gradient(transparent 70%, var(--primary) 30%);
       }
     }
   }

@@ -5,12 +5,11 @@ interface Props {
     url: string;
   }[];
   title: string;
-  cols: number;
 }
 
-const { chips, title, cols } = Astro.props;
+const { chips, title } = Astro.props;
 ---
-<div class="card-base container">
+<div class="container">
   <h2 class="title">{title}</h2>
   <ul class="list">
     {chips.map((chip) => (
@@ -21,17 +20,20 @@ const { chips, title, cols } = Astro.props;
   </ul>
 </div>
 
-<style lang="scss" define:vars={{ cols }}>
+<style lang="scss">
   .container {
+    max-width: 1000px;
+    margin-inline: auto;
     @include mixin.mobile {
       padding-bottom: 1.5rem;
     }
   }
   .list {
-    display: grid;
-    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 0.25rem;
     margin-top: 1.5rem;
+    margin-right: 2rem;
     @include mixin.mobile {
       margin-top: 1rem;
     }
@@ -42,16 +44,12 @@ const { chips, title, cols } = Astro.props;
     justify-content: space-between;
     padding: 0.5rem;
     border-radius: 0.5rem;
-    transition-property: background, color, padding;
+    font-size: 0.875rem;
+    transition-property: background, color;
     transition-duration: 0.3s;
-    @include mixin.phone {
-      background: var(--btn-regular-bg);
-      font-size: 0.875rem;
-    }
     @include mixin.hover {
-      background: var(--btn-regular-bg);
-      color: var(--primary);
-      padding-left: 0.75rem;
+      background: var(--black);
+      color: var(--white);
     }
   }
 </style>

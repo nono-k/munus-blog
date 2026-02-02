@@ -1,0 +1,35 @@
+---
+import { infoList, infoListSub } from "@/data/info";
+---
+
+<div class="side-title">Info</div>
+<ul class="list">
+  {infoList.map((info) => (
+    <li class="item">
+      <a href={info.slug} class="link">{info.title}</a>
+    </li>
+  ))}
+</ul>
+<ul class="list">
+  {infoListSub.map((info) => (
+    <li class="item">
+      <a href={info.slug} class="link">{info.title}</a>
+    </li>
+  ))}
+</ul>
+
+<style lang="scss">
+.list {
+  font-size: var(--fz-base);
+}
+.link {
+  display: block;
+  padding: 0.25rem 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+  transition-property: background-color;
+  transition-duration: 0.3s;
+  @include mixin.hover {
+    background-color: var(--hover-color);
+  }
+}
+</style>

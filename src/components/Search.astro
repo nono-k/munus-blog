@@ -20,9 +20,8 @@ import { Icon } from "astro-icon/components";
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.5rem 0.75rem;
-      border-radius: 0.5rem;
-      cursor: pointer;
+      padding: 0.1rem 0.5rem;
+      border-radius: 0.25rem;
       @include mixin.large {
         margin-right: 1rem;
         background: rgba(0, 0, 0, 0.04);
@@ -32,14 +31,14 @@ import { Icon } from "astro-icon/components";
         color: var(--text-color);
       }
       @include mixin.hover {
-        background: var(--btn-plain-bg-hover);
+        background: var(--hover-color);
       }
     }
     &__text {
-      font-size: 0.875rem;
+      font-size: 0.7rem;
     }
     &__icon {
-      font-size: 1.25rem;
+      font-size: 1rem;
     }
     &__modal {
       &::backdrop {

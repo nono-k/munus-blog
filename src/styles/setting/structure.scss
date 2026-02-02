@@ -9,7 +9,7 @@ body {
   color: var(--text-color);
   background: var(--page-bg);
   line-height: 1.5;
-  letter-spacing: 0.05em;
+  letter-spacing: -0.025em;
 }
 
 a {
@@ -58,6 +58,7 @@ button {
   font: inherit;
   color: inherit;
   background: none;
+  cursor: pointer;
 }
 
 table {
@@ -65,23 +66,13 @@ table {
   border-collapse: collapse;
 
   thead {
-    background: var(--btn-regular-bg);
+    background: #dcdad3;
   }
 
   th,
   td {
     padding: 0.375rem 0.8125rem;
     border: 1px solid #3d444d;
-  }
-}
-
-a,
-button,
-input,
-textarea,
-summary {
-  &:focus {
-    outline-color: var(--primary);
   }
 }
 
