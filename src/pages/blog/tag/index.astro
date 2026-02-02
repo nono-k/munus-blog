@@ -17,5 +17,13 @@ const description = "Tag一覧";
   pageTitle={pageTitle}
   description={description}
   >
-  <ChipLayout chips={chips} title={title} cols={3} />
+  <div class="container">
+    <ChipLayout chips={chips} title={title} />
+  </div>
 </MainGridLayout>
+
+<style lang="scss">
+  .container {
+    padding: 1.5rem 1rem 2.5rem;
+  }
+</style>

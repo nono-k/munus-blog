@@ -1,5 +1,6 @@
 ---
 import SubArticle from "@/components/SubArticle.astro";
+import InfoSide from "@/components/widget/InfoSide.astro";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
 
 const title = 'Contact';
@@ -9,7 +10,13 @@ const description = 'お問い合わせ';
 <MainGridLayout
   pageTitle={title}
   description={description}
+  gridType="list"
   >
+
+  <div class="side-left">
+    <InfoSide />
+  </div>
+
   <SubArticle>
     <div class="container">
       <p>お問い合わせありがとうございます。<br />弊ブログに関するご質問やご要望がございましたら、以下のフォームにご記入ください。</p>
@@ -75,9 +82,10 @@ const description = 'お問い合わせ';
       span {
         margin-left: 0.5rem;
         font-size: 0.75rem;
-        background: var(--btn-plain-bg-hover);
+        background: var(--black);
         padding: 0.25rem 0.5rem;
         border-radius: 0.5rem;
+        color: var(--white);
       }
     }
     &__input {

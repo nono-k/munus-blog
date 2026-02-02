@@ -96,6 +96,17 @@ const dateString = formatDateToYYYYMMDD(new Date(book.publishedAt));
     grid-template-columns: minmax(0, 1.5fr) 1fr;
     height: 100%;
 
+    transition-property: background-color;
+    transition-duration: 0.3s;
+
+    @include mixin.hover {
+      background-color: var(--hover-color);
+    }
+
+    @include mixin.phone {
+      display: none;
+    }
+
     img {
       filter: grayscale(0.8);
     }

@@ -1,6 +1,8 @@
 ---
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
+import SubArticle from "@/components/SubArticle.astro";
+import InfoSide from "@/components/widget/InfoSide.astro";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
 
 const workPosts = await getCollection("work");
@@ -11,32 +13,39 @@ const description = "個人開発したものの一覧です。";
 <MainGridLayout
   pageTitle={pageTitle}
   description={description}
+  gridType="list"
 >
-  <div class="stack">
-    {workPosts.map((post) => (
-      <a href={post.data.link} class="card-base card" target="_blank" rel="noreferrer">
-        <div class="card__img">
-          <Image src={post.data.image} alt={post.data.title} />
-        </div>
-        <div class="card__body">
-          <h2 class="card__title">{post.data.title}</h2>
-          <p class="card__desc" set:html={post.data.description} />
-        </div>
-      </a>
-    ))}
+  <div class="side-left">
+    <InfoSide />
   </div>
+
+  <SubArticle>
+    <div class="stack">
+      {workPosts.map((post) => (
+        <a href={post.data.link} class="card" target="_blank" rel="noreferrer">
+          <div class="card__img">
+            <Image src={post.data.image} alt={post.data.title} />
+          </div>
+          <div class="card__body">
+            <h2 class="card__title">{post.data.title}</h2>
+            <p class="card__desc" set:html={post.data.description} />
+          </div>
+        </a>
+      ))}
+    </div>
+  </SubArticle>
 </MainGridLayout>
 
 <style lang="scss">
   .stack {
     > * + * {
-      margin-top: 1rem;
+      margin-top: 3rem;
     }
   }
   .card {
     display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 2rem;
+    grid-template-columns: 1fr 1.8fr;
+    gap: 1.5rem;
     border: 2px solid transparent;
     transition-property: background, border-color;
     transition-duration: 0.4s;
@@ -47,19 +56,18 @@ const description = "個人開発したものの一覧です。";
       grid-template-columns: 1fr;
     }
     @include mixin.hover {
-      background: var(--btn-plain-bg-hover);
-      border-color: var(--primary);
+      background: var(--hover-color);
     }
     &__img {
       img {
-        border-radius: 1rem;
+        border-radius: 0.25rem;
         overflow: hidden;
       }
     }
     &__title {
-      font-size: 2rem;
-      @include mixin.mobile {
-        font-size: 1.5rem;
+      font-size: 1.25rem;
+      @include mixin.phone {
+        font-size: 1.1rem;
       }
     }
     &__desc {

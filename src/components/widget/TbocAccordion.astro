@@ -58,6 +58,7 @@ const toc = generateToc(headings);
 
 <style lang="scss">
   .tboc {
+    margin-top: 1.5rem;
     margin-inline: 2rem;
     margin-bottom: 2rem;
     @include mixin.mobile {
@@ -68,9 +69,10 @@ const toc = generateToc(headings);
       align-items: center;
       justify-content: space-between;
       padding: 0.5rem 1rem;
-      border: 1px solid var(--btn-regular-bg-hover);
-      @include mixin.mobile {
-        font-size: 0.875rem;
+      border: 1px solid var(--border-color);
+
+      @include mixin.phone {
+        padding-block: 0.4rem;
       }
     }
     &__text {
@@ -78,6 +80,11 @@ const toc = generateToc(headings);
       align-items: center;
       gap: 0.5rem;
       font-weight: 500;
+
+      @include mixin.phone {
+        font-size: 0.875rem;
+      }
+
       &::before {
         content: '';
         display: block;
@@ -93,11 +100,11 @@ const toc = generateToc(headings);
         }
       }
     }
+
     &[open] {
       .tboc__title {
         border-bottom-right-radius: 0px;
         border-bottom-left-radius: 0px;
-        border-color: var(--primary);
       }
       .tboc__icon {
         margin-top: 0.5rem;
@@ -117,20 +124,20 @@ const toc = generateToc(headings);
       }
     }
     &__body {
-      padding: 0.5rem 2.5rem 1rem;
-      border: 1px solid var(--primary);
+      padding-block: 0.5rem 1rem;
+      padding-inline: 2rem 1rem;
+      border: 1px solid var(--border-color);
       border-top: none;
-      border-bottom-right-radius: 0.5rem;
-      border-bottom-left-radius: 0.5rem;
+      border-bottom-right-radius: 0.25rem;
+      border-bottom-left-radius: 0.25rem;
       @include mixin.mobile {
-        padding-inline: 2rem 1rem;
       }
     }
     &__list {
       > * + * {
-        margin-top: 0.5rem;
-        @include mixin.mobile {
-          margin-top: 0.25rem;
+        margin-top: 0.25rem;
+        @include mixin.phone {
+          margin-top: 0.15rem;
         }
       }
       ul {
@@ -142,12 +149,8 @@ const toc = generateToc(headings);
       list-style: inherit;
     }
     &__link {
-      transition: color 0.2s;
-      @include mixin.mobile {
-        font-size: 0.875rem;
-      }
-      @include mixin.hover {
-        color: var(--primary);
+      @include mixin.phone {
+        font-size: var(--fz-base);
       }
     }
   }

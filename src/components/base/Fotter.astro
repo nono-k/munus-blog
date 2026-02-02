@@ -17,14 +17,19 @@ const currentYear = new Date().getFullYear();
     justify-content: flex-end;
     column-gap: 1rem;
     padding: 0.25rem;
+    border-top: 1px solid var(--border-color);
     &__link-wrap {
       display: flex;
       gap: 0.75rem;
       font-size: var(--fz-base);
+
+      @include mixin.phone {
+        font-size: 0.65rem;
+      }
     }
     small {
       @include mixin.mobile {
-        font-size: 0.75rem;
+        font-size: 0.6rem;
       }
     }
     small a {

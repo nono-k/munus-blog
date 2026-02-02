@@ -58,6 +58,7 @@ button {
   font: inherit;
   color: inherit;
   background: none;
+  cursor: pointer;
 }
 
 table {
@@ -72,16 +73,6 @@ table {
   td {
     padding: 0.375rem 0.8125rem;
     border: 1px solid #3d444d;
-  }
-}
-
-a,
-button,
-input,
-textarea,
-summary {
-  &:focus {
-    outline-color: var(--primary);
   }
 }
 

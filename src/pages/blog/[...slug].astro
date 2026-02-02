@@ -91,6 +91,7 @@ const blogOgp = entry.data.ogp ||`/api/og/${entry.slug}.png`;
 <style lang="scss">
 
   .article {
+    padding-bottom: 2.5rem;
   }
 
   .article-container {
@@ -110,15 +111,11 @@ const blogOgp = entry.data.ogp ||`/api/og/${entry.slug}.png`;
   .adLink-info {
     background: linear-gradient(135deg,transparent 25%,rgba(0,0,0,.05) 25%,rgba(0,0,0,.05) 50%,transparent 50%,transparent 75%,rgba(0,0,0,.05) 75%,rgba(0,0,0,.05));
     background-size: 4px 4px;
-    padding: 0.5rem;
+    padding: 0.25rem 0.5rem;
     text-align: center;
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     margin-top: 1rem;
-    margin-inline: 2rem;
-    @include mixin.mobile {
-      margin-inline: -1rem;
-      font-size: 0.75rem;
-    }
+    margin-bottom: 2rem;
   }
 
   .post-book-area {

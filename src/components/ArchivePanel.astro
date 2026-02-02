@@ -28,7 +28,7 @@ function formatDate(date: Date) {
   return `${month}-${day}`
 }
 ---
-<div class="card-base archive">
+<div class="archive">
   {Array.from(archives.keys()).map(year => (
     <div class="archive__item">
       <div class="archive__year">
@@ -57,20 +57,22 @@ function formatDate(date: Date) {
     @include mixin.mobile {
       padding: 1rem 0.5rem 1.5rem;
     }
+    &__item {
+      & + & {
+        margin-top: 2rem;
+      }
+    }
     &__year {
       display: grid;
       grid-template-columns: 80px 80px 1fr;
       align-items: center;
-      height: 3.75rem;
       @include mixin.mobile {
         grid-template-columns: 15% 10% 75%;
       }
       h2 {
         text-align: right;
         font-weight: 500;
-        @include mixin.mobile {
-          font-size: 1.25rem;
-        }
+        font-size: 1.25rem;
       }
     }
     &__list {
@@ -84,7 +86,7 @@ function formatDate(date: Date) {
       width: 0.75rem;
       height: 0.75rem;
       border-radius: 50%;
-      border: 2px solid var(--primary);
+      border: 2px solid var(--border-color);
       margin-inline: auto;
     }
     &__dot {
@@ -92,7 +94,7 @@ function formatDate(date: Date) {
       width: 0.25rem;
       height: 0.25rem;
       border-radius: .25rem;
-      background: var(--primary);
+      background: var(--border-color);
       margin-inline: auto;
       position: relative;
       transition-property: height;
@@ -125,8 +127,7 @@ function formatDate(date: Date) {
         height: auto;
       }
       @include mixin.hover {
-        background: var(--btn-plain-bg-hover);
-        color: var(--primary);
+        background: var(--hover-color);
         .archive__dot {
           height: 1.25rem;
         }

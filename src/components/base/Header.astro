@@ -27,7 +27,7 @@ const { title } = Astro.props;
         </span>
       </h1>
     </a>
-    <p class="header__lead">
+    <p class="header__lead text-ellipsis">
       { title ? title : 'The limits of my ... mean the limits of my ...'}
     </p>
     <Search />
@@ -81,6 +81,9 @@ const { title } = Astro.props;
     }
     &__lead {
       padding-left: 1rem;
+      @include mixin.phone {
+        display: none;
+      }
     }
   }
 </style>

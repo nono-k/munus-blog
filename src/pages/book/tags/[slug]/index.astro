@@ -79,17 +79,16 @@ const description = `タグ「${name}」本の一覧です。`;
       flex-direction: column;
       row-gap: 0.5rem;
       @include mixin.hover {
-        .book__card-img {
-          border-color: var(--primary);
-        }
-        .book__card-title {
-          color: var(--primary);
+        .book__card-img-wrap {
+          background-color: var(--hover-color);
         }
       }
     }
     &__card-img-wrap {
       border: 1px solid var(--border-color);
       padding: 0.75rem;
+      transition-property: background-color;
+      transition-duration: 0.3s;
     }
     &__card-img {
       display: flex;

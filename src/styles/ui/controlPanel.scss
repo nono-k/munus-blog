@@ -1,16 +1,23 @@
+@use '../mixin.scss'as mixin;
+
 .controlPanel {
   display: grid;
   grid-template-columns: var(--side-width) 1fr;
+  background: #dcdad3;
+  border-top: 1px solid var(--border-color);
+
+  @include mixin.phone {
+    grid-template-columns: 1fr;
+  }
 }
 
 .controlPanel-side {
-  border-bottom: 1px solid var(--border-color);
   border-right: 2px solid #cbc9c3;
+  background: var(--page-bg);
 
   &__header {
     font-size: var(--fz-base);
     background: #dcdad3;
-    border-top: 1px solid #a2a19e;
     border-bottom: 1px solid #a2a19e;
     display: flex;
     height: var(--title-header-height);
@@ -25,12 +32,30 @@
     display: flex;
     border-left: 1px solid #a2a19e;
 
+    @include mixin.phone {
+      display: none;
+    }
+
     button {
       width: 1.5rem;
       border-top: 3px solid rgb(236, 235, 229);
       border-right: 3px solid rgb(196, 194, 188);
       border-bottom: 3px solid rgb(175, 173, 168);
       border-left: 3px solid rgb(234, 232, 226);
+
+      @media (any-hover: hover) {
+        &:hover {
+          background: #d2d0c9;
+        }
+      }
+
+      &:active {
+        padding-top: 1px;
+        border-top: 3px solid rgb(152, 151, 147);
+        border-right: 3px solid rgb(205, 204, 199);
+        border-bottom: 3px solid rgb(209, 208, 203);
+        border-left: 3px solid rgb(170, 169, 164);
+      }
     }
   }
 
@@ -39,6 +64,10 @@
     flex-direction: column;
     align-items: end;
     height: calc(100% - var(--title-header-height));
+
+    @include mixin.phone {
+      display: none;
+    }
   }
 
   &__link {
@@ -59,6 +88,10 @@
     display: flex;
     transition-property: transform;
     transition-duration: 0.3s;
+
+    @include mixin.phone {
+      flex-direction: column;
+    }
   }
 
   &__link-wrap {
@@ -68,6 +101,15 @@
     display: flex;
     align-items: flex-end;
     background: #dcdad3;
+
+    @include mixin.phone {
+      width: 100%;
+      height: auto;
+      background: var(--page-bg);
+      justify-content: flex-end;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
   }
 
   &__link {
@@ -77,6 +119,11 @@
     font-size: var(--fz-base);
     margin-left: 1rem;
     margin-bottom: 0.5rem;
+
+    @include mixin.phone {
+      margin-left: 0;
+      margin-right: 1.25rem;
+    }
   }
 }
 
@@ -85,12 +132,32 @@
   height: 16.25rem;
   flex-shrink: 0;
   overflow: hidden;
-  border-bottom: 1px solid var(--border-color);
+  background: var(--page-bg);
   border-right: 1px solid var(--border-color);
+
+  @include mixin.phone {
+    width: 100%;
+    height: auto;
+  }
 
   &__link {
     display: block;
     height: 100%;
+
+    @include mixin.phone {
+      display: flex;
+      align-items: center;
+      margin-left: 1rem;
+      padding-block: 0.15rem;
+
+      &::before {
+        content: '';
+        width: 3px;
+        height: 3px;
+        background: var(--black);
+        border-radius: 50%;
+      }
+    }
   }
 
   &__title-wrap {
@@ -99,11 +166,22 @@
     height: var(--title-header-height);
     border-bottom: 1px solid var(--border-color);
     background: #dcdad3;
+
+    @include mixin.phone {
+      border-bottom: none;
+      background: transparent;
+      height: auto;
+    }
   }
 
   &__title {
     font-size: var(--fz-base);
     padding: 0.25rem 0.5rem;
+
+    @include mixin.phone {
+      white-space: wrap !important;
+      overflow: visible !important;
+    }
   }
 
   &__icon {
@@ -112,5 +190,9 @@
     align-items: center;
     width: 1.5rem;
     border-left: 1px solid var(--border-color);
+
+    @include mixin.phone {
+      display: none;
+    }
   }
 }

@@ -6,12 +6,6 @@
   }
 }
 
-@include mixin.large-2 {
-  .for-large-2 {
-    display: none !important;
-  }
-}
-
 @include mixin.mobile {
   .for-large {
     display: none !important;
@@ -36,4 +30,8 @@
 .u-header-height-area {
   height: var(--title-header-height);
   border-bottom: 1px solid var(--border-color);
+
+  @include mixin.phone {
+    display: none;
+  }
 }

@@ -36,9 +36,11 @@ class ControlPanelInstance {
       '.controlPanel-side__btn.-next',
     ) as HTMLButtonElement;
 
-    this.setup();
-    this.bind();
-    this.update();
+    if (this.prevBtn && this.nextBtn) {
+      this.setup();
+      this.bind();
+      this.update();
+    }
   }
 
   private setup() {

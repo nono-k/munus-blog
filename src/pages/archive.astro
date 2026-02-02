@@ -1,5 +1,6 @@
 ---
 import ArchivePanel from "@/components/ArchivePanel.astro";
+import InfoSide from "@/components/widget/InfoSide.astro";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
 import { getSortedBlogs } from "@/utils/content-utils";
 
@@ -11,6 +12,11 @@ const description = "Archive一覧";
 <MainGridLayout
   pageTitle={pageTitle}
   description={description}
-  >
+  gridType="list"
+>
+  <div class="side-left">
+    <InfoSide />
+  </div>
+
   <ArchivePanel posts={posts} />
 </MainGridLayout>

@@ -27,7 +27,17 @@
 }
 
 .side-left {
+  @include mixin.mobile {
+    display: none;
+  }
+
   &::before {
     right: 0;
+  }
+}
+
+.side-right {
+  @include mixin.phone {
+    display: none;
   }
 }

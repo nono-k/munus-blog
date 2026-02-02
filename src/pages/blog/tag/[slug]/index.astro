@@ -1,0 +1,48 @@
+---
+import PostCard from "@/components/PostCard.astro";
+import { tagsList } from "@/data/blog/tags";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { getTagList } from "@/utils/content-utils";
+
+interface Props {
+  name: string;
+  slug: string;
+}
+
+export async function getStaticPaths() {
+  return tagsList.map(tag => {
+    const { name, slug } = tag;
+    return {
+      params: { slug },
+      props: { name, slug }
+    }
+  })
+}
+
+const { name, slug } = Astro.props;
+const blogs = await getTagList(name);
+---
+
+<MainGridLayout
+  pageTitle={name}
+  description={`${name}タグの記事一覧`}
+>
+
+  <div class="grid">
+    {blogs.map((post) => (
+      <PostCard post={post} />
+    ))}
+  </div>
+
+</MainGridLayout>
+
+<style lang="scss">
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18.5rem, 1fr));
+
+    @include mixin.phone {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

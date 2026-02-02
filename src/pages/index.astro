@@ -5,9 +5,9 @@ import ControlPanel from "@/components/widget/ControlPanel/ControlPanel.astro";
 import { COUNT_PER_PAGE } from "@/config";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
 import { getBooks } from "@/scripts/library/microcms";
-import { getMonthlyReportList, getSortedBlogs, getTagList } from "@/utils/content-utils";
+import { getMonthlyReportList, getUpdateBlogs } from "@/utils/content-utils";
 
-const allBlogPosts = await getSortedBlogs();
+const allBlogPosts = await getUpdateBlogs();
 const reportData = await getMonthlyReportList();
 const books = await getBooks();
 ---
@@ -15,7 +15,7 @@ const books = await getBooks();
 <MainGridLayout>
   <ControlPanel
     title="NEW BLOG"
-    page={allBlogPosts.slice(0, 6)}
+    page={allBlogPosts.slice(0, 10)}
     link="/blog/"
   />
 
@@ -27,7 +27,7 @@ const books = await getBooks();
 
   <BookControlPanel
     title="読んだ本リスト"
-    books={books.slice(0, 6)}
+    books={books.slice(0, 10)}
     link="/book/"
   />
 
