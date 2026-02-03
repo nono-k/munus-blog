@@ -1,25 +1,34 @@
+import { formatDateToYYYYMMDD } from '@/utils/date-utils';
 import { loadDefaultJapaneseParser } from 'budoux';
 import satori from 'satori';
 import sharp from 'sharp';
 
 const parser = loadDefaultJapaneseParser();
 
-export async function getOgImage(title: string) {
+export async function getOgImage(title: string, tags?: string[], date?: Date) {
   const fontTitle = (await getFontData('Kiwi+Maru')) as ArrayBuffer;
   const fontTitleEn = (await getFontData('IBM+Plex+Mono')) as ArrayBuffer;
   const fontSiteName = (await getFontData('Genos')) as ArrayBuffer;
 
   const words = parser.parse(title);
+  const tagElements = tags?.map(tag => `${tag}`) ?? [];
+  const dateString = date ? formatDateToYYYYMMDD(date) : 'N/A';
 
   const svg = await satori(
     <div
       style={{
         display: 'flex',
-        padding: 48,
+        paddingTop: 96,
+        paddingBottom: 48,
+        paddingLeft: 96,
+        paddingRight: 96,
         height: '100%',
+        backgroundColor: '#f0eee7',
         backgroundImage:
-          ' linear-gradient(-45deg, #355C7D 0%, #6C5B7B 50%, #C06C84 100%)',
-        color: '#000',
+          'linear-gradient(#dcdad3 1px, transparent 1px), linear-gradient(to right, #dcdad3 1px, transparent 1px)',
+        backgroundSize: '20px 20px',
+        backgroundPosition: '-14px 14px',
+        color: '#2e2e2e',
       }}
     >
       <div
@@ -27,20 +36,18 @@ export async function getOgImage(title: string) {
           height: '100%',
           width: '100%',
           display: 'flex',
-          justifyContent: 'space-between',
           flexDirection: 'column',
-          backgroundColor: 'white',
-          padding: 48,
-          borderRadius: 12,
         }}
       >
         <div
           style={{
-            fontSize: 56,
+            fontSize: 48,
             maxWidth: 1000,
             fontWeight: 500,
             display: 'flex',
             flexWrap: 'wrap',
+            paddingBottom: 16,
+            borderBottom: '1px solid #2e2e2e',
           }}
         >
           {words.map(word => {
@@ -51,35 +58,56 @@ export async function getOgImage(title: string) {
             );
           })}
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', marginTop: 16, gap: 40 }}>
           <div
             style={{
-              fontSize: 30,
+              fontSize: 24,
               fontWeight: 400,
               display: 'flex',
               alignItems: 'center',
             }}
           >
-            <img
-              src='https://avatars.githubusercontent.com/u/142199384?s=400&u=3d47e6ba7fd3d1232c1bcd2c8d29af777e28cca2&v=4'
-              width={80}
-              height={80}
-              alt=''
-              style={{ borderRadius: 9999, marginRight: 20 }}
-            />
-            かめのの
+            公開日:
+            <span style={{ marginLeft: 12, color: '#555555' }}>
+              {dateString}
+            </span>
           </div>
           <div
             style={{
-              fontSize: 64,
-              fontFamily: 'Genos',
-              fontWeight: 500,
-              lineHeight: 1,
-              alignSelf: 'flex-end',
+              fontSize: 24,
+              fontWeight: 400,
+              display: 'flex',
+              alignItems: 'center',
             }}
           >
-            Munus
+            Tags:
+            <div
+              style={{
+                fontSize: 24,
+                fontWeight: 400,
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              {tagElements.map(tag => (
+                <span key={tag} style={{ marginLeft: 12, color: '#555555' }}>
+                  #{tag}
+                </span>
+              ))}
+            </div>
           </div>
+        </div>
+        <div
+          style={{
+            fontSize: 64,
+            fontFamily: 'Genos',
+            fontWeight: 500,
+            lineHeight: 1,
+            alignSelf: 'flex-end',
+            marginTop: 'auto',
+          }}
+        >
+          Munus
         </div>
       </div>
     </div>,
