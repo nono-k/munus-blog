@@ -52,6 +52,10 @@ const blogOgp = entry.data.ogp ||`/api/og/${entry.slug}.png`;
 
         <h1 class="title">{title}</h1>
 
+        <div class="header__wrap">
+          <PostMeta date={pubDate} updateAt={updateDate} tags={tags}  />
+        </div>
+
         { isAdLink && (
           <div class="adLink-info">
             記事内に商品プロモーションを含む場合があります
@@ -102,6 +106,13 @@ const blogOgp = entry.data.ogp ||`/api/og/${entry.slug}.png`;
 
   .header {
     margin-bottom: 0.75rem;
+
+    &__wrap {
+      display: none;
+      @include mixin.phone {
+        display: block;
+      }
+    }
   }
 
   .title {

@@ -1,5 +1,4 @@
 ---
-import type { CollectionEntry } from "astro:content";
 import BookControlPanel from "@/components/widget/ControlPanel/BookControlPanel.astro";
 import ControlPanel from "@/components/widget/ControlPanel/ControlPanel.astro";
 import { COUNT_PER_PAGE } from "@/config";
@@ -8,6 +7,7 @@ import { getBooks } from "@/scripts/library/microcms";
 import { getMonthlyReportList, getUpdateBlogs } from "@/utils/content-utils";
 
 const allBlogPosts = await getUpdateBlogs();
+const glslPosts = allBlogPosts.filter(post => post.data.tags?.includes("GLSL"));
 const reportData = await getMonthlyReportList();
 const books = await getBooks();
 ---
@@ -20,9 +20,15 @@ const books = await getBooks();
   />
 
   <ControlPanel
+    title="GLSL"
+    page={glslPosts}
+    link="/blog/tag/glsl/"
+  />
+
+  <ControlPanel
     title="月報"
     page={reportData}
-    link="/blog/tag/monthly-report"
+    link="/blog/tag/monthly-report/"
   />
 
   <BookControlPanel
