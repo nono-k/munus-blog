@@ -62,7 +62,7 @@
         --stack-space: 1rem;
       }
     }
-    h2, h3 {
+    h2, h3, h4 {
       font-weight: 500;
       @include mixin.hover {
         .anchor {
@@ -92,7 +92,6 @@
       --stack-space: 1.5rem
     }
     h4 {
-      font-size: 1.25rem;
       display: flex;
       align-items: center;
       column-gap: 0.5rem;
@@ -112,11 +111,11 @@
     }
     p {
       & + p {
-        margin-top: 2.5rem;
+        // margin-top: 2.5rem;
 
-        @include mixin.phone {
-          margin-top: 1.5rem;
-        }
+        // @include mixin.phone {
+        //   margin-top: 1.5rem;
+        // }
       }
     }
     ul, ol {
