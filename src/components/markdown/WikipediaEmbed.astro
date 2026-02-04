@@ -28,10 +28,8 @@ const data = await response.json();
   .wikipedia {
     display: grid;
     grid-template-columns: 140px 1fr;
-    color: oklch(1 0.0 0);
     text-decoration: none;
-    background: var(--code-bg);
-    border: 1px solid var(--primary);
+    border: 1px solid var(--border-color);
     padding: 0;
     overflow: hidden;
     transition: opacity 0.3s;
@@ -70,6 +68,10 @@ const data = await response.json();
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
       line-clamp: 2;
+
+      @include mixin.phone {
+        font-size: 0.6rem;
+      }
     }
     &__icon-wrap {
       display: grid;
@@ -87,6 +89,9 @@ const data = await response.json();
     }
     &__icon-text {
       font-size: 0.75rem;
+      @include mixin.phone {
+        font-size: 0.6rem;
+      }
     }
   }
 </style>
