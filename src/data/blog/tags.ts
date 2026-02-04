@@ -9,7 +9,7 @@ export const tagsList: Tags[] = [
   { name: 'フォント', slug: 'font' },
   { name: '実績紹介', slug: 'works' },
   { name: 'Web', slug: 'web' },
-  { name: 'シェーダ', slug: 'shader' },
+  { name: 'GLSL', slug: 'glsl' },
   { name: '数学', slug: 'math' },
   { name: '勉強ログ', slug: 'study-log' },
   { name: 'Astro', slug: 'astro' },
