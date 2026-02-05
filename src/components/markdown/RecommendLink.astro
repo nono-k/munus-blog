@@ -38,9 +38,8 @@ const { text = 'あわせて読みたい', items } = Astro.props;
       position: absolute;
       top: -1.5rem;
       left: 1rem;
-      background-color: var(--white);
+      background-color: var(--page-bg);
       padding: 0.5rem;
-      font-size: 1rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -70,7 +69,6 @@ const { text = 'あわせて読みたい', items } = Astro.props;
       padding: 0;
       overflow: hidden;
       transition-property: background-color;
-      transition-timing-function: cubic-bezier(.4, 0, .2, 1);
       transition-duration: .15s;
       @include mixin.large {
         padding-right: 1rem;
@@ -80,11 +78,11 @@ const { text = 'あわせて読みたい', items } = Astro.props;
         row-gap: 0.5rem;
       }
       @include mixin.hover {
-        background-color: var(--btn-plain-bg-hover);
+        background-color: var(--hover-color);
       }
     }
     &__title {
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 700;
       @include mixin.phone {
         padding: 0 1rem 1rem;
