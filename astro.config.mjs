@@ -23,7 +23,7 @@ import { siteConfig } from './src/config';
 const { siteUrl } = siteConfig;
 
 const codeOptions = {
-  theme: 'catppuccin-frappe',
+  theme: 'min-light',
   defaultLang: 'plaintext',
   transformers: [
     transformerCopyButton({

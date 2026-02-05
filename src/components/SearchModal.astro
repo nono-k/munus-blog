@@ -5,6 +5,17 @@ import '@pagefind/default-ui/css/ui.css';
   <div id="search"></div>
 </div>
 
+<style lang="scss" is:global>
+  .modal {
+    .pagefind-ui__results-area {
+      background: var(--page-bg);
+    }
+    .pagefind-ui__result {
+      padding-inline: 1rem;
+    }
+  }
+</style>
+
 <style lang="scss">
   .modal {
     width: 100%;
@@ -13,7 +24,7 @@ import '@pagefind/default-ui/css/ui.css';
     display: flex;
     flex-direction: column;
     border-radius: 0.5rem;
-    --pagefind-ui-background: var(--card-bg);
+    --pagefind-ui-background: var(--page-bg);
     --pagefind-ui-border: var(--text-color);
     --pagefind-ui-border-width: 1px;
     --pagefind-ui-text: var(--text-color);

@@ -7,18 +7,15 @@ import '@fontsource/kiwi-maru';
 
 import '@/styles/styles.scss';
 
-import BackgroundImage from '@/components/base/BackgroundImage.astro';
 import Header from '@/components/base/Header.astro';
 import Meta from '@/components/base/Meta.astro';
 
 interface Props {
   pageTitle: string;
-  pageLead?: string;
-  omitBackgroundHeading?: boolean;
 }
 
 const props = Astro.props;
-const { pageTitle, pageLead, omitBackgroundHeading } = props;
+const { pageTitle } = props;
 ---
 
 <!doctype html>
@@ -27,12 +24,7 @@ const { pageTitle, pageLead, omitBackgroundHeading } = props;
 		<Meta {...props} />
 	</head>
 	<body>
-    <Header />
-    <BackgroundImage
-      title={pageTitle}
-      lead={pageLead}
-      omitBackgroundHeading={omitBackgroundHeading}
-    />
+    <Header title={pageTitle} />
 		<slot />
 	</body>
 </html>
@@ -42,3 +34,8 @@ const { pageTitle, pageLead, omitBackgroundHeading } = props;
 		font-family: 'IBM Plex Mono', 'Kiwi Maru', sans-serif;
 	}
 </style>
+
+<script>
+  import { initScripts } from '@/scripts/scripts.ts';
+  initScripts();
+</script>

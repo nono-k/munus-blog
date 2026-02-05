@@ -40,16 +40,25 @@ export type Tags = {
   slug: string;
 };
 
+export type Info = {
+  title: string;
+  slug: string;
+  body?: string;
+};
+
 export type BlogPostData = {
   body: string;
   title: string;
   pubDate: Date;
-  image?: string;
+  updateDate?: Date;
+  image?: ImageMetadata;
   ogp?: string;
   category: string;
   tags: string[];
   description: string;
-  draft: boolean;
+  pin?: boolean;
+  draft?: boolean;
+  slug: string;
   prevTitle?: string;
   prevSlug?: string;
   nextTitle?: string;

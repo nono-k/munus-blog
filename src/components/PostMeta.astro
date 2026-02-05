@@ -1,24 +1,20 @@
 ---
-import { categoryList } from "@/data/blog/category";
 import { tagsList } from "@/data/blog/tags";
 import { formatDateToYYYYMMDD } from "@/utils/date-utils";
-import { Icon } from "astro-icon/components";
 
 interface Props {
   date: Date;
-  updateAt?: string | null;
-  category: string;
+  updateAt?: Date | null;
   tags: string[];
 }
 
-const { date, updateAt, category, tags } = Astro.props;
+const { date, updateAt, tags } = Astro.props;
 
 const dateString = formatDateToYYYYMMDD(date);
 const hasUpdateAt = updateAt !== null && updateAt !== undefined;
 const updateDateString = hasUpdateAt ? formatDateToYYYYMMDD(new Date(updateAt)) : null;
 const isUpdate = hasUpdateAt && updateDateString !== dateString;
 
-const categorySlug = categoryList.find(cat => cat.name === category)?.slug;
 const getTagSlug = (tag: string) => {
   const tagData = tagsList.find(tagData => tagData.name === tag);
   return tagData?.slug;
@@ -26,100 +22,61 @@ const getTagSlug = (tag: string) => {
 ---
 
 <div class="post-meta">
-  <div class="post-meta__item">
-    <div class="btn-regular post-meta__icon">
-      <Icon name="material-symbols:calendar-today-outline-rounded" />
-    </div>
-    <div class="post-meta__text">{dateString}</div>
-  </div>
-  {isUpdate && (
-    <div class="post-meta__item">
-      <div class="btn-regular post-meta__icon">
-        <Icon name="material-symbols:edit-calendar-outline-rounded" />
-      </div>
-      <div class="post-meta__text">{updateDateString}</div>
-    </div>
-  )}
-  <div class="post-meta__item">
-    <div class="btn-regular post-meta__icon">
-      <Icon name="material-symbols:book-2-outline-rounded" />
-    </div>
-    <a href=`/blog/category/${categorySlug}` class="post-meta__text hover">{category}</a>
-  </div>
-  <div class="post-meta__item">
-    <div class="btn-regular post-meta__icon">
-      <Icon name="material-symbols:tag-rounded" />
-    </div>
+  <div class="post-meta__title">Meta Data</div>
+  <div class="post-meta__content">
+    <div class="post-meta__item">公開日:{dateString}</div>
+    {isUpdate && (
+      <div class="post-meta__item">更新日:{updateDateString}</div>
+    )}
+
     <div class="post-meta__tags">
-      {tags.map((tag, i) => (
-        <div class:list={[{"hidden": i == 0}, "separator"]}>/</div>
-        <a href=`/blog/tag/${getTagSlug(tag)}` class="post-meta__tag hover">{tag}</a>
-        )
-      )}
+      Tags:
+      <div class="post-meta__tags-wrap">
+        {tags.map((tag, i) => (
+          <a href=`/blog/tag/${getTagSlug(tag)}` class="post-meta__tag">#{tag}</a>
+          )
+        )}
+      </div>
     </div>
   </div>
 </div>
 
 <style lang="scss">
   .post-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-left: 1rem;
-    @include mixin.mobile {
-      margin-left: 0;
-      gap: 0.5rem;
-    }
-    &__item {
-      display: flex;
-      gap: 0.4rem;
-    }
-    &__item {
-      display: flex;
-      align-items: center;
-    }
-    &__icon {
-      width: 2rem;
-      height: 2rem;
-      font-size: 1.25rem;
-      pointer-events: none;
-      @include mixin.mobile {
-        width: 1.75rem;
-        height: 1.75rem;
-        font-size: 1rem;
-      }
-    }
-    &__text {
+    font-size: 1rem;
+    @include mixin.phone {
       font-size: 0.875rem;
-      @include mixin.mobile {
-        font-size: 0.75rem;
+    }
+    &__title {
+      padding: 0.25rem 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+      height: var(--title-header-height);
+
+      @include mixin.phone {
+        display: none;
       }
+    }
+    &__content {
+      padding: 0.75rem 0.5rem;
+      border-bottom: 1px solid var(--border-color);
     }
     &__tags {
       display: flex;
-      .hidden {
-        display: none;
-      }
-      .separator {
-        margin-inline: 0.25rem;
-      }
+      column-gap: 0.25rem;
+    }
+    &__tags-wrap {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      column-gap: 0.4rem;
+      row-gap: 0.25rem;
     }
     &__tag {
+      font-family: var(--ff-jp);
+      letter-spacing: -0.05em;
       font-size: 0.875rem;
-      @include mixin.mobile {
-        font-size: 0.75rem;
-      }
-    }
-    &__text, &__tag {
-      &.hover {
-        padding: 0.25rem;
-        border-radius: 0.5rem;
-        transition-property: background, color;
-        transition-duration: 0.3s;
-        @include mixin.hover {
-          background: var(--btn-plain-bg-hover);
-          color: var(--primary);
-        }
+      @include mixin.phone {
+        font-size: 0.8rem;
       }
     }
   }

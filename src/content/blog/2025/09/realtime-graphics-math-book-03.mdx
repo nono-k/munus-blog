@@ -3,9 +3,8 @@ title: 「リアルタイムグラフィックスの数学」勉強ログ - 第3
 slug: realtime-graphics-math-book-03
 pubDate: 2025-09-16
 image: ../../../../assets/images/realtime-graphics-math-book-03.jpg
-category: プログラミング
 tags:
-  - シェーダ
+  - GLSL
   - 数学
   - 勉強ログ
 description: 第3章の値ノイズについての勉強ログ
@@ -15,6 +14,8 @@ isAdLink: true
 import AmazonLink from "@/components/markdown/AmazonLink.astro";
 import RecommendLink from "@/components/markdown/RecommendLink.astro";
 import WikipediaEmbed from "@/components/markdown/WikipediaEmbed.astro";
+
+{/* start */}
 
 ## はじめに
 
@@ -34,6 +35,8 @@ import WikipediaEmbed from "@/components/markdown/WikipediaEmbed.astro";
 ![平面上の正方形の4つの頂点（格子点）](https://res.cloudinary.com/dy8ftemi0/image/upload/v1757604466/realtime-graphics-math-book-03-01_lpzbvm.jpg "平面上の正方形の4つの頂点（格子点）")
 
 平面上の正方形の 4 つの頂点（格子点）を用いて、値ノイズを構成します。各格子点での乱数値、または乱数ベクトルを使って生成されるノイズを**格子ノイズ**と呼びます。格子点の成分は整数になるようにします。点$(x, y)$に対して床値$[]$を使って、$(x, y)$を取り囲むマスの格子点は次の 4 つのベクトルで表します。
+
+{/* end */}
 
 $$
 e_{00} = ([x], [y]),　e_{10} = ([x] + 1, [y])

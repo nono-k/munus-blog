@@ -1,0 +1,43 @@
+@use '../mixin';
+
+.side-title {
+  font-size: var(--fz-base);
+  padding: 0.25rem 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.side-image {
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.side-left,
+.side-right {
+  position: relative;
+
+  &::before {
+    content: '';
+    width: 2px;
+    height: 100%;
+    background: #cbc9c3;
+    position: absolute;
+    top: 0;
+    mix-blend-mode: multiply;
+  }
+}
+
+.side-left {
+  @include mixin.mobile {
+    display: none;
+  }
+
+  &::before {
+    right: 0;
+  }
+}
+
+.side-right {
+  @include mixin.phone {
+    display: none;
+  }
+}

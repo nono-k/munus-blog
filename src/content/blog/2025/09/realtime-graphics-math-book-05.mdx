@@ -3,9 +3,8 @@ title: 「リアルタイムグラフィックスの数学」勉強ログ - 第5
 slug: realtime-graphics-math-book-05
 pubDate: 2025-09-24
 image: ../../../../assets/images/realtime-graphics-math-book-05.jpg
-category: プログラミング
 tags:
-  - シェーダ
+  - GLSL
   - 数学
   - 勉強ログ
 description: 第5章のノイズの調理法についての勉強ログ
@@ -15,6 +14,8 @@ isAdLink: true
 import AmazonLink from "@/components/markdown/AmazonLink.astro";
 import RecommendLink from "@/components/markdown/RecommendLink.astro";
 import WikipediaEmbed from "@/components/markdown/WikipediaEmbed.astro";
+
+{/* start */}
 
 ## はじめに
 
@@ -40,6 +41,8 @@ noise(x) + Gnoise(2x) + G^2noise(4x) + ... + G^knoise(2^kx)
 $$
 
 ここで素材となるノイズ関数 noise(x)はどのような関数でもいいですが、値の範囲を$[-0.5, 0.5]$区画にずらしておきます。このように加工されたノイズ関数は**非整数ブラウン運動**(fractional Brownian motion, fBM)と呼ばれます。
+
+{/* end */}
 
 ノイズ関数として値ノイズを使用した fBM のコードは次のようになります。
 

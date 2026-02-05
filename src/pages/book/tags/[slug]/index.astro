@@ -1,0 +1,115 @@
+---
+import BookSideTagList from "@/components/pages/book/BookSideTagList.astro";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { getBooks, getBooksTags } from "@/scripts/library/microcms";
+
+export async function getStaticPaths() {
+  const { contents: tags} = await getBooksTags();
+
+
+  return tags.map((tag) => ({
+    params: { slug: tag.slug },
+    props: {
+      tagId: tag.id,
+      slug: tag.slug,
+      name: tag.name,
+    },
+  }));
+}
+
+const { tagId, slug, name } = Astro.props;
+
+const books = await getBooks({
+  fields: ['id', 'title', 'cover', 'tags'],
+  filters: `tags[contains]${tagId}`
+});
+
+const pageTitle = `タグ「${name}」本の一覧です。`;
+const description = `タグ「${name}」本の一覧です。`;
+---
+
+<MainGridLayout
+  pageTitle={pageTitle}
+  description={description}
+  gridType="list"
+>
+
+  <div class="side-left">
+    <BookSideTagList />
+  </div>
+
+  <ul class="book__list">
+    {books.map((book) => (
+      <li>
+        <a class="book__card" href={`/book/${book.id}`}>
+          <div class="book__card-img-wrap">
+            <div class="book__card-img">
+              <img src={book.cover} alt={book.title} />
+            </div>
+          </div>
+          <div class="book__card-title">
+            {book.title}
+          </div>
+        </a>
+      </li>
+    ))}
+  </ul>
+</MainGridLayout>
+
+<style lang="scss">
+  .book {
+    &__list {
+      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      column-gap: 0.75rem;
+      row-gap: 1rem;
+      margin-inline: 1.5rem;
+      @include mixin.mobile {
+        grid-template-columns: repeat(4, 1fr);
+        margin-bottom: 2.5rem;
+      }
+      @include mixin.phone {
+        grid-template-columns: repeat(2, 1fr);
+        margin-inline: 0.5rem;
+      }
+    }
+    &__card {
+      display: flex;
+      flex-direction: column;
+      row-gap: 0.5rem;
+      @include mixin.hover {
+        .book__card-img-wrap {
+          background-color: var(--hover-color);
+        }
+      }
+    }
+    &__card-img-wrap {
+      border: 1px solid var(--border-color);
+      padding: 0.75rem;
+      transition-property: background-color;
+      transition-duration: 0.3s;
+    }
+    &__card-img {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      img {
+        max-width: 160px;
+        max-height: 160px;
+        margin-inline: auto;
+        width: auto;
+      }
+    }
+    &__card-title {
+      font-size: 0.75rem;
+      transition: 0.3s;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+    }
+  }
+</style>

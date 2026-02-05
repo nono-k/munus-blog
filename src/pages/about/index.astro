@@ -1,7 +1,9 @@
 ---
+import { Image } from "astro:assets";
+import avatar from "@/assets/images/profile.jpg";
 import MarkdownBody from "@/components/MarkdownBody.astro";
-import SubArticle from "@/components/SubArticle.astro";
 import Figure from "@/components/markdown/Figure.astro";
+import InfoSide from "@/components/widget/InfoSide.astro";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
 
 const posts = await Astro.glob("./about.mdx");
@@ -13,10 +15,38 @@ const { title, description } = frontmatter;
 <MainGridLayout
   pageTitle={title}
   description={description}
-  >
-  <SubArticle>
-    <MarkdownBody>
-      <Content components={{ img: Figure }} />
-    </MarkdownBody>
-  </SubArticle>
+  gridType="post"
+>
+  <div class="side-left">
+    <InfoSide />
+  </div>
+
+  <div class="main">
+    <div class="u-header-height-area"></div>
+    <div class="wrap">
+      <MarkdownBody>
+        <Content components={{ img: Figure }} />
+      </MarkdownBody>
+    </div>
+  </div>
+
+  <div class="side-right">
+    <div class="side-title">Image</div>
+    <div class="side-image">
+      <Image src={avatar} alt="かめのの" />
+    </div>
+  </div>
+
 </MainGridLayout>
+
+<style lang="scss">
+  .wrap {
+    max-width: var(--post-max-width);
+    margin-inline: auto;
+    padding-inline: 1rem;
+    padding-bottom: 2.5rem;
+  }
+  .side-image {
+    padding: 1.5rem;
+  }
+</style>

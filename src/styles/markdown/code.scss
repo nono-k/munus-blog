@@ -14,23 +14,24 @@
     top: -1.5rem;
     left: 0;
     padding: 0.5rem 1rem;
-    background: var(--code-bg);
-    border-top-left-radius: 0.5rem;
-    border-top-right-radius: 0.5rem;
+    background: #dcdad3;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
     font-size: 0.85rem;
     font-weight: 500;
     line-height: 1;
-    color: #c6d0f5;
+    letter-spacing: -0.01em;
   }
 
   pre {
-    border-radius: 0.5rem;
+    background: #dcdad3 !important;
+    border-radius: 0.25rem;
     overflow-x: auto;
   }
 
   pre>code {
     display: grid;
-    border-radius: 0.5rem;
+    border-radius: 0.25rem;
     padding: 1.5rem 0 1.5rem;
     line-height: 1.5;
     font-family: JetBrains Mono Variable, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
@@ -42,8 +43,8 @@
     }
 
     .highlighted {
-      background-color: #2e4c35;
-      border-color: #469458;
+      background-color: rgba(108, 200, 125, 0.2);
+      border-color: rgba(0, 146, 27, .5);
     }
   }
 
@@ -54,14 +55,13 @@
     top: 0.75rem;
     width: 36px;
     height: 36px;
-    background: var(--primary-color-transparent);
+    background: #dcdad3;
     border-radius: 0.5rem;
     transition-property: opacity, background;
     transition-duration: 0.3s;
 
     @include mixin.hover {
-      background: var(--primary);
-      background: oklch(0.7 .15 var(--hue) / 40%);
+      background: var(--black);
     }
   }
 }

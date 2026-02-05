@@ -2,40 +2,35 @@
 import { headerLinks } from "@/config";
 import Hamburger from "../Hamburger.astro";
 import Search from "../Search.astro";
-import ThemeIcon from "../ThemeIcon.astro";
+
+interface Props {
+  title?: string;
+}
+
+const { title } = Astro.props;
 ---
 
 <header class="header">
   <div class="header__inner">
-    <a href="/">
-      <h1 class="header__logo">Munus</h1>
+    <a href="/" class="header__logo">
+      <h1>
+        <span class="line-wrap">
+          <span class="line"></span>
+          <span class="line"></span>
+          <span class="line"></span>
+        </span>
+        Munus
+        <span class="line-wrap">
+          <span class="line"></span>
+          <span class="line"></span>
+          <span class="line"></span>
+        </span>
+      </h1>
     </a>
-    <nav class="header__nav">
-      <ul>
-        {headerLinks.map((link) => (
-          <li class="header__item">
-            <a href={link.url}
-              class:list={["header__nav-link", link.popover && "popover__target"]}
-              >
-              {link.name}
-              {link.popover && <span class="arrow"></span>}
-            </a>
-            {link.popover && (
-              <ul class="popover card-base">
-                {link.popover.map(popover => (
-                  <li>
-                    <a href={popover.url} class="popover__link">{popover.name}</a>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <p class="header__lead text-ellipsis">
+      { title ? title : 'The limits of my ... mean the limits of my ...'}
+    </p>
     <Search />
-    <ThemeIcon />
-    <Hamburger />
   </div>
 </header>
 
@@ -43,157 +38,52 @@ import ThemeIcon from "../ThemeIcon.astro";
   .header {
     position: fixed;
     top: 0;
-    left: 50%;
-    translate: -50% 0;
+    left: 0;
     width: 100%;
-    max-width: var(--page-width);
-    margin-inline: auto;
-    padding-inline: 1rem;
+    border-bottom: 1px solid var(--border-color);
     z-index: 10;
-    transition: translate 0.3s;
-    @include mixin.mobile {
-      padding-inline: 0;
-    }
-    &.hidden {
-      translate: -50% -100%;
-    }
+    font-size: var(--fz-base);
     &__inner {
       height: var(--header-height);
-      background: var(--card-bg);
-      border-bottom-right-radius: 1rem;
-      border-bottom-left-radius: 1rem;
+      background: var(--gray);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-inline: 1rem;
-    }
-    &__nav {
-      position: absolute;
-      left: 50%;
-      translate: -50% 0;
-      @include mixin.mobile {
-        display: none;
-      }
-      ul {
-        display: flex;
-      }
-    }
-    &__nav-link {
-      font-weight: 500;
-      padding: 0.75rem 1rem;
-      border-radius: 1rem;
-      transition-property: background, color;
-      transition-duration: 0.3s;
-      @include mixin.hover {
-        background: var(--btn-plain-bg-hover);
-        color: var(--primary);
-      }
-      .arrow {
-        display: inline-block;
-        margin-left: 0.15rem;
-        width: 0.5rem;
-        height: 0.5rem;
-        border-bottom: 1px solid currentColor;
-        border-right: 1px solid currentColor;
-        rotate: 45deg;
-        translate: 0 -0.12rem;
-        transition-property: rotate;
-        transition-duration: 0.3s;
-      }
-      &:has(+ .popover.active) {
-        .arrow {
-          rotate: -135deg;
-          translate: 0 0.1rem;
-        }
-      }
     }
     &__logo {
-      font-size: 2.5rem;
+      width: var(--side-width);
+      font-size: var(--fz-base);
       font-family: 'Genos Variable', sans-serif;
       font-weight: 500;
       line-height: 1;
-      margin-top: -0.5rem;
+      padding: 1px 8px;
+      border-right: 1px solid var(--border-color);
       @include mixin.mobile {
-        font-size: 2rem;
-        margin-top: -0.25rem;
+      }
+
+      h1 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        column-gap: 9px;
+      }
+
+      .line-wrap {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.175rem;
+      }
+      .line {
+        width: 100%;
+        height: 1px;
+        background: var(--border-color);
       }
     }
-    &__item {
-      position: relative;
-    }
-  }
-  .popover {
-    position: absolute;
-    top: calc(var(--header-height) - 0.75rem);
-    left: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    padding: 0.5rem;
-    --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1);
-    box-shadow: 0 0 #0000, 0 0 #0000, var(--tw-shadow);
-    opacity: 0;
-    visibility: hidden;
-    transition-property: opacity, visibility;
-    transition-duration: 0.3s;
-    &.active {
-      opacity: 1;
-      visibility: visible;
-    }
-    &__link {
-      display: block;
-      font-size: 0.875rem;
-      font-weight: 500;
-      padding: 0.5rem 0.75rem;
-      border-radius: 0.5rem;
-      transition-property: background, color;
-      transition-duration: 0.3s;
-      @include mixin.hover {
-        background: var(--btn-plain-bg-hover);
-        color: var(--primary);
+    &__lead {
+      padding-left: 1rem;
+      @include mixin.phone {
+        display: none;
       }
     }
   }
 </style>
-
-<script>
-  const popoverTargets = document.querySelectorAll('.popover__target');
-
-  popoverTargets.forEach(target => {
-    const popover = target.nextElementSibling;
-    target.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      popover?.classList.toggle('active');
-    });
-  });
-
-  document.addEventListener('click', (e) => {
-    document.querySelectorAll('.popover').forEach(popover => {
-      if (popover.classList.contains('active')) {
-        popover.classList.remove('active');
-      }
-    })
-  });
-
-  function headerScroll() {
-    const header = document.querySelector('.header');
-    const headerTarget = document.querySelector('.main');
-    let lastScrollY = window.scrollY;
-
-    if (!header || !headerTarget) return;
-
-    const onScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY < lastScrollY) {
-        header?.classList.remove('hidden');
-      } else if (currentScrollY > 180) {
-        header.classList.add('hidden');
-      }
-      lastScrollY = currentScrollY;
-    }
-
-    window.addEventListener('scroll', onScroll);
-  }
-
-  headerScroll();
-</script>

@@ -2,11 +2,12 @@
 title: Astroで作ったブログで更新日時を自動で取得する方法
 slug: astro-update-date
 pubDate: 2026-01-25
-category: 雑記
 tags:
   - Astro
 description: 手動で設定しなくていいので楽
 ---
+
+{/* start */}
 
 ## はじめに
 
@@ -31,6 +32,8 @@ git log -1 --format=%ai -- filePath
 ```
 
 オプションについてはコメントの通りになります。
+
+{/* end */}
 
 それでは Git 関連のユーティリティ関数を作成します。
 このブログでは`src/utils`に`git.ts`を作成しました。

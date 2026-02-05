@@ -3,9 +3,8 @@ title: 「リアルタイムグラフィックスの数学」勉強ログ - 第7
 slug: realtime-graphics-math-book-07
 pubDate: 2025-10-05
 image: ../../../../assets/images/realtime-graphics-math-book-07.jpg
-category: プログラミング
 tags:
-  - シェーダ
+  - GLSL
   - 数学
   - 勉強ログ
 description: 第7章の距離とSDFについての勉強ログ
@@ -15,6 +14,8 @@ isAdLink: true
 import AmazonLink from "@/components/markdown/AmazonLink.astro";
 import RecommendLink from "@/components/markdown/RecommendLink.astro";
 import WikipediaEmbed from "@/components/markdown/WikipediaEmbed.astro";
+
+{/* start */}
 
 ## はじめに
 
@@ -36,6 +37,8 @@ import WikipediaEmbed from "@/components/markdown/WikipediaEmbed.astro";
 円の SDF について考えてみます。円は中心点 C と半径 r から決まりますが、C からの距離が r より小さければ円の「内部」、r より大きければ円の「外部」となり、r と等しい場合は円の「境界」です。平面上の点 P に対して、円の外部では値は正、内部では値が負とします。これが円の SDF を定めます。
 
 ![円のSDF](https://res.cloudinary.com/dy8ftemi0/image/upload/v1759419611/realtime-graphics-math-book-07-01_xxyjyj.jpg "円のSDF")
+
+{/* end */}
 
 ここで、円の SDF の等高線を描くようにします。SDF の特徴は、**等間隔に値をとると、その値の等高線も等間隔にあらわれる**ことです。サンプルコードでは$f(x, y) = (x^2 + y^2)^d - 1$として間隔$a$ごとに$f(x, y) = 0, \pm{a}, \pm{2a}, ...$を満たす等高線を描きます。
 

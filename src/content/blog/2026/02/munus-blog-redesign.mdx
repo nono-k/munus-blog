@@ -1,0 +1,76 @@
+---
+title: ブログのデザインを大幅に変更しました
+slug: munus-blog-redesign
+pubDate: 2026-02-06
+image: ../../../../assets/images/ogp.png
+tags:
+  - ブログ
+  - Astro
+description: しばらくはこれでやっていく
+pin: true
+---
+
+{/* start */}
+
+## はじめに
+
+このブログのデザインを大幅に変更しました。
+
+![変更後のTopページ](https://res.cloudinary.com/dy8ftemi0/image/upload/v1770093590/munus-blog-redesign-01_czahqh.jpg "変更後のTopページ")
+
+変更した経緯としては、2つあります。
+以前のブログのデザインは、Astroのfuwariテーマを参考にして作成していたのですが、fuwariベースの派生テーマが公式の方でも増えてきており、ブログのデザインが他の人と被るのが嫌だなとなり思い切ってデザインを大幅に変更してみました。
+
+また、以前は記事にカテゴリーを設定していたのですが、この雑記ブログにはタグのみの方が記事の分類として迷いがなくなって書きやすくなると感じたので、カテゴリーを廃止して一覧性をよくしようと思いました。
+
+この記事では、デザインを変更したAstro製のこのブログについて、サムネイルに記事の一部を表示する方法を紹介します。
+
+{/* end */}
+
+## サムネイルに記事の本文の一部を表示する
+
+記事の一覧にサムネイルがないと寂しいのですが、毎回サムネイルを準備するのは面倒です。そこで、[しずかなインターネット](https://sizu.me/home)の記事一覧を参考に、記事の本文の一部をサムネイルとして表示する方法を実装しました。
+
+Astroでの実装方法については、下記の記事を参考にしてます。
+
+https://www.paulie.dev/posts/2023/09/how-to-create-excerpts-with-astro/
+
+`getCollection`で取得した記事の`body`プロパティには、記事の本文がMarkdown形式で入っているので、これを`markdown-it`を使用しHTMLに変換して表示させます。
+
+このMarkdownをHTMLに変換する関数を`src/scripts/MarkdownToHtml.ts`に作成しました。
+
+```ts title="MarkdownToHtml.ts"
+import markdownit from "markdown-it";
+
+export function renderExcerpt(markdown: string) {
+  const match = markdown.match(
+    /\{\s*\/\*\s*start\s*\*\/\s*\}([\s\S]*?)\{\s*\/\*\s*end\s*\*\/\s*\}/,
+  );
+
+  if (!match) return "";
+
+  const md = new markdownit();
+  md.renderer.rules.link_open = () => "";
+  md.renderer.rules.link_close = () => "";
+
+  return md.render(match[1].trim());
+}
+```
+
+本当は、記事の本文から何文字を指定して抜き出して表示する方法がいいのですが、制御が難しそうなので、記事の本文の中に`{/* start */}`と`{/* end */}`で囲んだ部分を抜き出して表示する方法にしました。
+
+また、記事一覧に記事で書かれているリンクはaタグで表示されたくないので、下記のようにすることでpタグで出力されるようにしています。
+
+```ts title="MarkdownToHtml.ts"
+const md = new markdownit();
+md.renderer.rules.link_open = () => "";
+md.renderer.rules.link_close = () => "";
+```
+
+`markdown-it`でHTMLに変換する際の問題点は、独自のMDXコンポーネントがある場合に正しく変換されないことです。この部分はいったんそのまま出力するようにしてますが、いずれ独自コンポーネントの場合は除外するなどの処理を書いて対応したいと思います。
+
+## まとめ
+
+以前のブログのデザインに飽きたので、今回大幅にデザインの変更をしてみました。その際に、サムネイルに記事の本文の一部を表示したので、その方法を紹介しました。
+
+デザインを変更しましたが、一覧性が悪くなった気もするので、しばらく運用してみて、また改善するかもです。

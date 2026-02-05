@@ -10,7 +10,12 @@ export async function getStaticPaths() {
 
 export async function GET({ params }: { params: { slug: string } }) {
   const post = await getEntry('blog', params.slug);
-  const body = await getOgImage(post?.data.title ?? 'No title');
+  const date = post?.data.pubDate;
+  const body = await getOgImage(
+    post?.data.title ?? 'No title',
+    post?.data.tags ?? [],
+    date,
+  );
 
   return new Response(body);
 }

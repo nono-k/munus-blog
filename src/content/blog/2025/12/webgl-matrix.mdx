@@ -2,11 +2,12 @@
 title: WebGLで使う行列演算の備忘録
 slug: webgl-matrix
 pubDate: 2025-12-20
-category: 勉強ノート
 tags:
   - 数学
 description: 行列完全に理解した🧮
 ---
+
+{/* start */}
 
 ## はじめに
 
@@ -45,6 +46,8 @@ export class Mat3 extends Array<number> {
 ```
 
 数式で書くと次のような行列表記になります。
+
+{/* end */}
 
 $$
 M =
@@ -439,4 +442,201 @@ export class Mat4 extends Array<number> {
 }
 ```
 
-4x4 行列の演算は時間があるときに更新します。
+4x4 行列は数式で書くと次のような行列表記になります。
+
+$$
+M =
+\begin{bmatrix}
+m_{00} & m_{10} & m_{20} & m_{30} \\
+m_{01} & m_{11} & m_{21} & m_{31} \\
+m_{02} & m_{12} & m_{22} & m_{32} \\
+m_{03} & m_{13} & m_{23} & m_{33}
+\end{bmatrix}
+$$
+
+デフォルト値は単位行列になります。
+
+$$
+I =
+\begin{bmatrix}
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+$$
+
+ここからは、`Mat4Func`内をみていきます。
+
+### 平行移動(translate)
+
+平行移動(x, y , z)を表す行列 T は次のようになります。
+
+$$
+T =
+\begin{bmatrix}
+1 & 0 & 0 & x \\
+0 & 1 & 0 & y \\
+0 & 0 & 1 & z \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+$$
+
+移動後の行列$M'$は、次のような行列の掛け算で求まります。
+
+$$
+\begin{align}
+M' = M \cdot T
+&=
+\begin{bmatrix}
+m_{00} & m_{10} & m_{20} & m_{30} \\
+m_{01} & m_{11} & m_{21} & m_{31} \\
+m_{02} & m_{12} & m_{22} & m_{32} \\
+m_{03} & m_{13} & m_{23} & m_{33}
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+1 & 0 & 0 & x \\
+0 & 1 & 0 & y \\
+0 & 0 & 1 & z \\
+0 & 0 & 0 & 1
+\end{bmatrix} \notag \\
+&=
+\begin{bmatrix}
+m_{00} & m_{10} & m_{20} & m_{00}x + m_{10}y + m_{20}z + m_{30}\\
+m_{01} & m_{11} & m_{21} & m_{01}x + m_{11}y + m_{21}z + m_{31} \\
+m_{02} & m_{12} & m_{22} & m_{02}x + m_{12}y + m_{22}z + m_{32} \\
+m_{03} & m_{13} & m_{23} & m_{03}x + m_{13}y + m_{23}z + m_{33}
+\end{bmatrix} \notag
+\end{align}
+$$
+
+以上をコードで書くと次のようになります。
+
+```ts title="translate"
+export function translate(out: Mat4, a: Mat4, v: Vec3): Mat4 {
+  const x = v[0],
+    y = v[1],
+    z = v[2];
+
+  if (a === out) {
+    out[12] = a[0] * x + a[4] * y + a[8] * z + a[12];
+    out[13] = a[1] * x + a[5] * y + a[9] * z + a[13];
+    out[14] = a[2] * x + a[6] * y + a[10] * z + a[14];
+    out[15] = a[3] * x + a[7] * y + a[11] * z + a[15];
+  } else {
+    const a00 = a[0],
+      a01 = a[1],
+      a02 = a[2],
+      a03 = a[3],
+      a10 = a[4],
+      a11 = a[5],
+      a12 = a[6],
+      a13 = a[7],
+      a20 = a[8],
+      a21 = a[9],
+      a22 = a[10],
+      a23 = a[11];
+
+    out[0] = a00;
+    out[1] = a01;
+    out[2] = a02;
+    out[3] = a03;
+    out[4] = a10;
+    out[5] = a11;
+    out[6] = a12;
+    out[7] = a13;
+    out[8] = a20;
+    out[9] = a21;
+    out[10] = a22;
+    out[11] = a23;
+
+    out[12] = a00 * x + a10 * y + a20 * z + a[12];
+    out[13] = a01 * x + a11 * y + a21 * z + a[13];
+    out[14] = a02 * x + a12 * y + a22 * z + a[14];
+    out[15] = a03 * x + a13 * y + a23 * z + a[15];
+  }
+
+  return out;
+}
+```
+
+### 回転(rotate)
+
+角度$\theta$の回転行列$R(\theta)$は次のようになります。
+
+$$
+R(\theta) =
+$$
+
+以上をコードで書くと次のようになります。
+
+```ts title="rotate"
+export function rotate(out: Mat4, a: Mat4, rad: number, axis: Vec3): Mat4 {
+  let x = axis[0];
+  let y = axis[1];
+  let z = axis[2];
+
+  let len = Math.hypot(x, y, z);
+  len = 1 / len;
+  x *= len;
+  y *= len;
+  z *= len;
+
+  const s = Math.sin(rad);
+  const c = Math.cos(rad);
+  const t = 1 - c;
+
+  const a00 = a[0],
+    a01 = a[1],
+    a02 = a[2],
+    a03 = a[3],
+    a10 = a[4],
+    a11 = a[5],
+    a12 = a[6],
+    a13 = a[7],
+    a20 = a[8],
+    a21 = a[9],
+    a22 = a[10],
+    a23 = a[11];
+
+  const b00 = x * x * t + c;
+  const b01 = y * x * t + z * s;
+  const b02 = z * x * t - y * s;
+  const b10 = x * y * t - z * s;
+  const b11 = y * y * t + c;
+  const b12 = z * y * t + x * s;
+  const b20 = x * z * t + y * s;
+  const b21 = y * z * t - x * s;
+  const b22 = z * z * t + c;
+
+  out[0] = a00 * b00 + a10 * b01 + a20 * b02;
+  out[1] = a01 * b00 + a11 * b01 + a21 * b02;
+  out[2] = a02 * b00 + a12 * b01 + a22 * b02;
+  out[3] = a03 * b00 + a13 * b01 + a23 * b02;
+  out[4] = a00 * b10 + a10 * b11 + a20 * b12;
+  out[5] = a01 * b10 + a11 * b11 + a21 * b12;
+  out[6] = a02 * b10 + a12 * b11 + a22 * b12;
+  out[7] = a03 * b10 + a13 * b11 + a23 * b12;
+  out[8] = a00 * b20 + a10 * b21 + a20 * b22;
+  out[9] = a01 * b20 + a11 * b21 + a21 * b22;
+  out[10] = a02 * b20 + a12 * b21 + a22 * b22;
+  out[11] = a03 * b20 + a13 * b21 + a23 * b22;
+
+  if (a !== out) {
+    out[12] = a[12];
+    out[13] = a[13];
+    out[14] = a[14];
+    out[15] = a[15];
+  }
+  return out;
+}
+```
+
+### 拡大(scale)
+
+### 転置行列(transpose)
+
+### 行列式(determinant)
+
+### 逆行列(inverse)
