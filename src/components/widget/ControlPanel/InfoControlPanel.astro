@@ -88,7 +88,10 @@ import { infoList, infoListSub } from '@/data/info';
 </style>
 
 <style lang="scss">
-  .controlPanel-main {
+  .controlPanel-main__wrap {
+    @include mixin.phone {
+      margin-top: 0.25rem;
+    }
   }
 
   .controlPanel-card {
@@ -130,6 +133,12 @@ import { infoList, infoListSub } from '@/data/info';
   .controlPanel-card__side-content {
     padding: 0.5rem;
     border-bottom: 1px solid var(--border-color);
+  }
+
+  .controlPanel-card__title {
+    @include mixin.phone {
+      padding-block: 0;
+    }
   }
 
   .controlPanel-main__link-wrap {
