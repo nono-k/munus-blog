@@ -27,6 +27,21 @@
     background: #dcdad3 !important;
     border-radius: 0.25rem;
     overflow-x: auto;
+    outline: none;
+
+    &::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--gray);
+      border-radius: 4px;
+    }
   }
 
   pre>code {
