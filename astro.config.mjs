@@ -30,6 +30,14 @@ const codeOptions = {
       visibility: 'hover',
       feedbackDuration: 2_500,
     }),
+    {
+      span(node) {
+        if (node.properties?.style?.includes('#C2C3C5')) {
+          // コメントの色を変更
+          node.properties.style = 'color:#6a9955';
+        }
+      },
+    },
   ],
   // @ts-ignore
   onVisitLine(node) {
