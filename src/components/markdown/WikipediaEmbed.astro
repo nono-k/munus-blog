@@ -1,12 +1,37 @@
 ---
-import { Icon } from "astro-icon/components";
 const { title, lang = "ja" } = Astro.props;
 
 const apiURL = `https://${lang}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`;
 
-const response = await fetch(apiURL);
-const data = await response.json();
+let data: any = null;
+
+try {
+  const response = await fetch(apiURL, {
+    headers: {
+      'User-Agent': 'munus-blog/1.0 (https://munus.dev)',
+      'Accept': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    console.warn(
+      `[WikipediaEmbed] fetch failed: ${response.status} ${response.statusText} (${title})`
+    );
+  } else {
+    const contentType = response.headers.get('content-type') ?? '';
+    if (contentType.includes('application/json')) {
+      data = await response.json();
+    } else {
+      console.warn(
+        `[WikipediaEmbed] non-JSON response (${contentType}) (${title})`
+      );
+    }
+  }
+} catch (err) {
+  console.warn('[WikipediaEmbed] fetch error:', err);
+}
 ---
+
 
 <a href={data.content_urls.desktop.page} class="wikipedia" target="_blank">
   <div class="wikipedia__img">
