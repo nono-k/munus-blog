@@ -62,6 +62,16 @@ export async function getMonthlyReportList(): Promise<
   return filteredPosts;
 }
 
+export async function getBlogsByTags(
+  tags: string[],
+): Promise<{ body: string; data: BlogPostData; slug: string }[]> {
+  const sortedBlogs = await getSortedBlogs();
+  const filteredPosts = sortedBlogs.filter(blog =>
+    blog.data.tags.some(tag => tags.includes(tag)),
+  );
+  return filteredPosts;
+}
+
 export async function getTagList(
   tagName: string,
 ): Promise<{ body: string; data: BlogPostData; slug: string }[]> {

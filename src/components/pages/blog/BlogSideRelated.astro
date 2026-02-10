@@ -1,0 +1,43 @@
+---
+interface Props {
+  relatedPosts: { body: string; data: { title: string; tags: string[] }; slug: string }[];
+}
+
+const { relatedPosts } = Astro.props;
+---
+{
+  relatedPosts.length > 0 && (
+    <div class="side-title">Related Post</div>
+    <ul>
+      {relatedPosts.map(post => (
+        <li class="text-ellipsis">
+          <a href={`/blog/${post.slug}`}>{post.data.title}</a>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<style lang="scss">
+  ul {
+    padding-block: 0.25rem 0.4rem;
+    border-bottom: 1px solid var(--border-color);
+    > * + * {
+      margin-top: 0.15rem;
+    }
+    a {
+      padding: 0.25rem 0.75rem;
+      font-size: var(--fz-base);
+      &::before {
+        content: '';
+        display: inline-block;
+        width: 3px;
+        height: 3px;
+        background-color: var(--black);
+        border-radius: 50%;
+        margin-right: 0.5rem;
+        vertical-align: middle;
+      }
+    }
+  }
+</style>

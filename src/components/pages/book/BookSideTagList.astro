@@ -23,5 +23,10 @@ const sortedTags = tags.contents.sort((a, b) => a.order - b.order);
   display: block;
   padding: 0.25rem 0.5rem;
   border-bottom: 1px solid var(--border-color);
+  transition-property: background-color;
+  transition-duration: 0.3s;
+  @include mixin.hover {
+    background-color: var(--hover-color);
+  }
 }
 </style>

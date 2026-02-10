@@ -32,10 +32,9 @@ const data = await response.json();
     border: 1px solid var(--border-color);
     padding: 0;
     overflow: hidden;
-    transition: opacity 0.3s;
+    transition: background 0.3s;
     @include mixin.hover {
-      opacity: 0.9;
-      background: var(--code-bg);
+      background: var(--border-color);
     }
     &__img {
       img {
