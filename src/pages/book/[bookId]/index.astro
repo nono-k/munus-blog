@@ -45,12 +45,6 @@ const description = `「${book.title}」の読書記録です。`;
           <a href={book.url} class="book__detail-img" target="_blank">
             <img src={book.cover} alt={book.title} width="184" />
           </a>
-          <div class="book__detail-links">
-            <a href={book.url} class="book__detail-link btn-regular" target="_blank">Amazon</a>
-            {book.postlink && (
-              <a href={`/blog/${book.postlink}`} class="book__detail-link btn-regular">記事を見る</a>
-            )}
-          </div>
         </div>
         <dl class="book__detail-info">
           <div class="book__detail-info-tags">
@@ -68,8 +62,14 @@ const description = `「${book.title}」の読書記録です。`;
             <dt>発売日</dt>
             <dd>{`${year}年${month}月${day}日`}</dd>
           </div>
-          <div class="book__detail-info-body" set:html={book.review}></div>
+          <div class="book__detail-links">
+            <a href={book.url} class="book__detail-link btn-regular" target="_blank">Amazon</a>
+            {book.postlink && (
+              <a href={`/blog/${book.postlink}`} class="book__detail-link btn-regular">記事を見る</a>
+            )}
+          </div>
         </dl>
+        <div class="book__detail-info-body" set:html={book.review}></div>
       </div>
       <div class="book__detail-bottom-link-wrap">
         <a href="/book" class="book__detail-bottom-link">
@@ -107,7 +107,6 @@ const description = `「${book.title}」の読書記録です。`;
   .book {
     &__detail-info-body {
       ul, ol {
-        padding-left: 0.5rem;
         > * + * {
           margin-top: 0.15rem;
         }
@@ -118,7 +117,7 @@ const description = `「${book.title}」の読書記録です。`;
       }
       li {
         list-style: unset;
-        margin-left: 1.5rem;
+        margin-left: 1rem;
       }
       blockquote {
         --stack-space: 2rem;
@@ -169,10 +168,10 @@ const description = `「${book.title}」の読書記録です。`;
       }
     }
     &__detail-links {
-      margin-top: 1rem;
-      display: flex;
-      flex-direction: column;
-      row-gap: 1rem;
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 1rem;
     }
     &__detail-link {
       padding-block: 0.5rem;
@@ -219,7 +218,8 @@ const description = `「${book.title}」の読書記録です。`;
       padding: 1rem;
     }
     &__detail-info-body {
-      padding: 1rem;
+      grid-column: 1 / -1;
+      padding-block: 1.5rem 1rem;
       line-height: 1.75;
       display: flex;
       flex-direction: column;

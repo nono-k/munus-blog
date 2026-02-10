@@ -7,10 +7,12 @@ import PostBookArea from "@/components/PostBookArea.astro";
 import PostMeta from "@/components/PostMeta.astro";
 import PostNavLinks from "@/components/PostNavLinks.astro";
 import Figure from "@/components/markdown/Figure.astro";
+import BlogSideRelated from "@/components/pages/blog/BlogSideRelated.astro";
+import ControlPanel from "@/components/widget/ControlPanel/ControlPanel.astro";
 import TbocAccordion from "@/components/widget/TbocAccordion.astro";
 import TbocSide from "@/components/widget/TbocSide.astro";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
-import { getSortedBlogs } from "@/utils/content-utils";
+import { getBlogsByTags, getSortedBlogs } from "@/utils/content-utils";
 import { getGitInfo } from "@/utils/git";
 
 interface Props {
@@ -30,6 +32,10 @@ const { Content, headings } = await entry.render();
 const {
   data: { title, pubDate, updateDate, tags, description, isAdLink }
 } = entry;
+
+const relatedPosts = await getBlogsByTags(tags);
+const filteredRelatedPosts = relatedPosts.filter(post => post.slug !== entry.slug);
+
 const blogOgp = entry.data.ogp ||`/api/og/${entry.slug}.png`;
 ---
 <MainGridLayout
@@ -82,17 +88,24 @@ const blogOgp = entry.data.ogp ||`/api/og/${entry.slug}.png`;
         <Image src={entry.data.image} alt={title} />
       </div>
     )}
+
+    <BlogSideRelated relatedPosts={filteredRelatedPosts} />
   </div>
 
-  <!-- <PostNavLinks entry={entry} /> -->
-
-  <!-- <div class="post-book-area">
-    <PostBookArea />
-  </div> -->
+  <div class="grid-column">
+    <ControlPanel
+      title="Related Post"
+      page={filteredRelatedPosts}
+    />
+  </div>
 
 </MainGridLayout>
 
 <style lang="scss">
+
+  .grid-column {
+    grid-column: 1 / -1;
+  }
 
   .article {
     padding-bottom: 2.5rem;

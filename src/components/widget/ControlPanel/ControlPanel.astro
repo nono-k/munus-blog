@@ -6,7 +6,7 @@ import ControlPanelCard from "./ControlPanelCard.astro";
 interface Props {
   title: string;
   page: { body: string; data: BlogPostData; slug: string }[];
-  link: string;
+  link?: string;
 }
 
 const { title, page, link } = Astro.props;
@@ -22,10 +22,12 @@ const { title, page, link } = Astro.props;
       </div>
     </div>
     <div class="controlPanel-side__content">
-      <a href={link} class="controlPanel-side__link">
-        View More
-        <Icon name="material-symbols:arrow-forward" />
-      </a>
+      {link && (
+        <a href={link} class="controlPanel-side__link">
+          View More
+          <Icon name="material-symbols:arrow-forward" />
+        </a>
+      )}
     </div>
   </div>
 
@@ -49,10 +51,12 @@ const { title, page, link } = Astro.props;
         </article>
       ))}
       <div class="controlPanel-main__link-wrap">
-        <a href={link} class="controlPanel-main__link">
-          View More
-          <Icon name="material-symbols:arrow-forward" />
-        </a>
+        {link && (
+          <a href={link} class="controlPanel-main__link">
+            View More
+            <Icon name="material-symbols:arrow-forward" />
+          </a>
+        )}
       </div>
     </div>
   </div>
