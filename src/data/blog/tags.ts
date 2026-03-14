@@ -22,5 +22,6 @@ export const tagsList: Tags[] = [
   { name: 'Gulp', slug: 'gulp' },
   { name: 'Pug', slug: 'pug' },
   { name: 'Vue', slug: 'vue' },
+  { name: '装飾パターン', slug: 'decorative-pattern' },
   { name: 'ガンダム', slug: 'gundam' },
 ];

@@ -1,0 +1,359 @@
+---
+title: 17の平面繰り返しパターンをGLSLで実装してみる - その1
+slug: glsl-17-wallpaper-group-01
+pubDate: 2026-03-15
+tags:
+  - GLSL
+  - 勉強ログ
+  - 装飾パターン
+description: 備忘録としてGLSLでの17の平面繰り返しパターンを実装してみるシリーズ その1です。
+---
+
+import WikipediaEmbed from "@/components/markdown/WikipediaEmbed.astro";
+import AmazonLink from "@/components/markdown/AmazonLink.astro";
+import DemoBtn from "@/components/markdown/DemoBtn.astro";
+
+{/* start */}
+
+## はじめに
+
+平面の繰り返しパターンは17種に分類することが、数学的に証明されています。それも4つの基本移動(並進・鏡映・回転・映進)の組み合わせで17パターンを作成できます。
+
+詳しくは以下のWikipediaのリンクと参考書籍を参照ください。
+
+<WikipediaEmbed title="文様群" />
+
+このシリーズでは、GLSLで17の平面繰り返しパターンを実装してみます。
+紹介するパターンはp1~pmgまでの8パターンになります。残りのパターンは次回に紹介します。
+
+## 基本的なコードの説明
+
+このシリーズでは、対称性が分かりやすいように三角形を4つの基本移動をさせることでパターンを作成します。まずは基本的な`main`のコードを説明します。
+
+{/* end */}
+
+```glsl
+void main() {
+  vec2 uv = vUv; // 0~1 の範囲のUV座標
+
+  vec2 tile = vec2(6.0); // 分割数を6倍に設定
+  float offsetX = 0.5;
+
+  vec2 tuv = repeatP1(uv, tile, offsetX);
+
+  // 三角形の頂点座標を設定
+  vec2 p0 = vec2(0.0, 0.0);
+  vec2 p1 = vec2(0.0, 1.0);
+  vec2 p2 = vec2(1.0, 1.0);
+
+  vec3 color = isUv ?
+    vec3(tuv, 0.0) :
+    vec3(triangle(tuv, p0, p1, p2));
+
+  fragColor = vec4(color, 1.0);
+}
+```
+
+`vUv`には0~1の範囲のUV座標が入っています。`tile`で分割数を設定し、各パターンの関数に使用します。`isUv`はuniform変数で、デモのチェックボックスに対応し、チェックを入れるとUV座標を色で表示します。
+
+三角形を描画する関数は次のようになっているので、気になる方は参照ください。
+3つの頂点座標を渡し、三角形の内側の場合に`1.0`を返すので白色になります。
+
+<details>
+<summary>triangle関数のコード</summary>
+
+```glsl title="triangle"
+float triangle(vec2 uv, vec2 p0, vec2 p1, vec2 p2) {
+  vec2 v0 = p1 - p0;
+  vec2 v1 = p2 - p0;
+  vec2 v2 = uv - p0;
+
+  float d00 = dot(v0, v0);
+  float d01 = dot(v0, v1);
+  float d11 = dot(v1, v1);
+  float d20 = dot(v2, v0);
+  float d21 = dot(v2, v1);
+
+  float denom = d00 * d11 - d01 * d01;
+
+  float v = (d11 * d20 - d01 * d21) / denom;
+  float w = (d00 * d21 - d01 * d20) / denom;
+  float u = 1.0 - v - w;
+
+  return step(0.0, u) * step(0.0, v) * step(0.0, w);
+}
+```
+
+</details>
+
+それでは、p1の単純な並進からみていきましょう。
+
+## p1(単純な並進)
+
+p1では基本移動の並進を繰り返して展開します。
+
+![p1 単純な並進](https://res.cloudinary.com/dy8ftemi0/image/upload/v1770563146/glsl-17-wallpaper-group-01-01_qi1org.jpg "p1 単純な並進")
+
+<DemoBtn url="https://nono-k.github.io/glsl-sketch-note/laws-of-decorative-patterns/p1/" />
+
+このデモでは、偶数行のみX方向にずらせるようにしてます。
+コードは以下のようになります。
+
+```glsl title="p1"
+vec2 repeatP1(vec2 uv, vec2 tile, float offsetX) {
+  vec2 p = uv * tile;
+
+  float row = floor(p.y);
+  p.x += mod(row, 2.0) == 0.0 ? offsetX : 0.0; // 偶数行のみ移動させる
+
+  return fract(p);
+}
+```
+
+UV座標を`tile`で拡大し、行番号を`floor`で取得します。
+`mod`関数で行番号が偶数のときのみにX方向に`offsetX`分移動させています。
+最後に`fract`関数で0~1の範囲に戻すことで繰り返しパターンを作成しています。
+
+## pm(一方向の鏡映)
+
+pmでは左右に鏡映し、並進します。
+
+![pn 一方向の鏡映](https://res.cloudinary.com/dy8ftemi0/image/upload/v1770566273/glsl-17-wallpaper-group-01-02_m7iew4.jpg "pn 一方向の鏡映")
+
+<DemoBtn url="https://nono-k.github.io/glsl-sketch-note/laws-of-decorative-patterns/pm/" />
+
+デモでは、右半分の正三角形を鏡映し繰り返すようにしてます。
+コードは以下のようになります。
+
+```glsl title="pm"
+vec2 repeatPm(vec2 uv, vec2 tile) {
+  vec2 p = uv * tile;
+  vec2 f = fract(p);
+
+  // 右半分を鏡映
+  if (f.x > 0.5) {
+    f.x = 1.0 - f.x;
+  }
+
+  return f;
+}
+```
+
+拡大したUV座標を`fract`で0~1の範囲にし、右半分(`f.x > 0.5`)の場合に`1.0`から引くことで、反転することになるので鏡映の操作になります。
+
+## pg(一方向の映進)
+
+pgでは映進させて左右あるいは上下など一方向に繰り返します。鏡映は含みません。
+
+![pg 一方向の映進](https://res.cloudinary.com/dy8ftemi0/image/upload/v1771299547/glsl-17-wallpaper-group-01-03_fy1z77.jpg "pg 一方向の映進")
+
+<DemoBtn url="https://nono-k.github.io/glsl-sketch-note/laws-of-decorative-patterns/pg/" />
+
+デモでは右半分の三角形を上下に移動できるようにしています。
+コードは以下のようになります。
+
+```glsl title="pg"
+vec2 repeatPg(vec2 uv, vec2 tile, float offsetY) {
+  vec2 p = uv * tile;
+
+  vec2 cellSize = vec2(0.5, 1.0); // 基本セルサイズ
+
+  vec2 q = p;
+
+  // X基本並進
+  q.x = mod(q.x, cellSize.x);
+
+  // 2セル周期で判定
+  if (mod(p.x, cellSize.x * 2.0) >= cellSize.x) {
+    q.y += cellSize.y * offsetY;
+    q.x = cellSize.x - q.x;
+  }
+
+  // Y基本並進
+  q.y = mod(q.y, cellSize.y);
+
+  return q;
+}
+```
+
+ここでは基本モチーフの領域(`cellSize`)を横が0.5、縦が1.0の長方形に設定しています。
+if文の判定は、右半分の領域かを判定していて、その場合はY方向に`offsetY`分移動させ、X方向は反転させています。これでpgの操作が実現できます。
+
+最後にY方向に基本並進させるために`mod`関数を使用しています。
+
+### cm(鏡映 + 平行映進)
+
+cmでは、鏡映と平行映進を組み合わせて繰り返します。
+
+![cm 鏡映 + 平行映進](https://res.cloudinary.com/dy8ftemi0/image/upload/v1771860934/glsl-17-wallpaper-group-01-04_xgsedm.jpg "cm 鏡映 + 平行映進")
+
+<DemoBtn url="https://nono-k.github.io/glsl-sketch-note/laws-of-decorative-patterns/cm/" />
+
+デモでは偶数列のみ`0.5`を掛けることで、半分シフトさせています。
+
+```glsl title="cm"
+vec2 repeatCm(vec2 uv, vec2 tile) {
+  vec2 p = uv * tile;
+  vec2 id = floor(p);
+  vec2 f  = fract(p);
+
+  // 列番号
+  float col = mod(id.x, 2.0);
+
+  // 偶数列なら半分Yシフト
+  f.y += 0.5 * col;
+
+  // Y周期
+  f.y = mod(f.y, 1.0);
+
+  f.x = f.x > 0.5 ? 1.0 - f.x : f.x;
+
+  return f;
+}
+```
+
+### p2(180度回転)
+
+p2では、180度回転と並進を組み合わせて繰り返します。
+
+![p2 180度回転](https://res.cloudinary.com/dy8ftemi0/image/upload/v1772173923/glsl-17-wallpaper-group-01-05_jygrvu.jpg "p2 180度回転")
+
+<DemoBtn url="https://nono-k.github.io/glsl-sketch-note/laws-of-decorative-patterns/p2/" />
+
+180度回転は、行列を使用して実装しています。
+上図のUVのとおり、偶数行を180度回転させるようにしてます。
+
+```glsl title="p2"
+vec2 repeatP2(vec2 uv, vec2 tile) {
+  vec2 p = uv * tile;
+  vec2 center = vec2(0.5);
+
+  vec2 id = floor(p);
+  vec2 f = fract(p) - center;
+
+  float parity = mod(id.y, 2.0);
+
+  mat2 R = mat2(
+    -1.0, 0.0,
+    0.0,-1.0
+  );
+
+  f = mix(R * f, f, parity);
+
+  return f + center;
+}
+```
+
+偶数行の判定は、`mod(id.y, 2.0)`で行い、偶数行のときは180度回転させる行列`R`を掛けています。
+
+```glsl
+float parity = mod(id.y, 2.0);
+
+mat2 R = mat2(
+  -1.0, 0.0,
+  0.0,-1.0
+);
+
+f = mix(R * f, f, parity);
+```
+
+回転の中心はUV座標の`(0.5, 0.5)`に設定しているので、`f`から中心を引いて回転させた後、中心を足すことで回転させています。
+
+### pmm(二方向の鏡映、点を中心にした90度鏡映)
+
+pmmでは、モチーフが鏡映してから、さらに直行する軸で鏡映します。また、別に考えると点を中心に3回の90度を回転させているともいえます。
+
+![pmm 二方向の鏡映](https://res.cloudinary.com/dy8ftemi0/image/upload/v1772295551/glsl-17-wallpaper-group-01-06_j3tzqa.jpg "pmm 二方向の鏡映")
+
+<DemoBtn url="https://nono-k.github.io/glsl-sketch-note/laws-of-decorative-patterns/pmm/" />
+
+pmではX軸方向を鏡映していましたが、pmmではさらにY軸方向も鏡映するようにコードを書けばいいでしょう。
+
+```glsl title="pmm"
+vec2 repeatPmm(vec2 uv, vec2 tile) {
+  vec2 p = uv * tile;
+  vec2 f = fract(p);
+
+  f.x = f.x > 0.5 ? 1.0 - f.x : f.x;
+  f.y = f.y > 0.5 ? 1.0 - f.y : f.y;
+
+  return f;
+}
+```
+
+### pgg(二方向の映進)
+
+pggでは、モチーフが二方向に映進するパターンです。p2(180度回転)してから映進させても同じ結果が得られます。
+
+![pgg 二方向の映進](https://res.cloudinary.com/dy8ftemi0/image/upload/v1772899910/glsl-17-wallpaper-group-01-07_jz745u.jpg "pgg 二方向の映進")
+
+<DemoBtn url="https://nono-k.github.io/glsl-sketch-note/laws-of-decorative-patterns/pgg/" />
+
+```glsl title="pgg"
+vec2 repeatPgg(vec2 uv, vec2 tile) {
+  vec2 p = uv * tile;
+
+  vec2 id = floor(p);
+  vec2 f = fract(p);
+
+  if (f.x > 0.5) {
+    f.x = f.x - 0.5;
+    f.y = 1.0 - f.y;
+  }
+
+  if (mod(id.y, 2.0) < 1.0) {
+    f.x = 0.5 - f.x;
+    f.y = 1.0 - f.y;
+  }
+
+  return f;
+}
+```
+
+### pmg(一方向の鏡映、他方向の映進)
+
+pmgでは、鏡映したモチーフが、さらに映進して繰り返すパターンです。方向が互い違いになるパターンができあがります。
+
+![pmg 一方向の鏡映、他方向の映進](https://res.cloudinary.com/dy8ftemi0/image/upload/v1773414812/glsl-17-wallpaper-group-01-08_glwf9s.jpg "pmg 一方向の鏡映、他方向の映進")
+
+<DemoBtn url="https://nono-k.github.io/glsl-sketch-note/laws-of-decorative-patterns/pmg/" />
+
+```glsl title="pmg"
+vec2 repeatPmg(vec2 uv, vec2 tile, float offsetX) {
+
+  vec2 p  = uv * tile;
+  vec2 id = floor(p);
+  vec2 f  = fract(p);
+
+  if(mod(id.y, 2.0) < 1.0){
+    f.y = 1.0 - f.y;
+    f.x = fract(f.x - offsetX);
+  }
+
+  if(f.x > 0.5){
+    f.x = 1.0 - f.x;
+  }
+
+  return f;
+}
+```
+
+## まとめ
+
+今回は、p1~pmgまでの8パターンを紹介しました。次回は残りの9パターンを紹介します。
+
+## 参考書籍
+
+<AmazonLink
+  imageId="71OxyYXkJIL._SY522_"
+  linkId="4lJpPlk"
+  title="幾何学パターンづくりのすべて ファッション、建築、デザインのためのリピートパターン制作ガイド"
+  author="ポール・ジャクソン"
+/>
+
+<AmazonLink
+  imageId="61fWNRx89lL._SY522_"
+  linkId="4aEV511"
+  title="装飾パターンの法則"
+  author="藤田 伸"
+/>
