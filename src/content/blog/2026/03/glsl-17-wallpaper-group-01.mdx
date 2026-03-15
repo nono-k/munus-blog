@@ -24,7 +24,7 @@ import DemoBtn from "@/components/markdown/DemoBtn.astro";
 <WikipediaEmbed title="文様群" />
 
 このシリーズでは、GLSLで17の平面繰り返しパターンを実装してみます。
-紹介するパターンはp1~pmgまでの8パターンになります。残りのパターンは次回に紹介します。
+紹介するパターンはp1~pmgまでの9パターンになります。残りのパターンは次回に紹介します。
 
 ## 基本的なコードの説明
 
@@ -281,6 +281,38 @@ vec2 repeatPmm(vec2 uv, vec2 tile) {
 }
 ```
 
+### cmm(2本の対角線の両方に鏡映)
+
+pmmと同様にモチーフが直交する軸で鏡映しますが、展開の仕方がことなります。cmmではひし形格子状で展開されます。
+
+![cmm 2本の対角線の両方に鏡映](https://res.cloudinary.com/dy8ftemi0/image/upload/v1773561004/glsl-17-wallpaper-group-01-09_tae3xv.jpg "cmm 2本の対角線の両方に鏡映")
+
+<DemoBtn url="https://nono-k.github.io/glsl-sketch-note/laws-of-decorative-patterns/cmm/" />
+
+GLSLのコードはpmmのコードにy軸方向の条件を追加して鏡映させることで実現できます。
+
+```glsl title="cmm"
+vec2 repeatCmm(vec2 uv, vec2 tile) {
+  vec2 p = uv * tile;
+  vec2 id = floor(p);
+  vec2 f = fract(p);
+
+  // 列番号
+  float col = mod(id.x, 2.0);
+
+  // 奇数列なら半分Yシフト
+  f.y += 0.5 * col;
+
+  // Y周期
+  f.y = mod(f.y, 1.0);
+
+  f.x = f.x > 0.5 ? 1.0 - f.x : f.x;
+  f.y = f.y > 0.5 ? 1.0 - f.y : f.y;
+
+  return f;
+}
+```
+
 ### pgg(二方向の映進)
 
 pggでは、モチーフが二方向に映進するパターンです。p2(180度回転)してから映進させても同じ結果が得られます。
@@ -340,7 +372,7 @@ vec2 repeatPmg(vec2 uv, vec2 tile, float offsetX) {
 
 ## まとめ
 
-今回は、p1~pmgまでの8パターンを紹介しました。次回は残りの9パターンを紹介します。
+今回は、p1~pmgまでの9パターンを紹介しました。次回は残りの8パターンを紹介します。
 
 ## 参考書籍
 
