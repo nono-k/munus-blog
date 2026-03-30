@@ -5,6 +5,7 @@ export const tagsList: Tags[] = [
   { name: '月報', slug: 'monthly-report' },
   { name: '美術館', slug: 'museum' },
   { name: '映画', slug: 'movie' },
+  { name: '書籍紹介', slug: 'book' },
   { name: '小説', slug: 'novel' },
   { name: 'フォント', slug: 'font' },
   { name: '実績紹介', slug: 'works' },
