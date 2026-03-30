@@ -13,6 +13,12 @@ const year = date.getFullYear();
 const month = date.getMonth() + 1;
 const day = date.getDate();
 const dateString = formatDateToYYYYMMDD(new Date(book.publishedAt));
+
+function stripLinks(html: string) {
+  return html.replace(/<a[^>]*>(.*?)<\/a>/g, '$1');
+}
+
+const sanitizedReview = stripLinks(book.review);
 ---
 
 <div class="controlPanel-card">
@@ -41,7 +47,7 @@ const dateString = formatDateToYYYYMMDD(new Date(book.publishedAt));
             <dt>発売日</dt>
             <dd>{`${year}年${month}月${day}日`}</dd>
           </div>
-          <div class="book__detail-info-body" set:html={book.review}></div>
+          <div class="book__detail-info-body" set:html={sanitizedReview}></div>
         </dl>
       </div>
     </div>
@@ -84,6 +90,15 @@ const dateString = formatDateToYYYYMMDD(new Date(book.publishedAt));
       th,
       td {
         padding: 0.25rem;
+      }
+    }
+  }
+
+  .book {
+    &__detail-info-body {
+      h2, h3, h4 {
+        font-size: 0.55rem;
+        margin-top: 0.25rem;
       }
     }
   }
