@@ -1,0 +1,49 @@
+---
+interface Props {
+  id: string;
+  text: string;
+}
+
+const { id, text } = Astro.props;
+---
+
+<div class="map__wrap">
+  <div class="map__title">Google Map</div>
+  <div class="map">
+    <iframe
+      src={`https://www.google.com/maps/embed?pb=${id}`}
+      width="600"
+      height="450"
+      style="border:0;"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+  </div>
+  <p class="map__text">{text}</p>
+</div>
+
+<style lang="scss">
+  .map {
+    aspect-ratio: 2 / 1;
+    margin-top: 0.5rem;
+    iframe {
+      width: 100%;
+      height: 100%;
+    }
+
+    &__wrap {
+      margin-top: 2rem;
+      @include mixin.large {
+        margin-inline: 1rem;
+      }
+    }
+    &__title {
+      // font-size: var(--fz-base);
+    }
+    &__text {
+      font-size: var(--fz-base);
+    }
+  }
+
+</style>
