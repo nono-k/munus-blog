@@ -1,0 +1,85 @@
+---
+interface Props {
+  img: string;
+  table: {
+    th: string[];
+    td: string[][];
+  };
+  list?: string[];
+}
+
+const { img, table, list } = Astro.props;
+---
+
+<div class="media-table">
+  <div class="media-table__img">
+    <img src={img} alt="" />
+  </div>
+  <div class="media-table__wrap">
+    <table class="media-table__table">
+      <thead>
+        <tr>
+          {table.th.map((th) => (
+            <th>{th}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {table.td.map((tdRow) => (
+          <tr>
+            {tdRow.map((td) => (
+              <td set:html={td} />
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    {
+      list && list.length > 0 && (
+        <ul class="media-table__list">
+          {list.map((item) => (
+            <li class="media-table__list-item">{item}</li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</div>
+
+<style lang="scss">
+  .media-table {
+    // margin-top: 2rem;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    column-gap: 1.5rem;
+    @media (min-width: 1230px) {
+      margin-inline: -4rem;
+    }
+    @include mixin.mobile {
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 1rem;
+    }
+    @include mixin.phone {
+      grid-template-columns: 1fr;
+      row-gap: 1rem;
+    }
+    &__img {
+    }
+    &__table {
+      width: 100%;
+      height: fit-content;
+      border-collapse: collapse;
+      font-size: var(--fz-base);
+      th, td {
+      }
+      th {
+      }
+    }
+    &__list {
+      margin-top: 0.75rem;
+      font-size: var(--fz-base);
+    }
+    &__list-item {
+      line-height: 1.6;
+    }
+  }
