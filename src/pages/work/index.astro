@@ -6,6 +6,8 @@ import InfoSide from "@/components/widget/InfoSide.astro";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
 
 const workPosts = await getCollection("work");
+const sortedWorkPosts = workPosts.sort((a, b) => a.data.order - b.data.order);
+
 const pageTitle = "Work";
 const description = "個人開発したものの一覧です。";
 ---
@@ -21,7 +23,7 @@ const description = "個人開発したものの一覧です。";
 
   <SubArticle>
     <div class="stack">
-      {workPosts.map((post) => (
+      {sortedWorkPosts.map((post) => (
         <a href={post.data.link} class="card" target="_blank" rel="noreferrer">
           <div class="card__img">
             <Image src={post.data.image} alt={post.data.title} />
