@@ -1,0 +1,139 @@
+---
+title: 書籍に載っている参考文献をまとめるサイトを作成したので紹介
+slug: sankoubunken-deploy
+pubDate: 2026-05-09
+image: ../../../../assets/images/work/sankoubunken.jpg
+tags:
+  - 実績紹介
+  - Web
+description: 書籍に載っている参考文献をまとめるサイトを作ったので紹介します！作成方法や、サイトの特徴などを紹介します。
+---
+
+{/* start */}
+
+## はじめに
+
+![書籍の参考文献まとめサイト](https://res.cloudinary.com/dy8ftemi0/image/upload/v1778225376/sankoubunken-deploy-01_xwxrgt.jpg "書籍の参考文献まとめサイト")
+
+書籍の参考文献をまとめたサイトを公開したので紹介します！
+技術的にはいつもどおりにAstroを使用して作成しました。
+
+https://sankoubunken.com
+
+{/* end */}
+
+## 作成した利用
+
+次に読む本を探す際に、読んできた本の参考文献や関連書籍、ガイドブックに出てきた書籍から読むことがあります。なので、参考文献がまとめられたサイトはないのかなと思ってたのですが、現状存在しないので、作成して公開してみました！
+
+このように個人的に欲しいからといった理由で作成したので、手持ちにある本や読んでいる本に載ってる参考文献を登録していくので、まだ登録されている本は少ないですが、今後も増やしていきたいと思います！
+
+また、収益化も達成したいと思ってたので、参考文献をまとめたサイトはいい感じになるのではという期待もあります。
+
+## 技術的なこと
+
+フレームワークとしてはいつもどおりにAstroを使用して作成しました。最初は勉強のためにバックエンドやデータベースも用意して作成しようと思ったのですが、費用がかかるのと、面倒だったので、結局AstroのContent Collectionsを使用して作成しました。
+
+ディレクトリは`content`フォルダの中に`book`と`reference`の2つのディレクトリを作成し、`book`ディレクトリには本の情報を、`reference`ディレクトリには参考文献の情報を入れるようにしました。
+
+```
+src
+├── content
+│   ├── book
+│   └── reference
+```
+
+全て手動で登録するのは大変なので、Google Books APIを使用して、ISBNコードから本の情報を取得して登録できるようなスクリプトを作成しました。
+
+<details>
+<summary>ISBNから本を登録するスクリプト</summary>
+
+```ts
+import fs from "fs";
+import path from "path";
+import "dotenv/config";
+
+const isbn = process.argv[2];
+
+if (!isbn) {
+  console.error("ISBNを指定してください");
+  process.exit(1);
+}
+
+const API_KEY = process.env.GOOGLE_BOOKS_API_KEY;
+
+const fetchWithRetry = async (url, retries = 5) => {
+  for (let i = 0; i < retries; i++) {
+    const res = await fetch(url);
+
+    if (res.status !== 429) return res;
+
+    const wait = 2 ** i * 500;
+    console.log(`429 → ${wait}ms 待機`);
+    await new Promise((r) => setTimeout(r, wait));
+  }
+
+  throw new Error("429: Retry上限に到達");
+};
+
+const fetchBook = async () => {
+  const googleRes = await fetchWithRetry(
+    `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&country=JP&key=${API_KEY}`,
+  );
+  const googleJson = await googleRes.json();
+
+  if (!googleJson.items?.length) {
+    throw new Error("書籍情報が見つかりません");
+  }
+
+  const v = googleJson.items[0].volumeInfo;
+
+  return {
+    title: v.title,
+    subtitle: v.subtitle || "",
+    authors: v.authors || [],
+    publisher: v.publisher || "",
+    publishedDate: v.publishedDate || "",
+    description: v.description || "",
+    isbn,
+    image: v.imageLinks?.thumbnail || "",
+    createdAt: new Date(),
+  };
+};
+
+(async () => {
+  const book = await fetchBook();
+
+  const frontmatter = `---
+isbn: "${book.isbn}"
+title: "${book.title}"
+subtitle: "${book.subtitle}"
+authors:
+${book.authors.map((a) => `  - "${a}"`).join("\n")}
+publisher: "${book.publisher}"
+publishedDate: "${book.publishedDate}"
+description: "${book.description.replace(/"/g, '\\"')}"
+image: "${book.image}"
+category: ""
+amazonLink: ""
+createdAt: ${book.createdAt.toISOString()}
+---
+`;
+
+  const fileName = `${book.isbn}.mdx`;
+  const outputPath = path.resolve("src/content/book", fileName);
+
+  fs.writeFileSync(outputPath, frontmatter);
+  console.log(`✔ 作成完了: ${outputPath}`);
+})();
+```
+
+</details>
+
+まだ、AmazonのAPIが利用できないので、Google Books APIを利用してますが、利用できるようになったら、もっと楽に登録できるようにしたいと思います！
+
+## おわりに
+
+書籍の参考文献をまとめたサイトを作成して公開したので紹介しました！書籍に載っている参考文献は信頼できる面白い本の場合が多いかと思うので、眺めてみるだけでも楽しめるかと思うのでぜひ覗いてみてください！
+
+長い目で本の登録をしていき続けていきたいと思います！

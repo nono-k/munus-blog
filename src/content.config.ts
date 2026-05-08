@@ -25,6 +25,7 @@ const work = defineCollection({
       image: image(),
       description: z.string(),
       link: z.string(),
+      order: z.number(),
     }),
 });
 
