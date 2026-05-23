@@ -77,10 +77,16 @@ const updateDateString = isUpdate ? formatDateToYYYYMMDD(post.data.updateDate as
 
     @include mixin.hover {
       background-color: var(--hover-color);
+
+      img {
+        filter: grayscale(0);
+      }
     }
 
     img {
       filter: grayscale(0.8);
+      transition-property: filter;
+      transition-duration: 0.3s;
     }
   }
   .controlPanel-card {
