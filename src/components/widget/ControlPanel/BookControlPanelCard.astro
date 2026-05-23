@@ -79,7 +79,9 @@ const sanitizedReview = stripLinks(book.review);
     }
 
     img {
-      filter: grayscale(1);
+      filter: grayscale(0.8);
+      transition-property: filter;
+      transition-duration: 0.3s;
     }
 
     h2, h3, h4 {
@@ -116,6 +118,9 @@ const sanitizedReview = stripLinks(book.review);
 
     @include mixin.hover {
       background-color: var(--hover-color);
+      img {
+        filter: grayscale(0);
+      }
     }
 
     @include mixin.phone {
@@ -124,6 +129,8 @@ const sanitizedReview = stripLinks(book.review);
 
     img {
       filter: grayscale(0.8);
+      transition-property: filter;
+      transition-duration: 0.3s;
     }
 
     &__left {

@@ -59,7 +59,9 @@ const updateDateString = isUpdate ? formatDateToYYYYMMDD(post.data.updateDate as
     }
 
     img {
-      filter: grayscale(1);
+      filter: grayscale(0.8);
+      transition-property: filter;
+      transition-duration: 0.3s;
     }
 
     h2, h3, h4 {
@@ -70,6 +72,13 @@ const updateDateString = isUpdate ? formatDateToYYYYMMDD(post.data.updateDate as
       th,
       td {
         padding: 0.25rem;
+      }
+    }
+  }
+  .controlPanel-card {
+    @include mixin.hover {
+      img {
+        filter: grayscale(0);
       }
     }
   }
@@ -86,6 +95,10 @@ const updateDateString = isUpdate ? formatDateToYYYYMMDD(post.data.updateDate as
 
     @include mixin.hover {
       background-color: var(--hover-color);
+
+      img {
+        filter: grayscale(0);
+      }
     }
 
     @include mixin.phone {
@@ -94,6 +107,8 @@ const updateDateString = isUpdate ? formatDateToYYYYMMDD(post.data.updateDate as
 
     img {
       filter: grayscale(0.8);
+      transition-property: filter;
+      transition-duration: 0.3s;
     }
 
     &__left {
