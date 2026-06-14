@@ -44,7 +44,7 @@
     "sharp": "^0.33.5"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
+    "@biomejs/biome": "2.0.6",
     "@iconify-json/basil": "^1.2.4",
     "@iconify-json/devicon": "^1.2.16",
     "@iconify-json/fa6-brands": "^1.2.5",

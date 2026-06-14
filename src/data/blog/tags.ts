@@ -7,6 +7,8 @@ export const tagsList: Tags[] = [
   { name: '映画', slug: 'movie' },
   { name: '書籍紹介', slug: 'book' },
   { name: '小説', slug: 'novel' },
+  { name: '美術', slug: 'art' },
+  { name: '画家', slug: 'artist' },
   { name: 'フォント', slug: 'font' },
   { name: '建築', slug: 'architecture' },
   { name: '実績紹介', slug: 'works' },
