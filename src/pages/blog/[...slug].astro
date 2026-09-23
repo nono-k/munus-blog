@@ -3,15 +3,17 @@ import "katex/dist/katex.min.css";
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import MarkdownBody from "@/components/MarkdownBody.astro";
+import Figure from "@/components/markdown/Figure.astro";
 import PostBookArea from "@/components/PostBookArea.astro";
 import PostMeta from "@/components/PostMeta.astro";
 import PostNavLinks from "@/components/PostNavLinks.astro";
-import Figure from "@/components/markdown/Figure.astro";
 import BlogSideRelated from "@/components/pages/blog/BlogSideRelated.astro";
+import BookControlPanel from "@/components/widget/ControlPanel/BookControlPanel.astro";
 import ControlPanel from "@/components/widget/ControlPanel/ControlPanel.astro";
 import TbocAccordion from "@/components/widget/TbocAccordion.astro";
 import TbocSide from "@/components/widget/TbocSide.astro";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { getBooks } from "@/scripts/library/microcms";
 import { getBlogsByTags, getSortedBlogs } from "@/utils/content-utils";
 import { getGitInfo } from "@/utils/git";
 
@@ -37,6 +39,8 @@ const relatedPosts = await getBlogsByTags(tags);
 const filteredRelatedPosts = relatedPosts.filter(post => post.slug !== entry.slug);
 
 const blogOgp = entry.data.ogp ||`/api/og/${entry.slug}.png`;
+
+const books = await getBooks();
 ---
 <MainGridLayout
   pageTitle={title}
@@ -98,6 +102,13 @@ const blogOgp = entry.data.ogp ||`/api/og/${entry.slug}.png`;
       page={filteredRelatedPosts}
     />
   </div>
+
+  <BookControlPanel
+    title="読んだ本リスト"
+    books={books.slice(0, 10)}
+    link="/book/"
+    gridType="wide"
+  />
 
 </MainGridLayout>
 

@@ -1,18 +1,19 @@
 ---
-import type { Books } from '@/scripts/library/microcms';
 import { Icon } from "astro-icon/components";
+import type { Books } from '@/scripts/library/microcms';
 import BookControlPanelCard from "./BookControlPanelCard.astro";
 
 interface Props {
   title: string;
   books: Books[];
   link: string;
+  gridType?: string;
 }
 
-const { title, books, link } = Astro.props;
+const { title, books, link, gridType } = Astro.props;
 ---
 
-<div class="controlPanel">
+<div class:list={["controlPanel", gridType && `${gridType}`]}>
   <div class="controlPanel-side">
     <div class="controlPanel-side__header">
       <span class="controlPanel-side__title">{title}</span>

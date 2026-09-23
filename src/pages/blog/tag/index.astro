@@ -1,7 +1,9 @@
 ---
 import ChipLayout from "@/components/ChipLayout.astro";
+import BookControlPanel from "@/components/widget/ControlPanel/BookControlPanel.astro";
 import { tagsList } from "@/data/blog/tags";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { getBooks } from "@/scripts/library/microcms";
 
 const chips = tagsList.map(({ name, slug }) => ({
   name,
@@ -11,6 +13,8 @@ const title = "Tag一覧";
 
 const pageTitle = "Tag";
 const description = "Tag一覧";
+
+const books = await getBooks();
 ---
 
 <MainGridLayout
@@ -20,6 +24,12 @@ const description = "Tag一覧";
   <div class="container">
     <ChipLayout chips={chips} title={title} />
   </div>
+
+  <BookControlPanel
+    title="読んだ本リスト"
+    books={books.slice(0, 10)}
+    link="/book/"
+  />
 </MainGridLayout>
 
 <style lang="scss">
