@@ -7,9 +7,10 @@ import { getBooks } from "@/scripts/library/microcms";
 import { getMonthlyReportList, getUpdateBlogs } from "@/utils/content-utils";
 
 const allBlogPosts = await getUpdateBlogs();
-const glslPosts = allBlogPosts.filter(post => post.data.tags?.includes("GLSL"));
-const reportData = await getMonthlyReportList();
-const books = await getBooks();
+const _glslPosts = allBlogPosts.filter(post => post.data.tags?.includes("GLSL"));
+const _bookPosts = allBlogPosts.filter(post => post.data.tags?.includes("書籍紹介"));
+const _reportData = await getMonthlyReportList();
+const _books = await getBooks();
 ---
 
 <MainGridLayout>
@@ -21,19 +22,25 @@ const books = await getBooks();
 
   <ControlPanel
     title="GLSL"
-    page={glslPosts}
+    page={_glslPosts}
     link="/blog/tag/glsl/"
   />
 
   <ControlPanel
+    title="書籍紹介"
+    page={_bookPosts}
+    link="/blog/tag/book/"
+  />
+
+  <ControlPanel
     title="月報"
-    page={reportData}
+    page={_reportData}
     link="/blog/tag/monthly-report/"
   />
 
   <BookControlPanel
     title="読んだ本リスト"
-    books={books.slice(0, 10)}
+    books={_books.slice(0, 10)}
     link="/book/"
   />
 

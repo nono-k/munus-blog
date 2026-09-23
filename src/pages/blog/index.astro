@@ -1,29 +1,38 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import PostCard from "@/components/PostCard.astro";
-import MainGridLayout from "@/layouts/MainGridLayout.astro";
-import { getUpdateBlogs } from "@/utils/content-utils";
 import type { Page } from "astro";
+import PostCard from "@/components/PostCard.astro";
+import BookControlPanel from "@/components/widget/ControlPanel/BookControlPanel.astro";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { getBooks } from "@/scripts/library/microcms";
+import { getUpdateBlogs } from "@/utils/content-utils";
 
 interface Props {
   page: Page<CollectionEntry<"blog">>;
 }
 
-const allBlogPosts = await getUpdateBlogs();
+const _allBlogPosts = await getUpdateBlogs();
+const _books = await getBooks();
 
-const pageTitle = "ブログ記事一覧";
-const description = "ブログ記事一覧ページです。";
+const _pageTitle = "ブログ記事一覧";
+const _description = "ブログ記事一覧ページです。";
 ---
 
 <MainGridLayout
-  pageTitle={pageTitle}
-  description={description}
+  pageTitle={_pageTitle}
+  description={_description}
 >
   <div class="grid">
-    {allBlogPosts.map((post) => (
+    {_allBlogPosts.map((post) => (
       <PostCard post={post} />
     ))}
   </div>
+
+  <BookControlPanel
+    title="読んだ本リスト"
+    books={_books.slice(0, 10)}
+    link="/book/"
+  />
 </MainGridLayout>
 
 <style lang="scss">

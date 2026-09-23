@@ -1,10 +1,10 @@
 ---
+import { Icon } from "astro-icon/components";
 import BookSideRelated from "@/components/pages/book/BookSideRelated.astro";
 import BookSideTagList from "@/components/pages/book/BookSideTagList.astro";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
 import { getBooks, getBooksDetail } from "@/scripts/library/microcms";
 import { formatDateToYYYYMMDD } from "@/utils/date-utils";
-import { Icon } from "astro-icon/components";
 
 export async function getStaticPaths() {
   const response = await getBooks({ fields: ['id'] });
@@ -22,7 +22,7 @@ const day = date.getDate();
 
 const dateString = formatDateToYYYYMMDD(new Date(book.publishedAt));
 
-const pageTitle = book.title;
+const pageTitle = `「${book.title}」の読書感想`;
 const description = `「${book.title}」の読書記録です。`;
 ---
 
@@ -39,7 +39,7 @@ const description = `「${book.title}」の読書記録です。`;
   <div class="book__detail">
     <div class="u-header-height-area"></div>
     <div class="book__detail-wrap">
-      <h1 class="book__detail-title">{book.title}</h1>
+      <h1 class="book__detail-title">{`「${book.title}」の読書感想`}</h1>
       <div class="book__detail-body">
         <div class="book__detail-right">
           <a href={book.url} class="book__detail-img" target="_blank">

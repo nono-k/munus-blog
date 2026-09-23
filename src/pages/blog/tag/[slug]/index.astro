@@ -1,7 +1,9 @@
 ---
 import PostCard from "@/components/PostCard.astro";
+import BookControlPanel from "@/components/widget/ControlPanel/BookControlPanel.astro";
 import { tagsList } from "@/data/blog/tags";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { getBooks } from "@/scripts/library/microcms";
 import { getTagList } from "@/utils/content-utils";
 
 interface Props {
@@ -21,6 +23,7 @@ export async function getStaticPaths() {
 
 const { name, slug } = Astro.props;
 const blogs = await getTagList(name);
+const books = await getBooks();
 ---
 
 <MainGridLayout
@@ -33,6 +36,12 @@ const blogs = await getTagList(name);
       <PostCard post={post} />
     ))}
   </div>
+
+  <BookControlPanel
+    title="読んだ本リスト"
+    books={books.slice(0, 10)}
+    link="/book/"
+  />
 
 </MainGridLayout>
 
