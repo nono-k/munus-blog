@@ -7,13 +7,17 @@ interface Props {
 }
 
 const { imageId, linkId, title, author} = Astro.props;
+
+const amazonUrl = linkId.startsWith('B')
+  ? `https://link.amazon/${linkId}`
+  : `https://amzn.to/${linkId}`;
 ---
 
 <div class="amazon">
-  <a href=`https://amzn.to/${linkId}` class="amazon__link -img" target="_blank">
+  <a href=`${amazonUrl}` class="amazon__link -img" target="_blank">
     <img src=`https://m.media-amazon.com/images/I/${imageId}.jpg` alt=`${title}` width="170" height="220" loading="lazy">
   </a>
-  <a href=`https://amzn.to/${linkId}` class="amazon__link -text" target="_blank">
+  <a href=`${amazonUrl}` class="amazon__link -text" target="_blank">
     <span class="title">{title}</span>
     {author && <span class="author">{author}</span>}
     <span class="btn-regular btn">Amazon.co.jpで購入する</span>
